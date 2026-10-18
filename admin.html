@@ -1238,7 +1238,7 @@
   </div>
 
   <!-- TELEGRAM CHAT PICKER MODAL -->
-  <div class="overlay" id="telegramPickerModal">
+  <div class="overlay" id="telegramPickerModal" style="z-index:70;">
     <div class="modal">
       <div class="modal-head">
         <span class="modal-title" data-t="telegramPickerTitle">اختر محادثة تيليجرام</span>
@@ -1730,18 +1730,24 @@
       if (sendBtn) sendBtn.disabled = true;
       window.mcToast('جاري إرسال ' + pendingToday.length + ' رسالة، استنى لحظات...');
       var failed = [];
+      var stats = { tg: 0, wa: 0, noTg: 0 };
       Promise.all(pendingToday.map(function (student) {
         var record = attendance.find(function (a) { return a.studentId === student.id && a.date === today; });
         var message = buildAttendanceMessage(student, record, today, month);
+        if (!student.telegramChatId) stats.noTg++;
         return window.sendGuardianMessage(student, message).then(function (r) {
+          if (r.telegram) stats.tg++;
+          if (r.whatsapp) stats.wa++;
           if (r.any) { if (record) window.markAttendanceMessageSent(record.id); }
           else failed.push(student);
         });
       })).then(function () {
         if (sendBtn) sendBtn.disabled = false;
         renderTable();
+        var summary = 'تيليجرام: ' + stats.tg + ' | واتساب: ' + stats.wa +
+          (stats.noTg ? ' | ' + stats.noTg + ' طالب مش مربوط بتيليجرام' : '');
         if (!failed.length) {
-          window.mcToast('تم إرسال كل الرسائل تلقائياً ✓');
+          window.mcToast('تم الإرسال ✓ ' + summary);
           return;
         }
         window.mcToast('فشل إرسال ' + failed.length + ' رسالة، ابعتها يدوياً من القائمة');
