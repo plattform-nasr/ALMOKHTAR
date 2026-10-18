@@ -1,0 +1,2910 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <title>لوحة تحكم الأستاذ — سنتر الرياضيات</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="سنتر الرياضيات">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700;800&family=Manrope:wght@500;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 12px 8px;
+      border-radius: 14px;
+      border: 1.5px solid var(--line);
+      background: var(--card-2);
+      color: var(--text-dim);
+      font-weight: 800;
+      font-size: 13px;
+      cursor: pointer;
+      text-align: center;
+      transition: all .15s ease;
+    }
+
+    .tab.active {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent-2);
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .setup-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .stu-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: var(--card-2);
+      margin-bottom: 10px;
+    }
+
+    .stu-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .stu-name {
+      font-weight: 800;
+      font-size: 14.5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .stu-meta {
+      font-size: 12px;
+      color: var(--text-faint);
+      margin-top: 2px;
+    }
+
+    .stu-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .icon-round {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform .12s ease, filter .12s ease;
+    }
+
+    .icon-round:active {
+      transform: scale(.9);
+    }
+
+    .icon-round svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .ir-present {
+      background: var(--ok-soft);
+      color: var(--ok);
+    }
+
+    .ir-present.marked {
+      background: var(--ok);
+      color: #06210f;
+    }
+
+    .ir-absent {
+      background: var(--bad-soft);
+      color: var(--bad);
+    }
+
+    .ir-absent.marked {
+      background: var(--bad);
+      color: #2b0508;
+    }
+
+    .pay-pill {
+      border: 1.5px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 11.5px;
+      font-weight: 800;
+      cursor: pointer;
+      background: var(--card);
+      color: var(--text-dim);
+      flex-shrink: 0;
+    }
+
+    .pay-pill.on {
+      background: var(--ok-soft);
+      color: var(--ok);
+      border-color: transparent;
+    }
+
+    .stats-strip {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .stat-box {
+      flex: 1;
+      background: var(--card-2);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .stat-box b {
+      display: block;
+      font-size: 19px;
+    }
+
+    .stat-box span {
+      font-size: 11px;
+      color: var(--text-faint);
+    }
+
+    .filters {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .filters-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .rec-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: var(--card-2);
+      margin-bottom: 8px;
+    }
+
+    .rec-counts {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .count-circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .cc-ok {
+      background: var(--ok-soft);
+      color: var(--ok);
+    }
+
+    .cc-bad {
+      background: var(--bad-soft);
+      color: var(--bad);
+    }
+
+    .lb-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: var(--card-2);
+      margin-bottom: 8px;
+    }
+
+    .lb-rank {
+      width: 28px;
+      flex-shrink: 0;
+      text-align: center;
+      font-weight: 800;
+      font-size: 15px;
+      color: var(--text-dim);
+    }
+
+    .lb-points {
+      flex-shrink: 0;
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--accent-2);
+      white-space: nowrap;
+    }
+
+    .settings-block {
+      margin-bottom: 12px;
+      border: 1px solid var(--border, rgba(0, 0, 0, .1));
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .settings-block h4 {
+      font-size: 13.5px;
+      color: var(--text);
+      margin: 0;
+      padding: 13px 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      user-select: none;
+    }
+
+    .settings-block h4 .chev {
+      display: inline-block;
+      transition: transform .2s ease;
+      color: var(--text-dim);
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .settings-block.open h4 .chev {
+      transform: rotate(90deg);
+    }
+
+    .settings-block.open h4 {
+      border-bottom: 1px solid var(--border, rgba(0, 0, 0, .1));
+    }
+
+    .settings-body {
+      display: none;
+      padding: 14px;
+    }
+
+    .settings-block.open .settings-body {
+      display: block;
+    }
+
+    .class-code-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .class-code-row span {
+      flex: 1;
+      font-size: 13.5px;
+      font-weight: 700;
+    }
+
+    .class-code-row input {
+      width: 110px;
+    }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .fab-add {
+      position: fixed;
+      bottom: 22px;
+      inset-inline-end: 20px;
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      box-shadow: 0 16px 30px -10px var(--accent-shadow);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 40;
+    }
+
+    .fab-add.show {
+      display: flex;
+    }
+
+    .grade-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 14px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: var(--card-2);
+      margin-bottom: 8px;
+    }
+
+    .grade-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .grade-exam {
+      font-weight: 800;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .grade-meta {
+      font-size: 12px;
+      color: var(--text-faint);
+      margin-top: 2px;
+    }
+
+    .grade-score {
+      flex-shrink: 0;
+      text-align: center;
+      min-width: 54px;
+    }
+
+    .grade-score b {
+      display: block;
+      font-size: 15px;
+    }
+
+    .grade-score span {
+      font-size: 10.5px;
+      color: var(--text-faint);
+    }
+
+    .icon-round-sm {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: var(--bad-soft);
+      color: var(--bad);
+      transition: transform .12s ease;
+    }
+
+    .icon-round-sm:active {
+      transform: scale(.9);
+    }
+
+    .icon-round-sm svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .attendance-choice {
+      position: relative;
+    }
+
+    .attendance-menu {
+      position: absolute;
+      inset-inline-end: 0;
+      top: calc(100% + 8px);
+      z-index: 80;
+      min-width: 240px;
+      padding: 10px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow-2);
+      backdrop-filter: blur(14px);
+      display: none;
+    }
+
+    .attendance-menu.open {
+      display: block;
+    }
+
+    .attendance-menu label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 8px;
+      color: var(--text) !important;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.5;
+      cursor: pointer;
+    }
+
+    .attendance-menu input {
+      accent-color: var(--accent);
+    }
+
+    .attendance-menu button {
+      width: 100%;
+      margin-top: 6px;
+      border: 0;
+      border-radius: 10px;
+      padding: 8px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .attendance-text {
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      padding: 8px 10px;
+      background: var(--card);
+      color: var(--text);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .attendance-locked {
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      padding: 8px 10px;
+      background: var(--card);
+      color: var(--text-dim);
+      font-weight: 700;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .student-clickable {
+      cursor: pointer;
+    }
+
+    .student-clickable:hover {
+      border-color: var(--accent-2);
+    }
+
+    .detail-list {
+      display: grid;
+      gap: 8px;
+      max-height: 48vh;
+      overflow: auto;
+    }
+
+    .detail-item {
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--card-2);
+      font-size: 12px;
+    }
+
+    /* ===== سجل الطالب كصفحة كاملة (مش نافذة منبثقة) ===== */
+    :root {
+      --soft-ok-bg: rgba(34, 197, 94, .13);
+      --soft-ok-fg: #5FD68B;
+      --soft-ok-line: rgba(34, 197, 94, .28);
+      --soft-bad-bg: rgba(240, 71, 90, .12);
+      --soft-bad-fg: #FF8C99;
+      --soft-bad-line: rgba(240, 71, 90, .26);
+    }
+
+    :root[data-theme="light"] {
+      --soft-ok-bg: rgba(34, 197, 94, .15);
+      --soft-ok-fg: #15803D;
+      --soft-ok-line: rgba(21, 128, 61, .22);
+      --soft-bad-bg: rgba(240, 71, 90, .13);
+      --soft-bad-fg: #BE123C;
+      --soft-bad-line: rgba(190, 18, 60, .2);
+    }
+
+    .detail-page {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      display: none;
+      flex-direction: column;
+      background: var(--bg);
+    }
+
+    .detail-page.open {
+      display: flex;
+    }
+
+    .detail-page-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      padding-top: calc(14px + env(safe-area-inset-top));
+      border-bottom: 1px solid var(--line);
+      background: var(--bg-elev);
+    }
+
+    .detail-back {
+      width: 38px;
+      height: 38px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: var(--card-2);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .detail-back svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    html[dir="ltr"] .detail-back svg {
+      transform: scaleX(-1);
+    }
+
+    .detail-page-name {
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .detail-page-sub {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: 3px;
+    }
+
+    .detail-page-body {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 16px 18px calc(30px + env(safe-area-inset-bottom));
+    }
+
+    .detail-page-body .tabs {
+      margin-bottom: 14px;
+    }
+
+    .month-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--card);
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .month-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 14px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .month-title {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 800;
+      min-width: 0;
+    }
+
+    .month-chev {
+      color: var(--text-faint);
+      font-size: 17px;
+      line-height: 1;
+      transition: transform .2s ease;
+    }
+
+    .month-card.open .month-chev {
+      transform: rotate(90deg);
+    }
+
+    .month-body {
+      display: none;
+    }
+
+    .month-card.open .month-body {
+      display: block;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .pill-ok {
+      background: var(--soft-ok-bg);
+      color: var(--soft-ok-fg);
+      border: 1px solid var(--soft-ok-line);
+    }
+
+    .pill-bad {
+      background: var(--soft-bad-bg);
+      color: var(--soft-bad-fg);
+      border: 1px solid var(--soft-bad-line);
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .dot-ok {
+      background: var(--soft-ok-fg);
+    }
+
+    .dot-bad {
+      background: var(--soft-bad-fg);
+    }
+
+    .day-row,
+    .grade-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-top: 1px solid var(--line);
+      font-size: 12.5px;
+    }
+
+    .day-main,
+    .grade-main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .day-date {
+      color: var(--text-dim);
+      font-size: 12px;
+    }
+
+    .grade-name {
+      font-weight: 700;
+      font-size: 13px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .score-tag {
+      padding: 5px 11px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 12.5px;
+      white-space: nowrap;
+      direction: ltr;
+    }
+
+    .score-ok {
+      background: var(--soft-ok-bg);
+      color: var(--soft-ok-fg);
+      border: 1px solid var(--soft-ok-line);
+    }
+
+    .score-bad {
+      background: var(--soft-bad-bg);
+      color: var(--soft-bad-fg);
+      border: 1px solid var(--soft-bad-line);
+    }
+
+    .detail-empty {
+      padding: 28px 14px;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 13px;
+      border: 1px dashed var(--line);
+      border-radius: var(--radius-md);
+    }
+
+    .message-form {
+      margin-top: 16px;
+    }
+
+    .message-form textarea {
+      min-height: 92px;
+      resize: vertical;
+    }
+
+    .send-all {
+      margin-top: 14px;
+    }
+
+    .picker-button {
+      width: 100%;
+      text-align: start;
+    }
+
+    .picker-results {
+      display: grid;
+      gap: 8px;
+      max-height: 48vh;
+      overflow: auto;
+    }
+
+    .picker-option {
+      width: 100%;
+      text-align: start;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      padding: 11px 12px;
+      background: var(--card-2);
+      color: var(--text);
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .picker-option:hover {
+      border-color: var(--accent-2);
+    }
+
+    .field label.file-picker {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      max-width: 100%;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .file-picker>span:first-child {
+      flex-shrink: 0;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: var(--accent-soft);
+      color: var(--accent-2);
+    }
+
+    .file-picker-name {
+      display: block;
+      flex: 1 1 180px;
+      min-width: 140px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      user-select: none;
+      padding: 9px 12px;
+      border: 1.5px solid var(--line);
+      border-radius: 12px;
+      background: var(--bg-elev);
+      color: var(--text-faint);
+    }
+
+    .file-picker-name.has-file {
+      color: var(--text);
+    }
+
+    .admin-bottom-nav {
+      position: fixed;
+      inset-inline: 12px;
+      bottom: max(12px, env(safe-area-inset-bottom));
+      z-index: 50;
+      display: none;
+      grid-template-columns: repeat(5, 1fr);
+      align-items: end;
+      gap: 4px;
+      padding: 8px 8px 7px;
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      background: color-mix(in srgb, var(--card) 92%, transparent);
+      box-shadow: var(--shadow-2);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .admin-bottom-nav button {
+      min-width: 0;
+      min-height: 58px;
+      padding: 6px 2px;
+      border: 0;
+      border-radius: 16px;
+      background: transparent;
+      color: var(--text-faint);
+      font: inherit;
+      font-size: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+    }
+
+    .admin-bottom-nav button.active {
+      color: var(--accent-2);
+      background: var(--accent-soft);
+    }
+
+    .admin-bottom-nav svg {
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+
+    .admin-bottom-nav span {
+      display: none;
+    }
+
+    .admin-bottom-nav .bottom-add {
+      width: 58px;
+      height: 58px;
+      min-height: 58px;
+      margin: -22px auto 0;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 12px 24px -8px var(--accent-shadow);
+    }
+
+    .admin-bottom-nav .bottom-add svg {
+      width: 34px;
+      height: 34px;
+    }
+
+    @media(max-width:639px) {
+      .attendance-menu.open {
+        top: auto;
+        bottom: calc(100% + 8px);
+      }
+
+      .admin-bottom-nav {
+        display: grid;
+      }
+
+      .admin-page .topbar {
+        position: fixed;
+        top: 10px;
+        inset-inline: 12px;
+        z-index: 45;
+        width: auto;
+        margin: 0;
+        background: color-mix(in srgb, var(--card) 92%, transparent);
+        box-shadow: var(--shadow-1);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+      }
+
+      .admin-page>.shell-wide>.tabs {
+        display: none;
+      }
+
+      .admin-page .fab-add {
+        display: none !important;
+      }
+
+      .admin-page .shell-wide {
+        padding-top: 94px;
+        padding-bottom: 112px;
+      }
+    }
+  </style>
+</head>
+
+<body class="admin-page">
+
+  <div class="page-math-background" aria-hidden="true">
+    <span class="math-symbol">+</span>
+            <span class="math-symbol">+</span>
+            <span class="math-symbol">-</span>
+            <span class="math-symbol">=</span>
+            <span class="math-symbol">≠</span>
+            <span class="math-symbol">≥</span>
+            <span class="math-symbol">x²</span>
+            <span class="math-symbol">x²</span>
+            <span class="math-symbol">∅</span>
+            <span class="math-symbol">∫</span>
+            <span class="math-symbol">∈</span>
+            <span class="math-symbol">x²</span>
+            <span class="math-symbol">∫</span>
+            <span class="math-symbol">∪</span>
+  </div>
+
+  <div class="mc-loader" id="mcLoader">
+    <div class="spinner"></div><span data-t="loading">جاري التحميل...</span>
+  </div>
+
+  <div class="shell-wide">
+    <div class="topbar">
+      <div class="brand">
+        <div class="brand-logo" id="brandLogo">م</div>
+        <div>
+          <div class="brand-name" id="brandName">سنتر الرياضيات</div>
+          <div class="brand-sub" data-t="adminTitle">لوحة تحكم الأستاذ</div>
+        </div>
+      </div>
+      <div class="row">
+        <button class="icon-btn" onclick="toggleTheme()" aria-label="theme">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 3v1M12 20v1M4.2 4.2l.7.7M18.4 18.4l.7.7M3 12h1M20 12h1M4.2 19.8l.7-.7M18.4 5.6l.7-.7" />
+            <circle cx="12" cy="12" r="4.5" />
+          </svg>
+        </button>
+        <button class="icon-btn" onclick="toggleLang()" aria-label="lang"><span id="langLabel"
+            style="font-weight:800; font-size:12px;">EN</span></button>
+        <button class="icon-btn" onclick="openModal('settingsModal')" aria-label="settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3" />
+            <path
+              d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 0 1-4 0v-.09a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H3a2 2 0 0 1 0-4h.09a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1-1.55V3a2 2 0 0 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9a1.7 1.7 0 0 0 1.55 1H21a2 2 0 0 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1z" />
+          </svg>
+        </button>
+        <button class="icon-btn" onclick="doLogout()" aria-label="logout">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <path d="M16 17l5-5-5-5" />
+            <path d="M21 12H9" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="setup" onclick="switchTab('setup')" data-t="mainSection">الرئيسية</button>
+      <button class="tab" data-tab="record" onclick="switchTab('record')" data-t="fullRecord">السجل الشامل</button>
+      <button class="tab" data-tab="grades" onclick="switchTab('grades')" data-t="gradesSection">الدرجات</button>
+      <button class="tab" data-tab="communication" onclick="switchTab('communication')" data-t="homeworkNotesTab">الواجبات والملاحظات</button>
+    </div>
+
+    <!-- SETUP -->
+    <div class="section active" id="section-setup">
+      <div class="card">
+        <div class="field">
+          <label data-t="center">السنتر</label>
+          <div class="chip-select" id="setupCenters"></div>
+        </div>
+        <div class="field" style="margin-top:14px;">
+          <label data-t="classLevel">الصف الدراسي</label>
+          <div class="chip-select" id="setupClasses"></div>
+        </div>
+        <div class="setup-actions">
+          <button class="btn btn-primary" onclick="goToTable()" data-t="showList">عرض القائمة</button>
+          <button class="btn btn-ghost" onclick="openAddStudentModal()" data-t="addStudent">إضافة طالب جديد</button>
+        </div>
+      </div>
+
+      <!-- UNPAID STUDENTS -->
+      <div class="card" style="margin-top:14px;">
+        <h3 style="font-size:15px; margin-bottom:12px;"><span data-t="unpaidStudentsTitle">الطلاب الغير دافعين</span> (<span id="unpaidCount">0</span>)</h3>
+        <div class="filters">
+          <input type="text" class="input" id="unpaidFilterName" placeholder="فلترة بالاسم" oninput="renderUnpaidSection()">
+          <div class="chip-select" id="unpaidFilterCenter"></div>
+          <div class="chip-select" id="unpaidFilterClass"></div>
+        </div>
+        <div id="unpaidList" style="margin-top:10px;"></div>
+        <div class="empty-state" id="unpaidEmpty" style="display:none;">
+          <p data-t="unpaidAllPaid">تم الدفع من كل الطلاب </p>
+        </div>
+      </div>
+
+      <!-- LEADERBOARD -->
+      <div class="card" style="margin-top:14px;">
+        <h3 style="font-size:15px; margin-bottom:12px;" data-t="leaderboard">لوحة الصدارة</h3>
+        <div class="filters">
+          <div class="chip-select" id="lbFilterCenter"></div>
+          <div class="chip-select" id="lbFilterClass"></div>
+        </div>
+        <div id="leaderboardList" style="margin-top:10px;"></div>
+        <div class="empty-state" id="leaderboardEmpty" style="display:none;">
+          <p data-t="leaderboardEmpty">لا يوجد بيانات كافية لعرض الترتيب بعد</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ATTENDANCE TABLE -->
+    <div class="section" id="section-table">
+      <div class="row-between" style="margin-bottom:14px;">
+        <button class="icon-btn" onclick="history.back()" aria-label="back">
+          <svg class="flip-rtl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
+        <b id="tableGroupLabel"></b>
+        <span style="width:40px;"></span>
+      </div>
+      <div class="stats-strip">
+        <div class="stat-box"><b id="statTotal">0</b><span data-t="totalStudents">عدد الطلاب</span></div>
+        <div class="stat-box"><b id="statPaid" style="color:var(--ok)">0</b><span data-t="paidCount">دفعوا</span></div>
+        <div class="stat-box"><b id="statUnpaid" style="color:var(--bad)">0</b><span data-t="unpaidCount">لم
+            يدفعوا</span></div>
+      </div>
+      <div id="tableList"></div>
+      <div class="empty-state" id="tableEmpty" style="display:none;">
+        <p data-t="noStudentsYet">لا يوجد طلاب في هذه المجموعة بعد</p>
+      </div>
+    </div>
+
+    <!-- FULL RECORD -->
+    <div class="section" id="section-record">
+      <div class="filters">
+        <input type="text" class="input" id="filterName" data-t-ph="filterByName" placeholder="فلترة بالاسم"
+          oninput="renderRecord()">
+        <div class="filters-row">
+          <input type="text" class="input" id="filterPhone" data-t-ph="filterByPhone" placeholder="رقم الهاتف"
+            oninput="renderRecord()">
+        </div>
+        <div class="chip-select" id="filterCenter"></div>
+        <div class="chip-select" id="filterClass"></div>
+      </div>
+      <div id="recordList"></div>
+      <div class="empty-state" id="recordEmpty" style="display:none;">
+        <p data-t="noStudentsYet">لا يوجد طلاب بعد</p>
+      </div>
+    </div>
+
+    <!-- GRADES -->
+    <div class="section" id="section-grades">
+      <div class="card" style="margin-bottom:18px;">
+          <div class="field">
+            <label data-t="selectStudent">اختر الطالب</label>
+            <select id="gradeStudentSelect" class="input" hidden></select>
+            <button type="button" id="gradeStudentPicker" class="input picker-button" onclick="openStudentPicker()">اختر
+              الطالب</button>
+          </div>
+          <div class="field">
+            <label data-t="examName">اسم الاختبار</label>
+            <input type="text" id="gradeExamName" class="input">
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <label data-t="scoreObtained">الدرجة المحصلة</label>
+              <input type="number" id="gradeScore" class="input" inputmode="decimal" min="0" step="any">
+            </div>
+            <div class="field">
+              <label data-t="scoreOutOf">الدرجة الكاملة</label>
+              <input type="number" id="gradeMax" class="input" inputmode="decimal" min="1" step="any" value="100">
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="submitGrade()" data-t="addGrade">إضافة درجة</button>
+        </div>
+
+        <div class="filters" style="margin-bottom:16px;">
+          <div class="chip-select" id="gradeFilterCenter"></div>
+          <div class="chip-select" id="gradeFilterClass"></div>
+        </div>
+
+        <h3 style="font-size:15px; margin-bottom:12px;" data-t="gradesList">سجل الدرجات</h3>
+        <div id="gradesList"></div>
+        <div class="empty-state" id="gradesEmpty" style="display:none;">
+          <p data-t="noGradesYet">لا يوجد درجات مسجلة بعد</p>
+        </div>
+      </div>
+
+    <div class="section" id="section-communication">
+      <div class="card">
+        <h3 style="font-size:15px; margin-bottom:12px;" data-t="uploadHomeworkTitle">رفع واجب</h3>
+        <div class="field"><label data-t="homeworkTitleField">عنوان الواجب</label><input id="homeworkTitle" class="input" type="text"></div>
+        <div class="field"><label data-t="homeworkFileLabel">ملف PDF أو صورة</label><label class="file-picker"><span
+              data-t="chooseFile">اختيار ملف</span><span class="file-picker-name" id="homeworkFileName"
+              data-t="noFileChosen">لم يتم اختيار ملف</span><input id="homeworkFile" type="file"
+              accept="application/pdf,image/*" hidden></label></div>
+        <div class="field"><label data-t="centerAndClassField">السنتر والصف</label>
+          <div class="filters-row">
+            <div class="chip-select" id="homeworkCenter"></div>
+            <div class="chip-select" id="homeworkClass"></div>
+          </div>
+        </div>
+        <button id="homeworkSubmitBtn" class="btn btn-primary" onclick="submitHomework()" data-t="saveHomeworkBtn">حفظ الواجب</button>
+      </div>
+      <div class="card message-form">
+        <h3 style="font-size:15px; margin-bottom:12px;" data-t="sendNoteTitle">إرسال ملاحظة</h3>
+        <div class="field"><label data-t="searchByStudentName">بحث باسم الطالب</label><button type="button" id="noteStudentPicker"
+            class="input picker-button" onclick="openNoteStudentPicker()" data-t="chooseStudentToSearchBtn">اختر طالباً للبحث</button></div>
+        <div class="field"><label data-t="targetField">المستهدف</label><select id="noteTarget" class="input" hidden></select><button
+            type="button" id="noteTargetPicker" class="input picker-button" onclick="openNoteTargetPicker()" data-t="allStudentsBtn">كل
+            الطلاب</button></div>
+        <div class="field"><textarea id="noteText" class="input" placeholder="اكتب الملاحظة" data-t-ph="writeNotePh"></textarea></div>
+        <button class="btn btn-primary" onclick="submitNote()" data-t="sendNoteBtn">إرسال الملاحظة</button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="admin-bottom-nav" aria-label="admin navigation">
+    <button type="button" class="active" data-bottom-tab="setup" onclick="switchTab('setup')" aria-label="الرئيسية">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" />
+      </svg>
+      <span data-t="mainSection">الرئيسية</span>
+    </button>
+    <button type="button" data-bottom-tab="grades" onclick="switchTab('grades')" aria-label="الدرجات">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="m12 3 2.3 4.7 5.2.8-3.8 3.7.9 5.2-4.6-2.5-4.6 2.5.9-5.2-3.8-3.7 5.2-.8z" />
+        <path d="M8 19.5 6.5 22M16 19.5l1.5 2" />
+      </svg>
+      <span data-t="gradesSection">الدرجات</span>
+    </button>
+    <button type="button" class="bottom-add" onclick="openAddStudentModal()" aria-label="add student">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+        <path d="M12 5v14M5 12h14" />
+      </svg>
+    </button>
+    <button type="button" data-bottom-tab="record" onclick="switchTab('record')" aria-label="السجل">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M3 12a9 9 0 1 0 3-6.7" />
+        <path d="M3 4v6h6M12 7v5l3 2" />
+      </svg>
+      <span data-t="fullRecord">السجل</span>
+    </button>
+    <button type="button" data-bottom-tab="communication" onclick="switchTab('communication')" aria-label="الواجبات">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M5 3h11l3 3v15H5z" />
+        <path d="M16 3v4h4M8 12h8M8 16h6" />
+        <path d="m15 18 4-4" />
+      </svg>
+      <span data-t="homeworkNav">الواجبات</span>
+    </button>
+  </nav>
+
+  <button class="fab-add show" onclick="openAddStudentModal()" aria-label="add">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+      <path d="M12 5v14M5 12h14" />
+    </svg>
+  </button>
+
+  <!-- ADD STUDENT MODAL -->
+  <div class="overlay" id="addModal">
+    <div class="modal">
+      <div class="modal-head">
+        <span class="modal-title" data-t="addStudent">إضافة طالب جديد</span>
+        <button class="modal-close" onclick="closeModal('addModal')">&times;</button>
+      </div>
+      <div class="field">
+        <label data-t="studentName">اسم الطالب</label>
+        <input type="text" id="addName" class="input">
+      </div>
+      <div class="field">
+        <label data-t="parentPhone">رقم هاتف ولي الأمر</label>
+        <div style="display:flex; gap:8px;">
+          <select id="addPhoneCountry" class="input" style="flex:0 0 112px;"></select>
+          <input type="tel" id="addPhone" class="input" style="flex:1;" placeholder="1XXXXXXXXX">
+        </div>
+      </div>
+      <div class="field">
+        <label data-t="parentTelegram">تيليجرام ولي الأمر (لإرسال الرسائل تلقائياً)</label>
+        <div style="display:flex; gap:8px;">
+          <input type="text" id="addTelegramChatId" class="input" style="flex:1;" placeholder="Chat ID">
+          <button type="button" class="btn btn-sm" style="flex:0 0 auto;" onclick="openTelegramPicker('addTelegramChatId')" data-t="fetchTelegramChats">جلب المحادثات</button>
+        </div>
+      </div>
+      <div class="field">
+        <label data-t="chooseCenter">اختر السنتر</label>
+        <div class="chip-select" id="addCenterChoice"></div>
+      </div>
+      <div class="field">
+        <label data-t="classLevel">الصف الدراسي</label>
+        <div class="chip-select" id="addClassChoice"></div>
+      </div>
+      <div class="field">
+        <label data-t="createPassword">إنشاء كلمة مرور</label>
+        <input type="password" id="addPassword" class="input" autocomplete="new-password">
+      </div>
+      <button class="btn btn-primary" onclick="submitAddStudent()" data-t="save" style="margin-top:6px;">حفظ</button>
+    </div>
+  </div>
+
+  <!-- TELEGRAM CHAT PICKER MODAL -->
+  <div class="overlay" id="telegramPickerModal">
+    <div class="modal">
+      <div class="modal-head">
+        <span class="modal-title" data-t="telegramPickerTitle">اختر محادثة تيليجرام</span>
+        <button class="modal-close" onclick="closeModal('telegramPickerModal')">&times;</button>
+      </div>
+      <p class="muted" style="font-size:12px; margin:0 0 12px;" data-t="telegramPickerHint">
+        تظهر هنا فقط المحادثات اللي بعتت أي رسالة للبوت قبل كده (لازم ولي الأمر يضغط Start على البوت الأول).
+      </p>
+      <div id="telegramPickerList" style="max-height:320px; overflow:auto;"></div>
+    </div>
+  </div>
+
+  <!-- SETTINGS MODAL -->
+  <div class="overlay" id="settingsModal">
+    <div class="modal">
+      <div class="modal-head">
+        <span class="modal-title" data-t="settings">إعدادات المنصة</span>
+        <button class="modal-close" onclick="closeSettingsModal()">&times;</button>
+      </div>
+
+      <div class="settings-block">
+        <h4 onclick="toggleSettingsBlock(this)"><span data-t="platformName">اسم المنصة</span><span class="chev">›</span></h4>
+        <div class="settings-body">
+          <input type="text" id="setPlatformName" class="input" style="margin-bottom:8px;">
+          <div class="logo-row">
+            <div class="avatar" id="logoPreview" style="width:52px;height:52px;">م</div>
+            <label class="btn btn-ghost btn-sm" style="cursor:pointer;">
+              <span data-t="platformLogo">شعار المنصة</span>
+              <input type="file" id="logoInput" accept="image/*" style="display:none;">
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-block">
+        <h4 onclick="toggleSettingsBlock(this)"><span>لون المنصة</span><span class="chev">›</span></h4>
+        <div class="settings-body">
+          <p class="muted" style="font-size:12.5px; margin-bottom:10px;">
+            اختر لونًا وهيتطبق على كل المنصة فورًا — عند الأدمن وعند كل الطلاب.
+          </p>
+          <div id="accentColorWrap" class="row" style="gap:12px; flex-wrap:wrap;"></div>
+        </div>
+      </div>
+
+      <div class="settings-block">
+        <h4 onclick="toggleSettingsBlock(this)"><span data-t="changeAdminPassword">تغيير كلمة مرور الأدمن</span><span class="chev">›</span></h4>
+        <div class="settings-body">
+          <input type="text" id="setAdminPass" class="input">
+        </div>
+      </div>
+
+      <div class="settings-block">
+        <h4 onclick="toggleSettingsBlock(this)"><span>البريد الإلكتروني لاستلام كود الدخول</span><span class="chev">›</span></h4>
+        <div class="settings-body">
+          <p class="muted" style="font-size:12.5px; margin-bottom:10px;">
+            كل مرة حد يسجل دخول بكلمة سر الأدمن، هيتبعت كود تحقق من 6 أرقام على البريد ده قبل ما يدخل اللوحة.
+          </p>
+          <input type="email" id="setAdminEmail" class="input" placeholder="admin@gmail.com">
+        </div>
+      </div>
+
+      <div class="settings-block">
+        <h4 onclick="toggleSettingsBlock(this)"><span>كود الدخول عبر تليجرام</span><span class="chev">›</span></h4>
+        <div class="settings-body">
+          <p class="muted" style="font-size:12.5px; margin-bottom:10px;">
+            اختياري: لو عايز كود الدخول يتبعت على تليجرام كمان (بالإضافة للإيميل). محتاج تعمل بوت من
+            @BotFather مرة واحدة وتحط التوكن هنا، وبعدين تبعت أي رسالة للبوت ده من حساب تليجرام بتاعك
+            عشان تقدر تجيب الـ Chat ID بتاعك وتحطه في الخانة التانية. سيب الخانتين فاضيين لو مش عايز الميزة دي.
+          </p>
+          <input type="text" id="setTelegramBotToken" class="input" placeholder="Bot Token من BotFather" style="margin-bottom:10px;" dir="ltr">
+          <input type="text" id="setAdminTelegramChatId" class="input" placeholder="Chat ID بتاعك" dir="ltr">
+        </div>
+      </div>
+
+      <div class="settings-block">
+        <h4 onclick="toggleSettingsBlock(this)"><span>خلفية صفحة تسجيل الدخول</span><span class="chev">›</span></h4>
+        <div class="settings-body">
+          <p class="muted" style="font-size:12.5px; margin-bottom:10px;">
+            اختار صورة مختلفة لخلفية صفحة تسجيل الدخول حسب الجهاز. لو مسحت الصورة أو ماخترتش واحدة، هيترجع يشتغل التصميم الافتراضي.
+          </p>
+
+          <div class="logo-row" style="margin-bottom:14px;">
+            <div class="avatar" id="loginBgMobilePreview" style="width:52px;height:80px;border-radius:10px;overflow:hidden;font-size:11px;">بدون صورة</div>
+            <div class="row" style="gap:8px; flex-wrap:wrap;">
+              <label class="btn btn-ghost btn-sm" style="cursor:pointer;">
+                <span>خلفية الموبايل</span>
+                <input type="file" id="loginBgMobileInput" accept="image/*" style="display:none;">
+              </label>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="clearLoginBg('mobile')">استخدام الافتراضي</button>
+            </div>
+          </div>
+
+          <div class="logo-row">
+            <div class="avatar" id="loginBgDesktopPreview" style="width:80px;height:52px;border-radius:10px;overflow:hidden;font-size:11px;">بدون صورة</div>
+            <div class="row" style="gap:8px; flex-wrap:wrap;">
+              <label class="btn btn-ghost btn-sm" style="cursor:pointer;">
+                <span>خلفية الكمبيوتر</span>
+                <input type="file" id="loginBgDesktopInput" accept="image/*" style="display:none;">
+              </label>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="clearLoginBg('desktop')">استخدام الافتراضي</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-block">
+        <h4 onclick="toggleSettingsBlock(this)"><span>أجهزة الأدمن المسجلة</span><span class="chev">›</span></h4>
+        <div class="settings-body">
+          <p class="muted" style="font-size:12.5px; margin-bottom:10px;">
+            حدد أقصى عدد من الأجهزة يمكن لحساب الأدمن تسجيل الدخول منها في نفس الوقت.
+          </p>
+          <div class="row" style="gap:8px; margin-bottom:10px; align-items:center;">
+            <label for="setMaxAdminDevices" style="font-size:13px;">أقصى عدد أجهزة</label>
+            <input type="number" id="setMaxAdminDevices" class="input" min="1" max="20" step="1" style="max-width:90px;">
+          </div>
+          <div class="row-between" style="margin-bottom:10px;">
+            <span id="adminDevicesCount" class="badge badge-muted">0 / 2 جهاز نشط</span>
+          </div>
+          <button type="button" class="btn btn-ghost" onclick="handleClearAdminSessions()">تسجيل الخروج من باقي أجهزة
+            الأدمن</button>
+          <p class="muted" style="font-size:12px; margin-top:6px;">
+            هذا الزرار هيسجل الخروج من كل أجهزة الأدمن الأخرى فورًا، وهيسيب هذا الجهاز اللي بتستخدمه دلوقتي شغال.
+          </p>
+        </div>
+      </div>
+
+      <div class="settings-block">
+        <h4 onclick="toggleSettingsBlock(this)"><span>السناتر</span><span class="chev">›</span></h4>
+        <div class="settings-body">
+          <div id="centersWrap" class="detail-list" style="margin-bottom:10px;"></div>
+          <div class="row" style="gap:8px;">
+            <input type="text" id="newCenterInput" class="input" placeholder="اسم السنتر الجديد">
+            <button type="button" class="btn btn-primary btn-sm" onclick="addNewCenter()" style="width:auto; flex-shrink:0;">إضافة</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-block">
+        <h4 onclick="toggleSettingsBlock(this)"><span data-t="changeClassCodes">تغيير أكواد الصفوف</span><span class="chev">›</span></h4>
+        <div class="settings-body">
+          <div id="classCodesWrap"></div>
+        </div>
+      </div>
+
+      <div class="settings-block">
+        <h4 onclick="toggleSettingsBlock(this)"><span>تعديل كلمات مرور الطلاب</span><span class="chev">›</span></h4>
+        <div class="settings-body">
+          <input type="search" id="studentPasswordSearch" class="input" placeholder="ابحث باسم الطالب"
+            oninput="renderPasswordStudents()">
+          <div id="passwordStudentsWrap" class="detail-list" style="margin-top:10px;"></div>
+          <div id="passwordEditor" style="display:none; margin-top:12px;">
+            <div id="passwordStudentName" class="muted" style="font-size:13px; margin-bottom:7px;"></div>
+            <input type="password" id="newStudentPassword" class="input" placeholder="كلمة المرور الجديدة"
+              autocomplete="new-password">
+            <button class="btn btn-primary" style="margin-top:8px;" onclick="saveStudentPassword()">حفظ كلمة
+              المرور</button>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="saveAllSettings()" data-t="save">حفظ</button>
+
+      <hr class="divider">
+
+      <div class="settings-block" style="margin-bottom:8px; border-color: var(--bad-soft);">
+        <h4 onclick="toggleSettingsBlock(this)" style="color:var(--bad);"><span data-t="dangerZone">منطقة خطرة</span><span class="chev">›</span></h4>
+        <div class="settings-body">
+          <p class="muted" style="font-size:12.5px; margin-bottom:12px;" data-t="resetDataDesc">نقل كل طالب
+            للصف اللي بعده مباشرة (مثلاً الأول الإعدادي يبقى الثاني الإعدادي وهكذا لكل الصفوف) مع الاحتفاظ بسجل
+            حضوره ودرجاته، وحذف بيانات طلاب آخر صف نهائياً لأنهم اتخرجوا</p>
+          <button class="btn btn-bad" onclick="handleResetData()" data-t="resetData">ترقية الطلاب + حذف المتخرجين نهائياً</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- سجل الطالب: صفحة كاملة بدل النافذة المنبثقة -->
+  <div class="detail-page" id="studentDetailPage">
+    <div class="detail-page-head">
+      <button class="detail-back" onclick="closeStudentDetail()" aria-label="back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M15 18l-6-6 6-6" />
+        </svg>
+      </button>
+      <div style="min-width:0;">
+        <div class="detail-page-name" id="detailStudentTitle">بيانات الطالب</div>
+        <div class="detail-page-sub" id="detailStudentMeta"></div>
+      </div>
+    </div>
+    <div class="detail-page-body">
+      <div class="tabs">
+        <button class="tab active" id="detailTabAttendance" onclick="showStudentDetail('attendance')" data-t="attendanceTabLabel">الحضور
+          والغياب</button>
+        <button class="tab" id="detailTabGrades" onclick="showStudentDetail('grades')" data-t="gradesSection">الدرجات</button>
+      </div>
+      <div id="studentDetailList"></div>
+      <div class="field" style="margin-top:18px;">
+        <label data-t="parentTelegram">تيليجرام ولي الأمر (لإرسال الرسائل تلقائياً)</label>
+        <div style="display:flex; gap:8px;">
+          <input type="text" id="detailTelegramChatId" class="input" style="flex:1;" placeholder="Chat ID">
+          <button type="button" class="btn btn-sm" style="flex:0 0 auto;" onclick="openTelegramPicker('detailTelegramChatId')" data-t="fetchTelegramChats">جلب المحادثات</button>
+        </div>
+        <button type="button" class="btn btn-sm btn-primary" style="margin-top:8px;" onclick="saveDetailTelegramChatId()" data-t="save">حفظ</button>
+      </div>
+      <button class="btn btn-bad" style="margin-top:18px" onclick="removeDetailStudent()" data-t="deleteStudentPermanently">حذف الطالب نهائياً</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="resetConfirmModal">
+    <div class="modal">
+      <div class="modal-head"><span class="modal-title" data-t="resetConfirmTitle">تأكيد ترقية الطلاب</span><button class="modal-close"
+          onclick="closeModal('resetConfirmModal')">&times;</button></div>
+      <p id="resetConfirmText" class="muted" style="font-size:13px; line-height:1.8; margin-bottom:16px;"></p>
+      <div class="grid-2"><button class="btn btn-ghost" onclick="closeModal('resetConfirmModal')" data-t="cancel">إلغاء</button><button
+          class="btn btn-bad" onclick="continueResetData()" data-t="continueBtn">متابعة</button></div>
+    </div>
+  </div>
+  <div class="overlay" id="confirmModal">
+    <div class="modal">
+      <div class="modal-head"><span class="modal-title" id="confirmModalTitle" data-t="confirmTitle">تأكيد</span><button class="modal-close"
+          onclick="closeModal('confirmModal')">&times;</button></div>
+      <p id="confirmModalText" class="muted" style="font-size:13px; line-height:1.8; margin-bottom:16px;"></p>
+      <div class="grid-2"><button class="btn btn-ghost" onclick="closeModal('confirmModal')" data-t="cancel">إلغاء</button><button
+          class="btn btn-bad" id="confirmModalOkBtn" data-t="confirmDeleteBtn">تأكيد الحذف</button></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="attendanceQueueModal">
+    <div class="modal">
+      <div class="modal-head"><span class="modal-title" data-t="sendAbsenceMessagesTitle">إرسال رسائل الغياب</span><button class="modal-close"
+          onclick="closeModal('attendanceQueueModal')">&times;</button></div>
+      <p class="muted" style="font-size:12.5px; margin-bottom:10px;" data-t="absenceQueueHint">
+        دوس "إرسال" جنب كل طالب لوحده. هيفتح واتساب برسالته جاهزة، ابعتها وارجع تاني هنا للطالب اللي بعده.
+      </p>
+      <div id="attendanceQueueList"></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="studentPickerModal">
+    <div class="modal">
+      <div class="modal-head"><span class="modal-title" data-t="chooseStudentTitle">اختيار الطالب</span><button class="modal-close"
+          onclick="closeModal('studentPickerModal')">&times;</button></div>
+      <input id="gradeStudentSearch" class="input" type="search" placeholder="ابحث باسم الطالب" data-t-ph="searchByStudentName"
+        oninput="renderStudentPicker()">
+      <div class="picker-results" id="studentPickerResults" style="margin-top:12px;"></div>
+    </div>
+  </div>
+  <div class="overlay" id="noteStudentPickerModal">
+    <div class="modal">
+      <div class="modal-head"><span class="modal-title" data-t="chooseStudentForNoteTitle">اختيار طالب للملاحظة</span><button class="modal-close"
+          onclick="closeModal('noteStudentPickerModal')">&times;</button></div>
+      <input id="noteStudentSearch" class="input" type="search" placeholder="ابحث باسم الطالب" data-t-ph="searchByStudentName"
+        oninput="renderNoteStudentPicker()">
+      <div class="picker-results" id="noteStudentPickerResults" style="margin-top:12px;"></div>
+    </div>
+  </div>
+  <div class="overlay" id="noteTargetPickerModal">
+    <div class="modal">
+      <div class="modal-head"><span class="modal-title" data-t="chooseNoteTargetTitle">اختيار مستهدف الملاحظة</span><button class="modal-close"
+          onclick="closeModal('noteTargetPickerModal')">&times;</button></div>
+      <input id="noteTargetSearch" class="input" type="search" placeholder="ابحث باسم الطالب" data-t-ph="searchByStudentName"
+        oninput="renderNoteTargetPicker()">
+      <div class="picker-results" id="noteTargetPickerResults" style="margin-top:12px;"></div>
+    </div>
+  </div>
+  <div class="overlay" id="classCenterPickerModal">
+    <div class="modal">
+      <div class="modal-head"><span class="modal-title" id="classCenterPickerTitle" data-t="chooseCenterTitle">اختيار السنتر</span><button
+          class="modal-close" onclick="closeModal('classCenterPickerModal')">&times;</button></div>
+      <div class="picker-results" id="classCenterPickerResults"></div>
+    </div>
+  </div>
+
+  <script type="module" src="firebase.js"></script>
+  <script src="shared.js"></script>
+  <script>
+    window.applyTheme();
+    window.applyCachedAccent();
+    window.applyLangDir();
+
+    var session = window.getSession();
+    if (!session || session.role !== 'admin') { window.location.href = 'index.html'; }
+
+    var settings, setupCenter, setupClass;
+
+    function localize() {
+      document.querySelectorAll('[data-t]').forEach(function (el) { el.textContent = window.t(el.getAttribute('data-t')); });
+      document.querySelectorAll('[data-t-ph]').forEach(function (el) { el.setAttribute('placeholder', window.t(el.getAttribute('data-t-ph'))); });
+      document.getElementById('langLabel').textContent = window.t('langToggle');
+      document.getElementById('brandName').textContent = window.mcLang() === 'ar' ? settings.platformName : (settings.platformNameEn || settings.platformName);
+      document.getElementById('brandLogo').innerHTML = settings.logo ? '<img src="' + settings.logo + '">' : (settings.platformName ? settings.platformName[0] : 'م');
+    }
+
+    function className(c) { return window.mcLang() === 'ar' ? c.name : c.nameEn; }
+
+    function renderChips(containerId, items, getLabel, getVal, currentVal, onPick) {
+      var wrap = document.getElementById(containerId);
+      wrap.innerHTML = '';
+      items.forEach(function (item) {
+        var val = getVal(item);
+        var chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'chip' + (val === currentVal ? ' active' : '');
+        chip.textContent = getLabel(item);
+        chip.onclick = function () { onPick(item); };
+        wrap.appendChild(chip);
+      });
+    }
+
+    function renderSetup() {
+      renderChips('setupCenters', settings.centers, function (c) { return c; }, function (c) { return c; }, setupCenter, function (c) {
+        setupCenter = c; renderSetup();
+      });
+      renderChips('setupClasses', settings.classes, className, function (c) { return c.id; }, setupClass.id, function (c) {
+        setupClass = c; renderSetup();
+      });
+    }
+
+    /* ---------- tabs ---------- */
+    function closeAllModals() {
+      var settingsModal = document.getElementById('settingsModal');
+      if (settingsModal && settingsModal.classList.contains('open')) {
+        window.closeSettingsModal(); // also reverts any unsaved color preview
+      }
+      document.querySelectorAll('.overlay.open').forEach(function (overlay) {
+        overlay.classList.remove('open');
+      });
+      var detailPage = document.getElementById('studentDetailPage');
+      if (detailPage && detailPage.classList.contains('open')) window.closeStudentDetail();
+    }
+    window.closeAllModals = closeAllModals;
+
+    // Pure UI update — no browser-history side effects. Used for normal
+    // (forward) tab switches and to restore a tab when the back
+    // button/swipe gesture fires (see the popstate listener below).
+    function renderTab(name) {
+      closeAllModals();
+      document.querySelectorAll('.tab').forEach(function (t) { t.classList.toggle('active', t.dataset.tab === name); });
+      document.querySelectorAll('[data-bottom-tab]').forEach(function (t) { t.classList.toggle('active', t.dataset.bottomTab === name); });
+      document.querySelectorAll('.section').forEach(function (s) { s.classList.remove('active'); });
+      var targetSection = document.getElementById('section-' + name);
+      targetSection.classList.add('active');
+      document.querySelector('.fab-add').classList.toggle('show', name !== 'table' && name !== 'grades');
+      if (name === 'table') renderTable();
+      if (name === 'record') renderRecord();
+      if (name === 'grades') { populateGradeStudentSelect(); renderGrades(); }
+      if (name === 'setup') { renderUnpaidSection(); renderAdminLeaderboard(); }
+    }
+
+    // Tabs used to be plain show/hide with no browser-history entry, so
+    // pressing back — or the Android edge swipe-back gesture — skipped
+    // straight past them to whatever page was open before admin.html,
+    // i.e. the login page. We now push a real history entry per tab so
+    // back steps through the app's own screens first, one at a time.
+    history.replaceState({ adminTab: 'setup' }, '');
+
+    function switchTab(name) {
+      renderTab(name);
+      history.pushState({ adminTab: name }, '');
+    }
+    window.switchTab = switchTab;
+
+    window.addEventListener('popstate', function (event) {
+      var name = (event.state && event.state.adminTab) || 'setup';
+      renderTab(name);
+    });
+
+    window.goToTable = function () {
+      switchTab('table');
+    };
+
+    /* ---------- attendance table ---------- */
+    function renderTable() {
+      document.getElementById('tableGroupLabel').textContent = setupCenter + ' · ' + className(setupClass);
+      var students = window.getStudents().filter(function (s) { return (s.center || '').trim() === setupCenter.trim() && s.classId === setupClass.id; });
+      var today = new Date().toISOString().slice(0, 10);
+      var attendance = window.getAttendance();
+
+      var list = document.getElementById('tableList');
+      list.innerHTML = '';
+      var oldSendAll = document.getElementById('sendAllMessages');
+      if (oldSendAll) oldSendAll.remove();
+      document.getElementById('tableEmpty').style.display = students.length ? 'none' : 'block';
+
+      var paidCount = students.filter(function (s) { return s.paid; }).length;
+      document.getElementById('statTotal').textContent = students.length;
+      document.getElementById('statPaid').textContent = paidCount;
+      document.getElementById('statUnpaid').textContent = students.length - paidCount;
+
+      students.forEach(function (s) {
+        var todays = attendance.find(function (a) { return a.studentId === s.id && a.date === today; });
+        var row = document.createElement('div');
+        row.className = 'stu-row';
+        var attendanceCell = todays
+          ? '<span class="attendance-locked">' + (todays.status === 'present' ? 'تم تسجيل الحضور' : 'تم تسجيل الغياب') + '</span>'
+          : ('<div class="attendance-choice"><button class="attendance-text" data-id="' + s.id + '" data-act="present">حاضر</button><div class="attendance-menu" data-menu="' + s.id + '">' +
+            '<label><input type="radio" name="arrival-' + s.id + '" value="حاضر في الميعاد"> حاضر في الميعاد</label><label><input type="radio" name="arrival-' + s.id + '" value="حاضر متأخر عن الميعاد"> حاضر متأخر عن الميعاد</label><label><input type="radio" name="departure-' + s.id + '" value="خرج قبل انتهاء الحصة"> خرج قبل انتهاء الحصة</label><label><input type="radio" name="departure-' + s.id + '" value="خرج في الميعاد"> خرج في الميعاد</label><button data-save-attendance="' + s.id + '">تسجيل الحضور</button></div></div>' +
+            '<button class="attendance-text" data-id="' + s.id + '" data-act="absent">غائب</button>');
+        row.innerHTML =
+          '<div class="avatar">' + (s.avatar ? '<img src="' + s.avatar + '">' : window.initials(s.name)) + '</div>' +
+          '<div class="stu-info"><div class="stu-name">' + escapeHtml(s.name) + '</div><div class="stu-meta">' + escapeHtml(s.phone) + '</div></div>' +
+          '<div class="stu-actions">' +
+          '<button class="pay-pill ' + (s.paid ? 'on' : '') + '" data-id="' + s.id + '" data-act="paid">' + (s.paid ? window.t('paid') : window.t('unpaid')) + '</button>' +
+          attendanceCell +
+          '</div>';
+        list.appendChild(row);
+      });
+
+      list.querySelectorAll('[data-act="paid"]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          window.togglePaid(btn.dataset.id);
+          window.mcToast(window.t('paidUpdated'));
+          renderTable();
+        });
+      });
+
+      list.querySelectorAll('[data-act="present"]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          list.querySelectorAll('.attendance-menu.open').forEach(function (menu) { menu.classList.remove('open'); });
+          document.querySelector('[data-menu="' + btn.dataset.id + '"]').classList.add('open');
+        });
+      });
+      list.querySelectorAll('[data-act="absent"]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var student = window.getStudentById(btn.dataset.id);
+          var already = window.getAttendance().find(function (a) { return a.studentId === student.id && a.date === today; });
+          if (already) {
+            window.mcToast('تم تسجيل حضور ' + student.name + ' اليوم بالفعل');
+            renderTable();
+            return;
+          }
+          window.markAttendance(student.id, 'absent', null, []);
+          window.mcToast('تم تسجيل الغياب');
+          renderTable();
+        });
+      });
+      list.querySelectorAll('[data-save-attendance]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var menu = document.querySelector('[data-menu="' + btn.dataset.saveAttendance + '"]');
+          var details = Array.prototype.map.call(menu.querySelectorAll('input:checked'), function (input) { return input.value; });
+          var student = window.getStudentById(btn.dataset.saveAttendance);
+          var already = window.getAttendance().find(function (a) { return a.studentId === student.id && a.date === today; });
+          if (already) {
+            window.mcToast('تم تسجيل حضور ' + student.name + ' اليوم بالفعل');
+            menu.classList.remove('open');
+            renderTable();
+            return;
+          }
+          window.markAttendance(student.id, 'present', null, details);
+          menu.classList.remove('open');
+          window.mcToast('تم تسجيل الحضور');
+          renderTable();
+        });
+      });
+      document.getElementById('tableList').insertAdjacentHTML('afterend', '<button class="btn btn-primary send-all" id="sendAllMessages">إرسال كافة الرسائل</button>');
+      document.getElementById('sendAllMessages').onclick = sendAllAttendanceMessages;
+    }
+
+    document.addEventListener('click', function (event) {
+      if (!event.target.closest('.attendance-choice')) document.querySelectorAll('.attendance-menu.open').forEach(function (menu) { menu.classList.remove('open'); });
+    });
+
+    function sendAllAttendanceMessages() {
+      // Both absent AND present students get a WhatsApp message here now,
+      // each with wording that matches their status for the day.
+      var today = new Date().toISOString().slice(0, 10);
+      var students = window.getStudents().filter(function (s) { return (s.center || '').trim() === setupCenter.trim() && s.classId === setupClass.id; });
+      var attendance = window.getAttendance();
+      var month = window.t('months')[new Date().getMonth()];
+
+      // Any student marked today (absent or present) who hasn't already
+      // had their message sent today. A fresh attendance record is created
+      // each day, so messageSent naturally resets every day on its own.
+      var pendingToday = students.filter(function (student) {
+        var record = attendance.find(function (a) { return a.studentId === student.id && a.date === today; });
+        return record && (record.status === 'absent' || record.status === 'present') && !record.messageSent;
+      });
+
+      if (!pendingToday.length) {
+        window.mcToast('تم إرسال رسائل كل الطلاب اليوم بالفعل');
+        return;
+      }
+
+      // Every student's guardian gets the message automatically on BOTH
+      // Telegram (if a chat ID is linked) and WhatsApp (UltraMsg gateway).
+      // Only students where NOTHING got through fall back to the manual queue.
+      var sendBtn = document.getElementById('sendAllMessages');
+      if (sendBtn) sendBtn.disabled = true;
+      window.mcToast('جاري إرسال ' + pendingToday.length + ' رسالة، استنى لحظات...');
+      var failed = [];
+      Promise.all(pendingToday.map(function (student) {
+        var record = attendance.find(function (a) { return a.studentId === student.id && a.date === today; });
+        var message = buildAttendanceMessage(student, record, today, month);
+        return window.sendGuardianMessage(student, message).then(function (r) {
+          if (r.any) { if (record) window.markAttendanceMessageSent(record.id); }
+          else failed.push(student);
+        });
+      })).then(function () {
+        if (sendBtn) sendBtn.disabled = false;
+        renderTable();
+        if (!failed.length) {
+          window.mcToast('تم إرسال كل الرسائل تلقائياً ✓');
+          return;
+        }
+        window.mcToast('فشل إرسال ' + failed.length + ' رسالة، ابعتها يدوياً من القائمة');
+        renderAttendanceQueue(failed, today, month);
+        openModal('attendanceQueueModal');
+      });
+    }
+
+    function buildAttendanceMessage(student, record, today, month) {
+      var isPresent = record && record.status === 'present';
+      var statusLabel = isPresent ? 'حاضر' : 'غائب';
+      return 'مرحباً - التاريخ: ' + today + '\nالطالب: ' + student.name + '\nسنتر: ' + student.center + '\nحالة الحضور: ' + statusLabel + '\nرسوم الاشتراك: ' + (student.paid ? 'تم الدفع' : 'لم يدفع') + ' ' + month;
+    }
+
+    function renderAttendanceQueue(pendingToday, today, month) {
+      var list = document.getElementById('attendanceQueueList');
+      var attendance = window.getAttendance();
+      list.innerHTML = pendingToday.map(function (student, index) {
+        var record = attendance.find(function (a) { return a.studentId === student.id && a.date === today; });
+        var isPresent = record && record.status === 'present';
+        var statusLabel = isPresent ? 'حاضر' : 'غائب';
+        var message = buildAttendanceMessage(student, record, today, month);
+        return '<div class="row-between" id="queueRow' + index + '" style="padding:10px 0; border-bottom:1px solid var(--border);">' +
+          '<span>' + student.name + ' <span class="muted" style="font-size:11.5px;">(' + statusLabel + ')</span></span>' +
+          '<button type="button" class="btn btn-sm btn-primary" onclick="sendQueuedAttendanceMessage(this)" data-phone="' + student.phone + '" data-message="' + encodeURIComponent(message) + '" data-attendance-id="' + (record ? record.id : '') + '">إرسال</button>' +
+          '</div>';
+      }).join('');
+      if (!pendingToday.length) list.innerHTML = '<p style="padding:14px 0; text-align:center; color:var(--muted);">تم إرسال رسائل الجميع ✓</p>';
+    }
+
+    window.sendQueuedAttendanceMessage = function (btn) {
+      var phone = btn.dataset.phone;
+      var message = decodeURIComponent(btn.dataset.message);
+      var attendanceId = btn.dataset.attendanceId;
+      // IMPORTANT: persist to Firebase and remove the row BEFORE opening
+      // WhatsApp. On mobile, window.open() below hands control to the
+      // WhatsApp app almost immediately, which can pause/kill this page's
+      // JS before any code AFTER it gets a chance to run. So anything that
+      // must happen for sure (the Firebase write, the UI removal) goes first.
+      if (attendanceId) window.markAttendanceMessageSent(attendanceId);
+      var row = btn.closest('.row-between');
+      if (row) row.remove();
+      var list = document.getElementById('attendanceQueueList');
+      if (list && !list.children.length) {
+        list.innerHTML = '<p style="padding:14px 0; text-align:center; color:var(--muted);">تم إرسال رسائل الجميع ✓</p>';
+      }
+      window.openWhatsApp(phone, message);
+    };
+
+    /* ---------- full record ---------- */
+    function renderRecord() {
+      var nameF = document.getElementById('filterName').value.trim().toLowerCase();
+      var phoneF = document.getElementById('filterPhone').value.trim();
+      var centerF = document.getElementById('filterCenter').dataset.value || '';
+      var classF = document.getElementById('filterClass').dataset.value || '';
+
+      var students = window.getStudents().filter(function (s) {
+        if (nameF && s.name.toLowerCase().indexOf(nameF) === -1) return false;
+        if (phoneF && s.phone.indexOf(phoneF) === -1) return false;
+        if (centerF && s.center !== centerF) return false;
+        if (classF && s.classId !== classF) return false;
+        return true;
+      });
+
+      var list = document.getElementById('recordList');
+      list.innerHTML = '';
+      document.getElementById('recordEmpty').style.display = students.length ? 'none' : 'block';
+
+      students.forEach(function (s) {
+        var stats = window.getAttendanceStats(s.id);
+        var cls = settings.classes.find(function (c) { return c.id === s.classId; });
+        var row = document.createElement('div');
+        row.className = 'rec-row student-clickable';
+        row.dataset.studentId = s.id;
+        row.innerHTML =
+          '<div class="avatar">' + (s.avatar ? '<img src="' + s.avatar + '">' : window.initials(s.name)) + '</div>' +
+          '<div class="stu-info"><div class="stu-name">' + escapeHtml(s.name) + '</div>' +
+          '<div class="stu-meta">' + s.center + ' · ' + (cls ? className(cls) : '') + ' · ' + escapeHtml(s.phone) + '</div></div>' +
+          '<div class="rec-counts">' +
+          '<div class="count-circle cc-ok">' + stats.present + '</div>' +
+          '<div class="count-circle cc-bad">' + stats.absent + '</div>' +
+          '</div>';
+        list.appendChild(row);
+        row.onclick = function () { openStudentDetail(s.id); };
+      });
+    }
+
+    /* ---------- سجل الطالب (صفحة كاملة + تجميع شهري) ---------- */
+    var detailStudentId = null, detailMode = 'attendance';
+    var MC_MONTH_NAMES = {
+      ar: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+      en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    };
+
+    function monthKeyOf(dateStr) {
+      // dates are stored as YYYY-MM-DD
+      return (dateStr && dateStr.length >= 7) ? dateStr.slice(0, 7) : '0000-00';
+    }
+
+    function monthLabel(key) {
+      if (key === '0000-00') return window.mcLang() === 'en' ? 'Undated' : 'بدون تاريخ';
+      var parts = key.split('-');
+      var names = MC_MONTH_NAMES[window.mcLang()] || MC_MONTH_NAMES.ar;
+      var name = names[parseInt(parts[1], 10) - 1] || parts[1];
+      return name + ' ' + parts[0];
+    }
+
+    // Groups records into months and keeps ONLY the months that actually have
+    // records, newest month first — so a month never shows up on the card
+    // until the admin has logged something in it.
+    function groupByMonth(items) {
+      var map = {};
+      items.forEach(function (item) {
+        var key = monthKeyOf(item.date);
+        if (!map[key]) map[key] = [];
+        map[key].push(item);
+      });
+      return Object.keys(map).sort(function (a, b) { return b.localeCompare(a); })
+        .map(function (key) { return { key: key, label: monthLabel(key), items: map[key] }; });
+    }
+
+    window.toggleMonthCard = function (head) {
+      head.parentNode.classList.toggle('open');
+    };
+
+    function openStudentDetail(studentId) {
+      var student = window.getStudentById(studentId);
+      if (!student) return;
+      detailStudentId = studentId;
+      document.getElementById('detailStudentTitle').textContent = student.name;
+      var cls = settings.classes.find(function (c) { return c.id === student.classId; });
+      document.getElementById('detailStudentMeta').textContent =
+        (student.center || '') + (cls ? ' · ' + className(cls) : '') + (student.phone ? ' · ' + student.phone : '');
+      document.getElementById('detailTelegramChatId').value = student.telegramChatId || '';
+      showStudentDetail('attendance');
+      document.getElementById('studentDetailPage').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    window.closeStudentDetail = function () {
+      document.getElementById('studentDetailPage').classList.remove('open');
+      document.body.style.overflow = '';
+      detailStudentId = null;
+    };
+
+    window.showStudentDetail = function (mode) {
+      detailMode = mode;
+      document.getElementById('detailTabAttendance').classList.toggle('active', mode === 'attendance');
+      document.getElementById('detailTabGrades').classList.toggle('active', mode === 'grades');
+      var list = document.getElementById('studentDetailList');
+      list.innerHTML = mode === 'attendance'
+        ? buildAttendanceMonths(window.getAttendanceForStudent(detailStudentId))
+        : buildGradeMonths(window.getGradesForStudent(detailStudentId));
+    };
+
+    function buildAttendanceMonths(records) {
+      var groups = groupByMonth(records);
+      if (!groups.length) return '<div class="detail-empty">لا يوجد حضور مسجل بعد</div>';
+      return groups.map(function (g, i) {
+        var present = g.items.filter(function (r) { return r.status === 'present'; });
+        var absent = g.items.filter(function (r) { return r.status !== 'present'; });
+        var days = g.items.slice().sort(function (a, b) { return (b.date || '').localeCompare(a.date || ''); })
+          .map(function (r) {
+            var ok = r.status === 'present';
+            var extra = (r.details && r.details.length) ? ' · ' + escapeHtml(r.details.join('، ')) : '';
+            return '<div class="day-row">' +
+              '<span class="dot ' + (ok ? 'dot-ok' : 'dot-bad') + '"></span>' +
+              '<div class="day-main"><div class="day-date">' + escapeHtml(r.date || '') + extra + '</div></div>' +
+              '<span class="pill ' + (ok ? 'pill-ok' : 'pill-bad') + '">' + (ok ? 'حاضر' : 'غائب') + '</span>' +
+              '</div>';
+          }).join('');
+        return '<div class="month-card' + (i === 0 ? ' open' : '') + '">' +
+          '<div class="month-head" onclick="toggleMonthCard(this)">' +
+          '<span class="month-chev">›</span>' +
+          '<span class="month-title">' + g.label + '</span>' +
+          '<span class="pill pill-ok">' + present.length + ' حضور</span>' +
+          '<span class="pill pill-bad">' + absent.length + ' غياب</span>' +
+          '</div><div class="month-body">' + days + '</div></div>';
+      }).join('');
+    }
+
+    function buildGradeMonths(records) {
+      var groups = groupByMonth(records);
+      if (!groups.length) return '<div class="detail-empty">لا يوجد درجات مسجلة بعد</div>';
+      return groups.map(function (g, i) {
+        var totalScore = 0, totalMax = 0;
+        g.items.forEach(function (r) {
+          totalScore += Number(r.score) || 0;
+          totalMax += Number(r.maxScore) || 0;
+        });
+        var monthPct = totalMax ? Math.round((totalScore / totalMax) * 100) : 0;
+        var rows = g.items.map(function (r) {
+          var score = Number(r.score) || 0;
+          var max = Number(r.maxScore) || 0;
+          // أقل من نص الدرجة الأصلية = أحمر، غير كده أخضر
+          var weak = max > 0 && score < (max / 2);
+          return '<div class="grade-row">' +
+            '<span class="dot ' + (weak ? 'dot-bad' : 'dot-ok') + '"></span>' +
+            '<div class="grade-main">' +
+            '<div class="grade-name">' + escapeHtml(r.examName || '') + '</div>' +
+            '<div class="day-date">' + escapeHtml(r.date || '') + '</div></div>' +
+            '<span class="score-tag ' + (weak ? 'score-bad' : 'score-ok') + '">' + score + ' / ' + max + '</span>' +
+            '</div>';
+        }).join('');
+        return '<div class="month-card' + (i === 0 ? ' open' : '') + '">' +
+          '<div class="month-head" onclick="toggleMonthCard(this)">' +
+          '<span class="month-chev">›</span>' +
+          '<span class="month-title">' + g.label + '</span>' +
+          '<span class="pill ' + (monthPct < 50 ? 'pill-bad' : 'pill-ok') + '">' + monthPct + '%</span>' +
+          '<span class="pill pill-ok">' + g.items.length + ' اختبار</span>' +
+          '</div><div class="month-body">' + rows + '</div></div>';
+      }).join('');
+    }
+
+    window.saveDetailTelegramChatId = function () {
+      if (!detailStudentId) return;
+      var student = window.getStudentById(detailStudentId);
+      if (!student) return;
+      var chatId = document.getElementById('detailTelegramChatId').value.trim();
+      window.saveStudent(Object.assign({}, student, { telegramChatId: chatId }));
+      window.mcToast('تم حفظ تيليجرام ولي الأمر');
+    };
+
+    window.removeDetailStudent = function () {
+      if (!detailStudentId) return;
+      var idToDelete = detailStudentId;
+      window.showConfirm('هل تريد حذف الطالب وكل سجلاته نهائياً؟', function () {
+        window.deleteStudent(idToDelete).then(function () { window.closeStudentDetail(); renderRecord(); renderTable(); window.mcToast('تم حذف الطالب وبياناته'); });
+      });
+    };
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && document.getElementById('studentDetailPage').classList.contains('open')) {
+        window.closeStudentDetail();
+      }
+    });
+
+    function setupRecordFilters() {
+      var centerWrap = document.getElementById('filterCenter');
+      centerWrap.dataset.value = '';
+      centerWrap.innerHTML = '';
+      var allChip = document.createElement('button');
+      allChip.className = 'chip active'; allChip.textContent = window.t('allCenters');
+      allChip.onclick = function () { centerWrap.dataset.value = ''; markActive(centerWrap, allChip); renderRecord(); };
+      centerWrap.appendChild(allChip);
+      settings.centers.forEach(function (c) {
+        var chip = document.createElement('button');
+        chip.className = 'chip'; chip.textContent = c;
+        chip.onclick = function () { centerWrap.dataset.value = c; markActive(centerWrap, chip); renderRecord(); };
+        centerWrap.appendChild(chip);
+      });
+
+      var classWrap = document.getElementById('filterClass');
+      classWrap.dataset.value = '';
+      classWrap.innerHTML = '';
+      var allClassChip = document.createElement('button');
+      allClassChip.className = 'chip active'; allClassChip.textContent = window.t('allClasses');
+      allClassChip.onclick = function () { classWrap.dataset.value = ''; markActive(classWrap, allClassChip); renderRecord(); };
+      classWrap.appendChild(allClassChip);
+      settings.classes.forEach(function (c) {
+        var chip = document.createElement('button');
+        chip.className = 'chip'; chip.textContent = className(c);
+        chip.onclick = function () { classWrap.dataset.value = c.id; markActive(classWrap, chip); renderRecord(); };
+        classWrap.appendChild(chip);
+      });
+    }
+
+    function markActive(wrap, chip) {
+      wrap.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('active'); });
+      chip.classList.add('active');
+    }
+
+    /* ---------- unpaid students (home page) ---------- */
+    function setupUnpaidFilters() {
+      var centerWrap = document.getElementById('unpaidFilterCenter');
+      centerWrap.dataset.value = '';
+      centerWrap.innerHTML = '';
+      var allChip = document.createElement('button');
+      allChip.className = 'chip active'; allChip.textContent = window.t('allCenters');
+      allChip.onclick = function () { centerWrap.dataset.value = ''; markActive(centerWrap, allChip); renderUnpaidSection(); };
+      centerWrap.appendChild(allChip);
+      settings.centers.forEach(function (c) {
+        var chip = document.createElement('button');
+        chip.className = 'chip'; chip.textContent = c;
+        chip.onclick = function () { centerWrap.dataset.value = c; markActive(centerWrap, chip); renderUnpaidSection(); };
+        centerWrap.appendChild(chip);
+      });
+
+      var classWrap = document.getElementById('unpaidFilterClass');
+      classWrap.dataset.value = '';
+      classWrap.innerHTML = '';
+      var allClassChip = document.createElement('button');
+      allClassChip.className = 'chip active'; allClassChip.textContent = window.t('allClasses');
+      allClassChip.onclick = function () { classWrap.dataset.value = ''; markActive(classWrap, allClassChip); renderUnpaidSection(); };
+      classWrap.appendChild(allClassChip);
+      settings.classes.forEach(function (c) {
+        var chip = document.createElement('button');
+        chip.className = 'chip'; chip.textContent = className(c);
+        chip.onclick = function () { classWrap.dataset.value = c.id; markActive(classWrap, chip); renderUnpaidSection(); };
+        classWrap.appendChild(chip);
+      });
+    }
+
+    function renderUnpaidSection() {
+      var nameEl = document.getElementById('unpaidFilterName');
+      var centerEl = document.getElementById('unpaidFilterCenter');
+      var classEl = document.getElementById('unpaidFilterClass');
+      if (!nameEl || !centerEl || !classEl) return;
+
+      var nameF = nameEl.value.trim().toLowerCase();
+      var centerF = centerEl.dataset.value || '';
+      var classF = classEl.dataset.value || '';
+
+      var students = window.getStudents().filter(function (s) {
+        if (s.paid) return false;
+        if (nameF && s.name.toLowerCase().indexOf(nameF) === -1) return false;
+        if (centerF && s.center !== centerF) return false;
+        if (classF && s.classId !== classF) return false;
+        return true;
+      });
+
+      document.getElementById('unpaidCount').textContent = students.length;
+
+      var list = document.getElementById('unpaidList');
+      list.innerHTML = '';
+      document.getElementById('unpaidEmpty').style.display = students.length ? 'none' : 'block';
+
+      students.forEach(function (s) {
+        var cls = settings.classes.find(function (c) { return c.id === s.classId; });
+        var row = document.createElement('div');
+        row.className = 'rec-row';
+        row.innerHTML =
+          '<div class="avatar">' + (s.avatar ? '<img src="' + s.avatar + '">' : window.initials(s.name)) + '</div>' +
+          '<div class="stu-info"><div class="stu-name">' + escapeHtml(s.name) + '</div>' +
+          '<div class="stu-meta">' + escapeHtml(s.center) + ' · ' + (cls ? className(cls) : '') + ' · ' + escapeHtml(s.phone) + '</div></div>' +
+          '<button class="pay-pill" data-id="' + s.id + '">' + window.t('unpaid') + '</button>';
+        list.appendChild(row);
+        row.querySelector('.pay-pill').addEventListener('click', function () {
+          window.togglePaid(s.id);
+          window.mcToast(window.t('paidUpdated'));
+          renderUnpaidSection();
+          if (document.getElementById('section-table').classList.contains('active')) renderTable();
+        });
+      });
+    }
+    window.renderUnpaidSection = renderUnpaidSection;
+
+    /* ---------- grades ---------- */
+    function setupGradeFilters() {
+      var centerWrap = document.getElementById('gradeFilterCenter');
+      centerWrap.dataset.value = '';
+      centerWrap.innerHTML = '';
+      var allChip = document.createElement('button');
+      allChip.className = 'chip active'; allChip.textContent = window.t('allCenters');
+      allChip.onclick = function () { centerWrap.dataset.value = ''; markActive(centerWrap, allChip); populateGradeStudentSelect(); renderGrades(); };
+      centerWrap.appendChild(allChip);
+      settings.centers.forEach(function (c) {
+        var chip = document.createElement('button');
+        chip.className = 'chip'; chip.textContent = c;
+        chip.onclick = function () { centerWrap.dataset.value = c; markActive(centerWrap, chip); populateGradeStudentSelect(); renderGrades(); };
+        centerWrap.appendChild(chip);
+      });
+
+      var classWrap = document.getElementById('gradeFilterClass');
+      classWrap.dataset.value = '';
+      classWrap.innerHTML = '';
+      var allClassChip = document.createElement('button');
+      allClassChip.className = 'chip active'; allClassChip.textContent = window.t('allClasses');
+      allClassChip.onclick = function () { classWrap.dataset.value = ''; markActive(classWrap, allClassChip); populateGradeStudentSelect(); renderGrades(); };
+      classWrap.appendChild(allClassChip);
+      settings.classes.forEach(function (c) {
+        var chip = document.createElement('button');
+        chip.className = 'chip'; chip.textContent = className(c);
+        chip.onclick = function () { classWrap.dataset.value = c.id; markActive(classWrap, chip); populateGradeStudentSelect(); renderGrades(); };
+        classWrap.appendChild(chip);
+      });
+    }
+
+    /* ---------- leaderboard ---------- */
+    function setupLeaderboardFilters() {
+      var centerWrap = document.getElementById('lbFilterCenter');
+      centerWrap.dataset.value = '';
+      centerWrap.innerHTML = '';
+      var allChip = document.createElement('button');
+      allChip.className = 'chip active'; allChip.textContent = window.t('allCenters');
+      allChip.onclick = function () { centerWrap.dataset.value = ''; markActive(centerWrap, allChip); renderAdminLeaderboard(); };
+      centerWrap.appendChild(allChip);
+      settings.centers.forEach(function (c) {
+        var chip = document.createElement('button');
+        chip.className = 'chip'; chip.textContent = c;
+        chip.onclick = function () { centerWrap.dataset.value = c; markActive(centerWrap, chip); renderAdminLeaderboard(); };
+        centerWrap.appendChild(chip);
+      });
+
+      var classWrap = document.getElementById('lbFilterClass');
+      classWrap.dataset.value = '';
+      classWrap.innerHTML = '';
+      var allClassChip = document.createElement('button');
+      allClassChip.className = 'chip active'; allClassChip.textContent = window.t('allClasses');
+      allClassChip.onclick = function () { classWrap.dataset.value = ''; markActive(classWrap, allClassChip); renderAdminLeaderboard(); };
+      classWrap.appendChild(allClassChip);
+      settings.classes.forEach(function (c) {
+        var chip = document.createElement('button');
+        chip.className = 'chip'; chip.textContent = className(c);
+        chip.onclick = function () { classWrap.dataset.value = c.id; markActive(classWrap, chip); renderAdminLeaderboard(); };
+        classWrap.appendChild(chip);
+      });
+    }
+
+    function renderAdminLeaderboard() {
+      var centerF = document.getElementById('lbFilterCenter').dataset.value || '';
+      var classF = document.getElementById('lbFilterClass').dataset.value || '';
+      var ranking = window.getLeaderboard({ center: centerF || undefined, classId: classF || undefined });
+
+      var list = document.getElementById('leaderboardList');
+      list.innerHTML = '';
+      document.getElementById('leaderboardEmpty').style.display = ranking.length ? 'none' : 'block';
+
+      var medals = ['🥇', '🥈', '🥉'];
+      ranking.forEach(function (entry, i) {
+        var s = entry.student;
+        var cls = settings.classes.find(function (c) { return c.id === s.classId; });
+        var row = document.createElement('div');
+        row.className = 'lb-row student-clickable';
+        row.dataset.studentId = s.id;
+        row.innerHTML =
+          '<div class="lb-rank">' + (medals[i] || (i + 1)) + '</div>' +
+          '<div class="avatar">' + (s.avatar ? '<img src="' + s.avatar + '">' : window.initials(s.name)) + '</div>' +
+          '<div class="stu-info"><div class="stu-name">' + escapeHtml(s.name) + '</div>' +
+          '<div class="stu-meta">' + escapeHtml(s.center) + ' · ' + (cls ? className(cls) : '') + '</div></div>' +
+          '<div class="lb-points">' + entry.points + ' نقطة</div>';
+        list.appendChild(row);
+        row.onclick = function () { openStudentDetail(s.id); };
+      });
+    }
+    window.renderAdminLeaderboard = renderAdminLeaderboard;
+
+    function populateGradeStudentSelect() {
+      var select = document.getElementById('gradeStudentSelect');
+      var prevVal = select.value;
+      var centerF = document.getElementById('gradeFilterCenter').dataset.value || '';
+      var classF = document.getElementById('gradeFilterClass').dataset.value || '';
+      var students = window.getStudents().filter(function (s) {
+        if (centerF && s.center !== centerF) return false;
+        if (classF && s.classId !== classF) return false;
+        return true;
+      }).sort(function (a, b) { return (a.name || '').localeCompare(b.name || ''); });
+      select.innerHTML = '';
+      students.forEach(function (s) {
+        var cls = settings.classes.find(function (c) { return c.id === s.classId; });
+        var opt = document.createElement('option');
+        opt.value = s.id;
+        opt.textContent = s.name + ' — ' + s.center + (cls ? ' · ' + className(cls) : '');
+        select.appendChild(opt);
+      });
+      if (prevVal && students.some(function (s) { return s.id === prevVal; })) select.value = prevVal;
+      var picker = document.getElementById('gradeStudentPicker');
+      var selected = students.find(function (s) { return s.id === select.value; });
+      picker.textContent = selected ? selected.name + ' · ' + selected.phone : 'اختر الطالب';
+    }
+
+    window.openStudentPicker = function () {
+      document.getElementById('gradeStudentSearch').value = '';
+      renderStudentPicker();
+      openModal('studentPickerModal');
+      document.getElementById('gradeStudentSearch').focus();
+    };
+    window.renderStudentPicker = function () {
+      var search = (document.getElementById('gradeStudentSearch').value || '').trim().toLowerCase();
+      var centerF = document.getElementById('gradeFilterCenter').dataset.value || '';
+      var classF = document.getElementById('gradeFilterClass').dataset.value || '';
+      var results = window.getStudents().filter(function (s) {
+        return (!centerF || s.center === centerF) && (!classF || s.classId === classF) && (!search || (s.name || '').toLowerCase().indexOf(search) !== -1);
+      }).sort(function (a, b) { return (a.name || '').localeCompare(b.name || ''); });
+      var wrap = document.getElementById('studentPickerResults');
+      wrap.innerHTML = '';
+      results.forEach(function (student) {
+        var option = document.createElement('button');
+        option.type = 'button'; option.className = 'picker-option';
+        option.textContent = student.name + ' · ' + student.phone;
+        option.onclick = function () {
+          document.getElementById('gradeStudentSelect').value = student.id;
+          document.getElementById('gradeStudentPicker').textContent = student.name + ' · ' + student.phone;
+          closeModal('studentPickerModal');
+        };
+        wrap.appendChild(option);
+      });
+      if (!results.length) wrap.innerHTML = '<div class="empty-state">' + window.t('noMatchingStudent') + '</div>';
+    };
+
+    function renderGrades() {
+      var centerF = document.getElementById('gradeFilterCenter').dataset.value || '';
+      var classF = document.getElementById('gradeFilterClass').dataset.value || '';
+
+      var grades = window.getGrades().filter(function (g) {
+        if (!centerF && !classF) return true;
+        var student = window.getStudentById(g.studentId);
+        if (!student) return false;
+        if (centerF && student.center !== centerF) return false;
+        if (classF && student.classId !== classF) return false;
+        return true;
+      }).sort(function (a, b) {
+        return (b.date || '').localeCompare(a.date || '') || (b.createdAt || '').localeCompare(a.createdAt || '');
+      });
+      var list = document.getElementById('gradesList');
+      list.innerHTML = '';
+      document.getElementById('gradesEmpty').style.display = grades.length ? 'none' : 'block';
+
+      grades.forEach(function (g) {
+        var student = window.getStudentById(g.studentId);
+        var pct = g.maxScore ? Math.round((Number(g.score) / Number(g.maxScore)) * 100) : 0;
+        var row = document.createElement('div');
+        row.className = 'grade-row';
+        row.innerHTML =
+          '<div class="grade-info"><div class="grade-exam">' + escapeHtml(g.examName) + '</div>' +
+          '<div class="grade-meta">' + escapeHtml(student ? student.name : '—') + ' · ' + (g.date || '') + '</div></div>' +
+          '<div class="grade-score"><b>' + g.score + '/' + g.maxScore + '</b><span>' + pct + '%</span></div>' +
+          '<button class="icon-round-sm" data-id="' + g.id + '" aria-label="delete">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 6L6 18M6 6l12 12"/></svg></button>';
+        list.appendChild(row);
+      });
+
+      list.querySelectorAll('.icon-round-sm').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var gradeId = btn.dataset.id;
+          window.showConfirm(window.t('deleteGradeConfirm'), function () {
+            window.deleteGrade(gradeId);
+            window.mcToast(window.t('gradeDeleted'));
+            renderGrades();
+          });
+        });
+      });
+    }
+
+    window.submitGrade = function () {
+      var select = document.getElementById('gradeStudentSelect');
+      var studentId = select.value;
+      var examName = document.getElementById('gradeExamName').value.trim();
+      var score = parseFloat(document.getElementById('gradeScore').value);
+      var max = parseFloat(document.getElementById('gradeMax').value);
+
+      if (!studentId) { window.mcToast(window.t('chooseStudentFirst')); return; }
+      if (!examName || isNaN(score) || isNaN(max) || max <= 0) { window.mcToast(window.t('required')); return; }
+
+      window.saveGrade({ studentId: studentId, examName: examName, score: score, maxScore: max });
+      window.saveNotification({ studentId: studentId, type: 'grade', text: 'لقد تمت إضافة درجتك: ' + examName });
+
+      var gradedStudent = window.getStudentById(studentId);
+      if (gradedStudent) {
+        var gradeMessage = 'مرحباً - نتيجة اختبار جديدة\nالطالب: ' + gradedStudent.name + '\nالاختبار: ' + examName + '\nالدرجة: ' + score + ' من ' + max;
+        window.sendGuardianMessage(gradedStudent, gradeMessage);
+      }
+
+      window.mcToast(window.t('gradeSaved'));
+      document.getElementById('gradeExamName').value = '';
+      document.getElementById('gradeScore').value = '';
+      document.getElementById('gradeMax').value = '100';
+      document.getElementById('gradeStudentSelect').value = '';
+      document.getElementById('gradeStudentPicker').textContent = 'اختر الطالب';
+      renderGrades();
+    };
+
+    /* ---------- add student modal ---------- */
+    var addSelCenter = null, addSelClass = null;
+    window.openAddStudentModal = function () {
+      closeAllModals();
+      document.getElementById('addName').value = '';
+      document.getElementById('addPhone').value = '';
+      document.getElementById('addTelegramChatId').value = '';
+      document.getElementById('addPassword').value = '';
+      var countrySelect = document.getElementById('addPhoneCountry');
+      if (!countrySelect.options.length) {
+        countrySelect.innerHTML = window.COUNTRY_DIAL_CODES.map(function (c) {
+          return '<option value="' + c.code + '">' + c.flag + ' +' + c.code + '</option>';
+        }).join('');
+      }
+      countrySelect.value = '20';
+      addSelCenter = settings.centers[0];
+      addSelClass = settings.classes[0];
+      buildAddChips();
+      openModal('addModal');
+    };
+
+    function buildAddChips() {
+      renderChips('addCenterChoice', settings.centers, function (c) { return c; }, function (c) { return c; }, addSelCenter, function (c) { addSelCenter = c; buildAddChips(); });
+      renderChips('addClassChoice', settings.classes, className, function (c) { return c.id; }, addSelClass.id, function (c) { addSelClass = c; buildAddChips(); });
+    }
+
+    window.submitAddStudent = function () {
+      var name = document.getElementById('addName').value.trim();
+      var localPhone = document.getElementById('addPhone').value.trim();
+      var dialCode = document.getElementById('addPhoneCountry').value || '20';
+      var telegramChatId = document.getElementById('addTelegramChatId').value.trim();
+      var password = document.getElementById('addPassword').value;
+      if (!name || !localPhone || !password) { window.mcToast(window.t('required')); return; }
+      var phone = window.formatIntlPhone(dialCode, localPhone);
+      window.saveStudent({ name: name, phone: phone, telegramChatId: telegramChatId, center: addSelCenter, classId: addSelClass.id, avatar: '', password: password });
+      window.mcToast(window.t('studentSaved'));
+      closeModal('addModal');
+      if (document.getElementById('section-table').classList.contains('active')) renderTable();
+      if (document.getElementById('section-record').classList.contains('active')) renderRecord();
+      if (document.getElementById('section-setup').classList.contains('active')) renderUnpaidSection();
+    };
+
+    /* ---------- telegram chat picker ---------- */
+    var telegramPickerTarget = null;
+    window.openTelegramPicker = function (targetInputId) {
+      telegramPickerTarget = targetInputId;
+      var list = document.getElementById('telegramPickerList');
+      list.innerHTML = '<p class="muted" style="text-align:center; padding:12px 0;">...جارِ التحميل</p>';
+      openModal('telegramPickerModal');
+      window.fetchTelegramChats().then(function (chats) {
+        if (!chats.length) {
+          list.innerHTML = '<p class="muted" style="text-align:center; padding:12px 0;">لا توجد محادثات بعد — لازم ولي الأمر يبعت أي رسالة للبوت الأول</p>';
+          return;
+        }
+        list.innerHTML = chats.map(function (c) {
+          var label = c.name || c.username || c.chatId;
+          var sub = (c.username ? '@' + c.username + ' · ' : '') + (c.text || '');
+          return '<div class="row-between" style="padding:10px 0; border-bottom:1px solid var(--border);">' +
+            '<span>' + escapeHtml(String(label)) + '<br><span class="muted" style="font-size:11.5px;">' + escapeHtml(String(sub)) + '</span></span>' +
+            '<button type="button" class="btn btn-sm btn-primary" onclick="pickTelegramChat(' + "'" + c.chatId + "'" + ')">استخدام</button>' +
+            '</div>';
+        }).join('');
+      });
+    };
+    window.pickTelegramChat = function (chatId) {
+      if (telegramPickerTarget) document.getElementById(telegramPickerTarget).value = chatId;
+      closeModal('telegramPickerModal');
+    };
+
+    function setupCommunication() {
+      var center = document.getElementById('homeworkCenter'), cls = document.getElementById('homeworkClass');
+      renderChips('homeworkCenter', settings.centers, function (x) { return x; }, function (x) { return x; }, settings.centers[0], function () { });
+      renderChips('homeworkClass', settings.classes, className, function (x) { return x.id; }, settings.classes[0].id, function () { });
+      center.querySelectorAll('.chip').forEach(function (chip) { chip.onclick = function () { markActive(center, chip); }; });
+      cls.querySelectorAll('.chip').forEach(function (chip) { chip.onclick = function () { markActive(cls, chip); }; });
+      renderNoteTargets();
+    }
+    window.renderNoteTargets = function () {
+      var target = document.getElementById('noteTarget');
+      if (!target) return;
+      var search = (document.getElementById('noteStudentSearch').value || '').trim().toLowerCase();
+      target.innerHTML = '<option value="all">كل الطلاب</option>' + settings.centers.map(function (x) { return '<option value="center:' + escapeHtml(x) + '">كل طلاب ' + escapeHtml(x) + '</option>'; }).join('') + settings.classes.map(function (x) { return '<option value="class:' + x.id + '">كل طلاب ' + escapeHtml(className(x)) + '</option>'; }).join('') + window.getStudents().filter(function (x) { return !search || (x.name || '').toLowerCase().indexOf(search) !== -1; }).map(function (x) { return '<option value="student:' + x.id + '">' + escapeHtml(x.name) + ' · ' + escapeHtml(x.phone || '') + '</option>'; }).join('');
+    };
+    window.openNoteTargetPicker = function () {
+      document.getElementById('noteTargetSearch').value = '';
+      renderNoteTargetPicker();
+      openModal('noteTargetPickerModal');
+      document.getElementById('noteTargetSearch').focus();
+    };
+    window.renderNoteTargetPicker = function () {
+      var search = (document.getElementById('noteTargetSearch').value || '').trim().toLowerCase();
+      var wrap = document.getElementById('noteTargetPickerResults');
+      wrap.innerHTML = '';
+      function addOption(value, label) {
+        var option = document.createElement('button');
+        option.type = 'button'; option.className = 'picker-option'; option.textContent = label;
+        option.onclick = function () {
+          document.getElementById('noteTarget').value = value;
+          document.getElementById('noteTargetPicker').textContent = label;
+          closeModal('noteTargetPickerModal');
+        };
+        wrap.appendChild(option);
+      }
+      if (!search) {
+        addOption('all', 'كل الطلاب');
+        settings.centers.forEach(function (center) { addOption('center:' + center, 'كل طلاب ' + center); });
+        settings.classes.forEach(function (cls) {
+          var option = document.createElement('button');
+          option.type = 'button'; option.className = 'picker-option'; option.textContent = 'كل طلاب ' + className(cls);
+          option.onclick = function () { openClassCenterPicker(cls); };
+          wrap.appendChild(option);
+        });
+      }
+      if (search) window.getStudents().filter(function (student) { return (student.name || '').toLowerCase().indexOf(search) !== -1; }).forEach(function (student) {
+        addOption('student:' + student.id, student.name + ' · ' + student.phone);
+      });
+      if (search && !wrap.children.length) wrap.innerHTML = '<div class="empty-state">' + window.t('noMatchingStudent') + '</div>';
+    };
+    window.openNoteStudentPicker = function () {
+      document.getElementById('noteStudentSearch').value = '';
+      renderNoteStudentPicker();
+      openModal('noteStudentPickerModal');
+      document.getElementById('noteStudentSearch').focus();
+    };
+    window.renderNoteStudentPicker = function () {
+      var search = (document.getElementById('noteStudentSearch').value || '').trim().toLowerCase();
+      var results = search ? window.getStudents().filter(function (student) { return (student.name || '').toLowerCase().indexOf(search) !== -1; }) : [];
+      var wrap = document.getElementById('noteStudentPickerResults');
+      wrap.innerHTML = '';
+      results.forEach(function (student) {
+        var option = document.createElement('button');
+        option.type = 'button'; option.className = 'picker-option';
+        option.textContent = student.name + ' · ' + student.phone;
+        option.onclick = function () {
+          document.getElementById('noteTarget').value = 'student:' + student.id;
+          document.getElementById('noteStudentPicker').textContent = student.name + ' · ' + student.phone;
+          closeModal('noteStudentPickerModal');
+        };
+        wrap.appendChild(option);
+      });
+      if (!results.length) wrap.innerHTML = '<div class="empty-state">' + window.t('typeStudentNameToSearch') + '</div>';
+    };
+    function openClassCenterPicker(cls) {
+      document.getElementById('classCenterPickerTitle').textContent = 'اختر السنتر لـ ' + className(cls);
+      var wrap = document.getElementById('classCenterPickerResults');
+      wrap.innerHTML = '';
+      settings.centers.forEach(function (center) {
+        var option = document.createElement('button');
+        option.type = 'button'; option.className = 'picker-option'; option.textContent = 'كل طلاب ' + className(cls) + ' في ' + center;
+        option.onclick = function () {
+          document.getElementById('noteTarget').value = 'classcenter:' + center + ':' + cls.id;
+          document.getElementById('noteTargetPicker').textContent = option.textContent;
+          closeModal('classCenterPickerModal');
+        };
+        wrap.appendChild(option);
+      });
+      closeModal('noteTargetPickerModal');
+      openModal('classCenterPickerModal');
+    }
+    window.submitHomework = function () {
+      var file = document.getElementById('homeworkFile').files[0], title = document.getElementById('homeworkTitle').value.trim();
+      var center = document.getElementById('homeworkCenter').querySelector('.active');
+      var cls = document.getElementById('homeworkClass').querySelector('.active');
+      if (!file || !title || !center || !cls) { window.mcToast(window.t('required')); return; }
+      var btn = document.getElementById('homeworkSubmitBtn');
+      if (btn.disabled) return;
+      var centerName = center.textContent;
+      var classId = settings.classes.find(function (x) { return className(x) === cls.textContent; }).id;
+      function setBtn(text, busy) { btn.disabled = busy; btn.textContent = text; }
+
+      function finish(fileFields) {
+        var item = { title: title, fileName: file.name, center: centerName, classId: classId };
+        Object.keys(fileFields).forEach(function (k) { item[k] = fileFields[k]; });
+        return window.saveHomework(item).then(function () {
+          window.getStudents().filter(function (s) { return s.center === centerName && s.classId === classId; }).forEach(function (s) { window.saveNotification({ studentId: s.id, type: 'homework', text: 'واجب جديد: ' + title }); });
+          document.getElementById('homeworkTitle').value = '';
+          document.getElementById('homeworkFile').value = '';
+          document.getElementById('homeworkFileName').textContent = window.t('noFileChosen');
+          document.getElementById('homeworkFileName').classList.remove('has-file');
+          document.querySelectorAll('#homeworkCenter .chip').forEach(function (chip, index) { chip.classList.toggle('active', index === 0); });
+          document.querySelectorAll('#homeworkClass .chip').forEach(function (chip, index) { chip.classList.toggle('active', index === 0); });
+          window.mcToast('تم رفع الواجب');
+        });
+      }
+
+      setBtn('جاري الرفع... 0%', true);
+      window.uploadHomeworkFile(file, function (p) { setBtn('جاري الرفع... ' + p + '%', true); })
+        .then(function (res) { return { fileUrl: res.url, storagePath: res.path }; })
+        .catch(function (err) {
+          // Storage not enabled / offline: fall back to the old in-database method for small files only.
+          console.error('Storage upload failed, falling back to database', err);
+          if (file.size > 5 * 1024 * 1024) throw new Error('too-big');
+          return new Promise(function (resolve, reject) {
+            window.fileToDataUrl(file, function (d) { d ? resolve({ dataUrl: d }) : reject(new Error('read-failed')); });
+          });
+        })
+        .then(finish)
+        .catch(function (err) {
+          console.error(err);
+          window.mcToast(err && err.message === 'too-big' ? 'تعذر رفع الملف، جرّب ملف أصغر من 5 ميجا' : 'تعذر رفع الواجب، جرّب مرة تانية');
+        })
+        .then(function () { setBtn(window.t('saveHomeworkBtn'), false); });
+    };
+    window.submitNote = function () {
+      var text = document.getElementById('noteText').value.trim(), target = document.getElementById('noteTarget').value;
+      if (!text) { window.mcToast(window.t('required')); return; }
+      var classCenter = target.indexOf('classcenter:') === 0 ? target.slice(12).split(':') : [];
+      var students = window.getStudents().filter(function (s) { return target === 'all' || (target === 'student:' + s.id) || (target === 'center:' + s.center) || (target === 'class:' + s.classId) || (classCenter.length === 2 && s.center === classCenter[0] && s.classId === classCenter[1]); });
+      if (!students.length) { window.mcToast('لم يتم العثور على طلاب لهذا الاختيار'); return; }
+      Promise.all(students.map(function (s) {
+        return Promise.all([
+          window.saveNote({ studentId: String(s.id), text: text }),
+          window.saveNotification({ studentId: String(s.id), type: 'note', text: 'ملاحظة جديدة: ' + text })
+        ]);
+      })).then(function () {
+        // Also push the note to each guardian on Telegram + WhatsApp (background, queued).
+        students.forEach(function (s) {
+          window.sendGuardianMessage(s, 'مرحباً - ملاحظة جديدة من الأستاذ\nالطالب: ' + s.name + '\nالملاحظة: ' + text);
+        });
+        document.getElementById('noteText').value = '';
+        document.getElementById('noteTarget').value = 'all';
+        document.getElementById('noteTargetPicker').textContent = 'كل الطلاب';
+        document.getElementById('noteStudentPicker').textContent = 'اختر طالباً للبحث';
+        window.mcToast('تم إرسال الملاحظة');
+      }).catch(function () { window.mcToast('تعذر حفظ الملاحظة، تحقق من اتصال Firebase'); });
+    };
+
+    /* ---------- settings modal ---------- */
+    function toggleSettingsBlock(header) {
+      var block = header.closest('.settings-block');
+      if (!block) return;
+      block.classList.toggle('open');
+    }
+
+    function openSettingsForm() {
+      document.querySelectorAll('#settingsModal .settings-block.open').forEach(function (b) {
+        b.classList.remove('open');
+      });
+      document.getElementById('setPlatformName').value = settings.platformName;
+      document.getElementById('setAdminPass').value = settings.adminPassword;
+      document.getElementById('setAdminEmail').value = settings.adminEmail || '';
+      document.getElementById('setTelegramBotToken').value = settings.telegramBotToken || '';
+      document.getElementById('setAdminTelegramChatId').value = settings.adminTelegramChatId || '';
+      document.getElementById('setMaxAdminDevices').value = window.getMaxAdminDevices();
+      document.getElementById('logoPreview').innerHTML = settings.logo ? '<img src="' + settings.logo + '">' : (settings.platformName ? settings.platformName[0] : 'م');
+      delete document.getElementById('loginBgMobilePreview').dataset.newLoginBgMobile;
+      delete document.getElementById('loginBgDesktopPreview').dataset.newLoginBgDesktop;
+      renderLoginBgPreview('mobile');
+      renderLoginBgPreview('desktop');
+
+      openAccentColorPicker();
+      renderCentersWrap();
+
+      var wrap = document.getElementById('classCodesWrap');
+      wrap.innerHTML = '';
+      settings.classes.forEach(function (c) {
+        var row = document.createElement('div');
+        row.className = 'class-code-row';
+        row.innerHTML = '<span>' + className(c) + '</span><input class="input" data-class="' + c.id + '" value="' + c.code + '">';
+        wrap.appendChild(row);
+      });
+      document.getElementById('studentPasswordSearch').value = '';
+      document.getElementById('passwordEditor').style.display = 'none';
+      renderPasswordStudents();
+      renderAdminDevicesCount();
+    }
+
+    var pendingAccentColor = null;
+    function openAccentColorPicker() {
+      pendingAccentColor = settings.themeColor || 'purple';
+      renderAccentColorSwatches();
+    }
+    function renderAccentColorSwatches() {
+      var wrap = document.getElementById('accentColorWrap');
+      wrap.innerHTML = Object.keys(window.ACCENT_PALETTE).map(function (key) {
+        var c = window.ACCENT_PALETTE[key];
+        var selected = key === pendingAccentColor;
+        return '<button type="button" data-accent-key="' + key + '" title="' + c.label + '" aria-label="' + c.label + '" style="width:40px;height:40px;border-radius:50%;background:' + c.accent + ';cursor:pointer;flex-shrink:0;border:3px solid ' + (selected ? 'var(--text)' : 'transparent') + ';box-shadow:' + (selected ? '0 0 0 2px ' + c.accent : 'none') + ';"></button>';
+      }).join('');
+      wrap.querySelectorAll('[data-accent-key]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          pendingAccentColor = btn.dataset.accentKey;
+          window.previewAccentColor(pendingAccentColor);
+          renderAccentColorSwatches();
+        });
+      });
+    }
+
+    window.closeSettingsModal = function () {
+      window.applyAccentFromSettings(); // discard any unsaved color preview
+      closeModal('settingsModal');
+    };
+
+    function renderAdminDevicesCount() {
+      var sessions = window.getActiveDeviceSessions({ activeSessions: settings.adminSessions });
+      var count = Object.keys(sessions).length;
+      document.getElementById('adminDevicesCount').textContent = count + ' / ' + window.getMaxAdminDevices() + ' جهاز نشط';
+    }
+
+    // Logs out every OTHER admin device immediately (this device stays
+    // logged in). Writing the trimmed session map to settings.adminSessions
+    // is what triggers the live kick: every other open admin tab is
+    // listening for settings changes (see startAdminSessionGuard in
+    // shared.js) and will notice it's no longer in the list and log itself
+    // out right away — no refresh needed on the other end.
+    window.handleClearAdminSessions = function () {
+      if (!confirm('سيتم تسجيل الخروج من حساب الأدمن فورًا من كل الأجهزة الأخرى (هذا الجهاز هيفضل شغال). هل تريد المتابعة؟')) return;
+      var deviceId = window.getDeviceId();
+      var onlyThisDevice = {};
+      onlyThisDevice[deviceId] = Date.now();
+      settings.adminSessions = onlyThisDevice;
+      window.saveSettings(settings);
+      window.mcToast('تم تسجيل الخروج من باقي أجهزة الأدمن');
+      renderAdminDevicesCount();
+    };
+
+    // Centers are a plain array on settings.centers, and every place that
+    // needs a center (student setup, add-student form, homework/notes
+    // targeting, communication filters, attendance loops...) already reads
+    // that same array dynamically. So adding/removing a center here is
+    // enough to make it show up (or disappear) everywhere automatically.
+    function renderCentersWrap() {
+      var wrap = document.getElementById('centersWrap');
+      wrap.innerHTML = '';
+      settings.centers.forEach(function (center, index) {
+        var row = document.createElement('div');
+        row.className = 'class-code-row';
+        row.innerHTML = '<span>' + escapeHtml(center) + '</span>' +
+          '<button type="button" class="icon-round-sm" data-center-index="' + index + '" aria-label="delete">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 6L6 18M6 6l12 12"/></svg></button>';
+        wrap.appendChild(row);
+      });
+      if (!settings.centers.length) wrap.innerHTML = '<div class="empty-state">' + window.t('noCentersYet') + '</div>';
+      wrap.querySelectorAll('[data-center-index]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var index = Number(btn.dataset.centerIndex);
+          var center = settings.centers[index];
+          var inUse = window.getStudents().some(function (s) { return s.center === center; });
+          if (inUse) { window.mcToast('لا يمكن حذف سنتر مرتبط بطلاب حالياً'); return; }
+          window.showConfirm('هل تريد حذف سنتر "' + center + '"؟', function () {
+            settings.centers.splice(index, 1);
+            window.saveSettings(settings);
+            renderCentersWrap();
+            window.mcToast('تم حذف السنتر');
+          });
+        });
+      });
+    }
+
+    window.addNewCenter = function () {
+      var input = document.getElementById('newCenterInput');
+      var name = input.value.trim();
+      if (!name) { window.mcToast(window.t('required')); return; }
+      if (settings.centers.indexOf(name) !== -1) { window.mcToast('السنتر ده موجود بالفعل'); return; }
+      settings.centers.push(name);
+      window.saveSettings(settings);
+      input.value = '';
+      renderCentersWrap();
+      window.mcToast('تمت إضافة السنتر');
+    };
+
+    var passwordStudentId = null;
+    window.renderPasswordStudents = function () {
+      var search = (document.getElementById('studentPasswordSearch').value || '').trim().toLowerCase();
+      var wrap = document.getElementById('passwordStudentsWrap');
+      wrap.innerHTML = '';
+      if (!search) {
+        wrap.innerHTML = '<div class="empty-state">' + window.t('typeStudentNameToSearch') + '</div>';
+        return;
+      }
+      var students = window.getStudents().filter(function (student) { return (student.name || '').toLowerCase().indexOf(search) !== -1; });
+      students.forEach(function (student) {
+        var option = document.createElement('button');
+        option.type = 'button'; option.className = 'picker-option'; option.textContent = student.name + ' · ' + student.phone;
+        option.onclick = function () {
+          passwordStudentId = student.id;
+          document.getElementById('passwordStudentName').textContent = student.name + ' · ' + student.phone;
+          document.getElementById('newStudentPassword').value = '';
+          document.getElementById('passwordEditor').style.display = 'block';
+          document.getElementById('newStudentPassword').focus();
+        };
+        wrap.appendChild(option);
+      });
+      if (!students.length) wrap.innerHTML = '<div class="empty-state">' + window.t('noMatchingStudent') + '</div>';
+    };
+    window.saveStudentPassword = function () {
+      var password = document.getElementById('newStudentPassword').value.trim();
+      var student = passwordStudentId ? window.getStudentById(passwordStudentId) : null;
+      if (!student || !password) { window.mcToast(window.t('required')); return; }
+      student.password = password;
+      student.activeSessionId = '';
+      student.activeSessionAt = '';
+      student.activeSessions = null;
+      window.saveStudent(student);
+      window.mcToast('تم تغيير كلمة مرور الطالب');
+      document.getElementById('newStudentPassword').value = '';
+    };
+
+    function renderLoginBgPreview(kind) {
+      var el = document.getElementById(kind === 'mobile' ? 'loginBgMobilePreview' : 'loginBgDesktopPreview');
+      var pendingKey = kind === 'mobile' ? 'newLoginBgMobile' : 'newLoginBgDesktop';
+      var settingsKey = kind === 'mobile' ? 'loginBgMobile' : 'loginBgDesktop';
+      var pending = el.dataset[pendingKey];
+      var value = pending === 'CLEAR' ? '' : (pending || settings[settingsKey]);
+      el.innerHTML = value ? '<img src="' + value + '" style="width:100%;height:100%;object-fit:cover;">' : 'بدون صورة';
+    }
+
+    document.getElementById('loginBgMobileInput').addEventListener('change', function (e) {
+      var file = e.target.files[0];
+      if (!file) return;
+      window.fileToDataUrl(file, function (dataUrl) {
+        var el = document.getElementById('loginBgMobilePreview');
+        el.dataset.newLoginBgMobile = dataUrl;
+        renderLoginBgPreview('mobile');
+      });
+    });
+
+    document.getElementById('loginBgDesktopInput').addEventListener('change', function (e) {
+      var file = e.target.files[0];
+      if (!file) return;
+      window.fileToDataUrl(file, function (dataUrl) {
+        var el = document.getElementById('loginBgDesktopPreview');
+        el.dataset.newLoginBgDesktop = dataUrl;
+        renderLoginBgPreview('desktop');
+      });
+    });
+
+    window.clearLoginBg = function (kind) {
+      var el = document.getElementById(kind === 'mobile' ? 'loginBgMobilePreview' : 'loginBgDesktopPreview');
+      el.dataset[kind === 'mobile' ? 'newLoginBgMobile' : 'newLoginBgDesktop'] = 'CLEAR';
+      renderLoginBgPreview(kind);
+    };
+
+    document.getElementById('logoInput').addEventListener('change', function (e) {
+      var file = e.target.files[0];
+      if (!file) return;
+      window.fileToDataUrl(file, function (dataUrl) {
+        document.getElementById('logoPreview').innerHTML = '<img src="' + dataUrl + '">';
+        document.getElementById('logoPreview').dataset.newLogo = dataUrl;
+      });
+    });
+
+    document.getElementById('homeworkFile').addEventListener('change', function (e) {
+      var nameEl = document.getElementById('homeworkFileName');
+      nameEl.textContent = e.target.files[0] ? e.target.files[0].name : window.t('noFileChosen');
+      nameEl.classList.toggle('has-file', !!e.target.files[0]);
+    });
+
+    window.saveAllSettings = function () {
+      settings.platformName = document.getElementById('setPlatformName').value.trim() || settings.platformName;
+      settings.adminPassword = document.getElementById('setAdminPass').value.trim() || settings.adminPassword;
+      settings.adminEmail = document.getElementById('setAdminEmail').value.trim();
+      settings.telegramBotToken = document.getElementById('setTelegramBotToken').value.trim();
+      settings.adminTelegramChatId = document.getElementById('setAdminTelegramChatId').value.trim();
+      var maxDevicesInput = parseInt(document.getElementById('setMaxAdminDevices').value, 10);
+      if (maxDevicesInput && maxDevicesInput >= 1) settings.maxAdminDevices = maxDevicesInput;
+      settings.themeColor = pendingAccentColor || settings.themeColor || 'purple';
+      var newLogo = document.getElementById('logoPreview').dataset.newLogo;
+      if (newLogo) settings.logo = newLogo;
+
+      var newBgMobile = document.getElementById('loginBgMobilePreview').dataset.newLoginBgMobile;
+      if (newBgMobile) settings.loginBgMobile = newBgMobile === 'CLEAR' ? '' : newBgMobile;
+      var newBgDesktop = document.getElementById('loginBgDesktopPreview').dataset.newLoginBgDesktop;
+      if (newBgDesktop) settings.loginBgDesktop = newBgDesktop === 'CLEAR' ? '' : newBgDesktop;
+      document.querySelectorAll('#classCodesWrap input').forEach(function (inp) {
+        var cls = settings.classes.find(function (c) { return c.id === inp.dataset.class; });
+        if (cls && inp.value.trim()) cls.code = inp.value.trim();
+      });
+      window.saveSettings(settings);
+      window.mcToast(window.t('settingsSaved'));
+      closeModal('settingsModal');
+      localize();
+      renderSetup();
+    };
+
+    var resetConfirmationStep = 0;
+    window.handleResetData = function () {
+      resetConfirmationStep = 1;
+      document.getElementById('resetConfirmText').textContent = window.t('resetDataConfirm');
+      openModal('resetConfirmModal');
+    };
+    window.continueResetData = function () {
+      if (resetConfirmationStep === 1) {
+        resetConfirmationStep = 2;
+        document.getElementById('resetConfirmText').textContent = window.t('resetDataConfirm2');
+        return;
+      }
+      closeModal('resetConfirmModal');
+      window.promoteAllStudents().then(function () {
+        window.mcToast(window.t('resetDataDone'));
+        closeModal('settingsModal');
+        if (document.getElementById('section-table').classList.contains('active')) renderTable();
+        if (document.getElementById('section-record').classList.contains('active')) renderRecord();
+        if (document.getElementById('section-setup').classList.contains('active')) renderUnpaidSection();
+        if (document.getElementById('section-grades').classList.contains('active')) {
+          populateGradeStudentSelect();
+          renderGrades();
+        }
+      }).catch(function (err) {
+        console.error(err);
+      });
+    };
+
+    /* ---------- modal helpers ---------- */
+    function openModal(id) {
+      if (id === 'settingsModal') openSettingsForm();
+      document.getElementById(id).classList.add('open');
+    }
+    window.openModal = openModal;
+    window.closeModal = function (id) { document.getElementById(id).classList.remove('open'); };
+
+    // Generic styled confirm dialog (replaces the plain browser confirm()
+    // popup) used for every destructive action: delete student, delete
+    // grade, delete center, etc. Pass the message + a callback to run only
+    // if the admin taps the red confirm button.
+    window.showConfirm = function (message, onConfirm, opts) {
+      opts = opts || {};
+      document.getElementById('confirmModalTitle').textContent = opts.title || 'تأكيد الحذف';
+      document.getElementById('confirmModalText').textContent = message;
+      var okBtn = document.getElementById('confirmModalOkBtn');
+      okBtn.textContent = opts.okLabel || 'تأكيد الحذف';
+      // Replace the button with a clone to wipe any listener from a
+      // previous showConfirm() call, so handlers never stack up.
+      var freshBtn = okBtn.cloneNode(true);
+      okBtn.parentNode.replaceChild(freshBtn, okBtn);
+      freshBtn.addEventListener('click', function () {
+        closeModal('confirmModal');
+        onConfirm();
+      });
+      openModal('confirmModal');
+    };
+
+    function escapeHtml(str) {
+      return (str || '').replace(/[&<>"']/g, function (m) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+      });
+    }
+
+    window.doLogout = function () {
+      window.clearSession();
+      window.location.replace('index.html');
+    };
+
+    window.whenMCReady(function () {
+      settings = window.getSettings();
+
+      // Register/refresh this device in settings.adminSessions. Without this
+      // call the "log out other admin devices" button and the max-devices
+      // limit at login have nothing real to work from — no device was ever
+      // being recorded as logged in, so the session map stayed effectively
+      // empty (or stale) no matter how many admins were actually connected.
+      window.updateAdminSession(window.getDeviceId());
+
+      setupCenter = settings.centers[0];
+      setupClass = settings.classes[0];
+      document.getElementById('mcLoader').classList.add('hide');
+      localize();
+      renderSetup();
+      setupRecordFilters();
+      setupUnpaidFilters();
+      renderUnpaidSection();
+      setupGradeFilters();
+      setupCommunication();
+      setupLeaderboardFilters();
+      renderAdminLeaderboard();
+
+      window.applyAccentFromSettings();
+      window.onMCUpdate('settings', window.applyAccentFromSettings);
+
+      // If this device gets removed from settings.adminSessions (another
+      // admin device used "log out other devices"), react immediately
+      // instead of waiting for a refresh.
+      window.startAdminSessionGuard(function () {
+        window.mcToast('تم تسجيل خروجك من هذا الجهاز بواسطة جهاز أدمن آخر');
+        setTimeout(function () { window.location.replace('index.html'); }, 900);
+      });
+
+      // keep the UI in sync if data changes from another device
+      window.onMCUpdate('students', function () {
+        if (document.getElementById('section-table').classList.contains('active')) renderTable();
+        if (document.getElementById('section-record').classList.contains('active')) renderRecord();
+        if (document.getElementById('section-setup').classList.contains('active')) { renderUnpaidSection(); renderAdminLeaderboard(); }
+      });
+      window.onMCUpdate('attendance', function () {
+        if (document.getElementById('section-table').classList.contains('active')) renderTable();
+        if (document.getElementById('section-record').classList.contains('active')) renderRecord();
+        if (document.getElementById('section-setup').classList.contains('active')) renderAdminLeaderboard();
+      });
+      window.onMCUpdate('grades', function () {
+        if (document.getElementById('section-grades').classList.contains('active')) renderGrades();
+        if (document.getElementById('section-setup').classList.contains('active')) renderAdminLeaderboard();
+      });
+      window.onMCUpdate('students', function () {
+        if (document.getElementById('section-grades').classList.contains('active')) populateGradeStudentSelect();
+      });
+      window.onMCUpdate('settings', function () {
+        settings = window.getSettings();
+        localize();
+      });
+    });
+  </script>
+</body>
+
+</html>

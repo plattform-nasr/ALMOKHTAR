@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#ffffff">
+    <title>تسجيل الدخول — منصة التعليم</title>
+    <link rel="stylesheet" href="shared.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="سنتر الرياضيات">
+    <meta name="mobile-web-app-capable" content="yes">
+    <style>
+        .login-page {
+            overflow: hidden;
+            background: var(--login-bg-mobile, url('login bg.jpg')) center center / cover no-repeat fixed;
+        }
+
+        .login-page::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(60, 6, 10, 0) 0%, rgba(50, 5, 8, 0) 55%, rgba(44, 40, 41, 0.28) 100%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .login-page .login-wrap {
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            isolation: isolate;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 20px 20px 56px;
+        }
+
+        .login-card {
+            position: relative;
+            overflow: visible;
+            margin-top: 0;
+            background: rgba(234, 228, 229, 0);
+            border: 1px solid rgba(255, 255, 255, .22);
+            backdrop-filter: blur(14px) saturate(140%);
+            -webkit-backdrop-filter: blur(14px) saturate(140%);
+            box-shadow: 0 10px 34px rgba(0, 0, 0, .45);
+        }
+
+        .login-page .field label {
+            color: rgba(255, 255, 255, .82);
+        }
+
+        .login-page .input {
+            background: rgba(0, 0, 0, .28);
+            border: 1.5px solid rgba(255, 255, 255, .25);
+            color: #fff;
+        }
+
+        .login-page .input::placeholder {
+            color: rgba(255, 255, 255, .55);
+        }
+
+        .login-page .input:focus {
+            border-color: rgba(255, 255, 255, .6);
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, .12);
+        }
+
+        .login-page .btn-primary {
+            background: #fff;
+            color: #7A0D14;
+            box-shadow: 0 12px 24px -10px rgba(0, 0, 0, .35);
+        }
+
+        .login-page .btn-primary:hover {
+            filter: brightness(.97);
+        }
+
+        .login-page .hero h2 {
+            color: #fff;
+        }
+
+        /* ---------- tablet / desktop: use the pre-composed wide image directly ---------- */
+        @media (min-width: 700px) {
+            .login-page {
+                background: var(--login-bg-desktop, url('login-bg-wide.jpg')) center / cover no-repeat fixed;
+            }
+
+            .login-page::before {
+                background: none;
+            }
+
+            .login-card {
+                background: rgba(20, 4, 7, .5);
+            }
+
+            .login-page .login-wrap {
+                justify-content: center;
+                align-items: flex-start;
+                padding: 40px 8% 40px 0;
+            }
+        }
+
+        .teacher-image {
+            position: absolute;
+            top: 27px;
+            left: -2px;
+            width: 140px;
+            height: auto;
+            z-index: 5;
+            pointer-events: none;
+            filter: drop-shadow(0 12px 18px rgba(0, 0, 0, .25));
+        }
+
+        @media (max-width: 480px) {
+            .teacher-image {
+                width: 110px;
+                top: -135px;
+                left: -12px;
+            }
+        }
+
+        .math-background {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .math-symbol {
+            position: absolute;
+            color: var(--accent-2);
+            opacity: .48;
+            font-family: Georgia, serif;
+            font-size: clamp(26px, 5vw, 58px);
+            font-weight: 700;
+            filter: saturate(1.2) brightness(.82);
+            animation: float-math 4s ease-in-out infinite;
+        }
+
+        .math-symbol:nth-child(1) {
+            top: 7%;
+            inset-inline-start: 6%;
+            color: #F5A524;
+            animation-delay: -2s;
+        }
+
+        .math-symbol:nth-child(2) {
+            top: 12%;
+            inset-inline-end: 8%;
+            color: #22C55E;
+            animation-delay: -7s;
+        }
+
+        .math-symbol:nth-child(3) {
+            top: 31%;
+            inset-inline-start: 4%;
+            color: #38BDF8;
+            animation-delay: -4s;
+        }
+
+        .math-symbol:nth-child(4) {
+            top: 38%;
+            inset-inline-end: 6%;
+            color: #F0475A;
+            animation-delay: -6s;
+        }
+
+        .math-symbol:nth-child(5) {
+            top: 68%;
+            inset-inline-start: 7%;
+            color: #A78BFA;
+            animation-delay: -3s;
+        }
+
+        .math-symbol:nth-child(6) {
+            top: 73%;
+            inset-inline-end: 8%;
+            color: #14B8A6;
+            animation-delay: -1s;
+        }
+
+        .math-symbol:nth-child(7) {
+            bottom: 7%;
+            inset-inline-start: 27%;
+            color: #FB7185;
+            animation-delay: -5s;
+        }
+
+        .math-symbol:nth-child(8) {
+            bottom: 8%;
+            inset-inline-end: 27%;
+            color: #FACC15;
+            animation-delay: -8s;
+        }
+
+        .math-symbol:nth-child(9) {
+            top: 4%;
+            inset-inline-start: 42%;
+            color: #60A5FA;
+            animation-delay: -1s;
+        }
+
+        .math-symbol:nth-child(10) {
+            bottom: 3%;
+            inset-inline-end: 44%;
+            color: #34D399;
+            animation-delay: -6s;
+        }
+
+        .math-symbol:nth-child(11) {
+            top: 24%;
+            inset-inline-start: 20%;
+            color: #FB923C;
+            animation-delay: -7s;
+        }
+
+        .math-symbol:nth-child(12) {
+            top: 29%;
+            inset-inline-end: 24%;
+            color: #F472B6;
+            animation-delay: -3s;
+        }
+
+        .math-symbol:nth-child(13) {
+            bottom: 24%;
+            inset-inline-start: 40%;
+            color: #2DD4BF;
+            animation-delay: -6s;
+        }
+
+        .math-symbol:nth-child(14) {
+            bottom: 18%;
+            inset-inline-end: 39%;
+            color: #60A5FA;
+            animation-delay: -2s;
+        }
+
+        .math-symbol:nth-child(15) {
+            top: 55%;
+            inset-inline-start: 20%;
+            color: #A78BFA;
+            animation-delay: -5s;
+        }
+
+        .math-symbol:nth-child(16) {
+            top: 62%;
+            inset-inline-end: 19%;
+            color: #FACC15;
+            animation-delay: -1s;
+        }
+
+        :root[data-theme="light"] .math-symbol {
+            opacity: .58;
+            filter: saturate(1.35) brightness(.7);
+        }
+
+        /* keep the floating math glyphs white against the red backdrop */
+        .math-symbol {
+            color: #4c0d0d !important;
+            filter: none;
+        }
+
+        @keyframes float-math {
+
+            0%,
+            100% {
+                transform: translate3d(0, 0, 0) rotate(-8deg);
+            }
+
+            50% {
+                transform: translate3d(10px, -18px, 0) rotate(8deg);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .math-symbol {
+                animation: none;
+            }
+        }
+
+
+
+        .first-boy-image {
+            position: absolute;
+            top: 93px;
+            left: 1px;
+            width: 140px;
+            height: auto;
+            z-index: 5;
+            pointer-events: none;
+            filter: drop-shadow(0 12px 18px rgba(0, 0, 0, .25));
+        }
+
+        @media (max-width: 480px) {
+            .first-boy-image {
+                width: 110px;
+                top: -13589px;
+                left: -12px;
+            }
+        }
+
+        .second-boy-image {
+            position: absolute;
+            top: 9334px;
+            left: 89px;
+            width: 140px;
+            height: auto;
+            z-index: 5;
+            pointer-events: none;
+            filter: drop-shadow(0 12px 18px rgba(0, 0, 0, .25));
+        }
+
+        @media (max-width: 480px) {
+            .second-boy-image {
+                width: 110px;
+                top: 130px;
+                left: -16px;
+            }
+        }
+
+        .third-boy-image {
+            position: absolute;
+            top: -27px;
+            right: -10px;
+            width: 140px;
+            height: auto;
+            z-index: 5;
+            pointer-events: none;
+            filter: drop-shadow(0 12px 18px rgba(0, 0, 0, .25));
+        }
+
+        @media (max-width: 480px) {
+            .third-boy-image {
+                width: 110px;
+                top: -155px;
+                left: 190px;
+            }
+        }
+        
+    </style>
+
+</head>
+
+<body class="login-page">
+    <div class="login-wrap">
+        <div class="math-background" aria-hidden="true">
+            <span class="math-symbol">+</span>
+            <span class="math-symbol">-</span>
+            <span class="math-symbol">=</span>
+            <span class="math-symbol">≠</span>
+            <span class="math-symbol">≥</span>
+            <span class="math-symbol">x²</span>
+            <span class="math-symbol">x²</span>
+            <span class="math-symbol">∅</span>
+            <span class="math-symbol">∫</span>
+            <span class="math-symbol">∈</span>
+            <span class="math-symbol">x²</span>
+            <span class="math-symbol">∫</span>
+            <span class="math-symbol">∪</span>
+        </div>
+        <div class="login-card card">
+            <img src="2boys.png" alt="الأستاذ المختار" class=" first-boy-image">
+            <img src="2boys.png" alt="الأستاذ المختار" class="second-boy-image">
+            <img src="girl.png" alt="الأستاذ المختار" class="third-boy-image">
+
+            <div class="hero">
+                <div class="brand-logo" id="loginLogo">Top</div>
+                <h2> ALMOKHTAR </h2>
+            </div>
+
+            <div id="loginStep1">
+                <div class="field">
+                    <label>كود السنة الدراسية</label>
+                    <input type="text" id="classCode" class="input" placeholder="أدخل كود الصف">
+                </div>
+
+                <div class="field">
+                    <label>كلمة سر الطالب</label>
+                    <input type="password" id="userPassword" class="input" placeholder="أدخل كلمة السر">
+                </div>
+
+                <p class="err-text" id="loginErr"></p>
+                <button class="btn btn-primary" onclick="handleLogin()">تسجيل الدخول</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="firebase.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="shared.js"></script>
+    <script>
+        // Belt-and-braces fix for "back button shows the login page again":
+        // no matter how the browser ended up showing index.html — the back
+        // button, a bookmark, a bfcache restore, a second tab, typing the
+        // URL again — if there's already a valid session, never show the
+        // login form. Bounce straight to the right page instead.
+        (function () {
+            function redirectIfAlreadyLoggedIn() {
+                var existingSession = window.getSession ? window.getSession() : null;
+                if (existingSession && existingSession.role === 'admin') {
+                    window.location.replace('admin.html');
+                } else if (existingSession && existingSession.role === 'student') {
+                    window.location.replace('studenti.html');
+                }
+            }
+            redirectIfAlreadyLoggedIn();
+            // Some mobile browsers restore a cached snapshot of this page on
+            // back/forward (bfcache) without re-running the script above —
+            // 'pageshow' fires in that case too, so check again there.
+            window.addEventListener('pageshow', function (event) {
+                if (event.persisted) redirectIfAlreadyLoggedIn();
+            });
+        })();
+
+        window.applyCachedAccent();
+        window.initEmailJS();
+
+        window.whenMCReady(() => {
+            window.applyTheme();
+            window.applyAccentFromSettings();
+            window.applyFaviconFromSettings();
+            window.onMCUpdate('settings', window.applyAccentFromSettings);
+            window.onMCUpdate('settings', window.applyFaviconFromSettings);
+            window.onMCUpdate('settings', applyLoginBgFromSettings);
+            applyLoginBgFromSettings();
+            const settings = window.getSettings();
+            const logo = document.getElementById('loginLogo');
+            if (settings && settings.logo) {
+                logo.innerHTML = '<img src="' + settings.logo + '" alt="شعار المنصة">';
+            }
+        });
+
+        function applyLoginBgFromSettings() {
+            const settings = window.getSettings() || {};
+            document.documentElement.style.setProperty('--login-bg-mobile', settings.loginBgMobile ? "url('" + settings.loginBgMobile + "')" : '');
+            document.documentElement.style.setProperty('--login-bg-desktop', settings.loginBgDesktop ? "url('" + settings.loginBgDesktop + "')" : '');
+        }
+
+        // Password matched — before actually granting access, send a one-time
+        // code to the admin's email and send the browser to the verification
+        // page. loginAsAdmin() itself only runs AFTER that code is confirmed
+        // (see admin-verify.html).
+        function loginAsAdmin(deviceId, err) {
+            const liveSettings = window.getSettings() || {};
+            const adminSessions = window.getActiveDeviceSessions({ activeSessions: liveSettings.adminSessions });
+            const maxAdminDevices = window.getMaxAdminDevices();
+            if (!window.canDeviceLogin(adminSessions, deviceId, maxAdminDevices)) {
+                err.textContent = 'تم الوصول للحد الأقصى (' + maxAdminDevices + ' جهاز) لتسجيل دخول الأدمن في نفس الوقت.';
+                err.style.display = 'block';
+                return;
+            }
+            if (!liveSettings.adminEmail) {
+                err.textContent = 'لازم الأدمن يحدد بريد إلكتروني لاستلام كود الدخول من الإعدادات أولاً.';
+                err.style.display = 'block';
+                return;
+            }
+
+            const btn = document.querySelector('.login-page .btn-primary');
+            if (btn) { btn.disabled = true; btn.textContent = 'جاري إرسال الكود...'; }
+
+            window.createAndSendAdminOTP(deviceId).then(() => {
+                sessionStorage.setItem('mc_pending_admin_device', deviceId);
+                // replace (not href) so the login page isn't left sitting in
+                // browser history — back from the verify page shouldn't be
+                // able to return to it.
+                window.location.replace('admin-verify.html');
+            }).catch((e) => {
+                console.error(e);
+                if (btn) { btn.disabled = false; btn.textContent = 'تسجيل الدخول'; }
+                err.textContent = (e && e.message === 'EMAILJS_NOT_CONFIGURED')
+                    ? 'خدمة إرسال البريد غير مُفعّلة بعد — راجع الإعدادات التقنية.'
+                    : 'تعذر إرسال كود التحقق، تحقق من الاتصال بالإنترنت وحاول مرة أخرى.';
+                err.style.display = 'block';
+            });
+        }
+
+        function handleLogin() {
+            const code = document.getElementById('classCode').value.trim();
+            const pass = document.getElementById('userPassword').value.trim();
+            const err = document.getElementById('loginErr');
+            err.style.display = 'none';
+            const deviceId = window.getDeviceId();
+
+            // يسمح للأدمن باستخدام خانة الكود وحدها.
+            const settings = window.getSettings();
+            if (!settings) {
+                if ((code === 'admin123' && !pass) || (code === 'admin123' && pass === 'admmin123')) {
+                    loginAsAdmin(deviceId, err);
+                    return;
+                }
+                err.textContent = 'انتظر لحظة حتى يكتمل تحميل المنصة.';
+                err.style.display = 'block';
+                return;
+            }
+            if (code === settings.adminPassword && !pass) {
+                loginAsAdmin(deviceId, err);
+                return;
+            }
+
+            if (!code || !pass) {
+                err.textContent = 'يرجى إدخل جميع البيانات المطلوبة.';
+                err.style.display = 'block';
+                return;
+            }
+
+            if (pass === settings.adminPassword || (code === 'admin123' && pass === 'admmin123')) {
+                loginAsAdmin(deviceId, err);
+                return;
+            }
+
+            const matchedClass = settings.classes.find(c => c.code === code);
+            if (!matchedClass) {
+                err.textContent = 'كود السنة الدراسية غير صحيح.';
+                err.style.display = 'block';
+                return;
+            }
+
+            const student = window.getStudents().find(s => s.classId === matchedClass.id && s.password === pass);
+
+            if (!student) {
+                err.textContent = 'كلمة السر غير صحيحة أو الطالب غير مسجل.';
+                err.style.display = 'block';
+                return;
+            }
+
+            // الطالب مسموح له بالدخول من جهازين مختلفين كحد أقصى في نفس الوقت.
+            const studentSessions = window.getActiveDeviceSessions(student);
+            if (!window.canDeviceLogin(studentSessions, deviceId)) {
+                err.textContent = 'كلمة السر هذه مسجلة دخول بالفعل من جهازين آخرين حالياً!';
+                err.style.display = 'block';
+                return;
+            }
+
+            window.updateStudentSession(student.id, deviceId);
+            window.setSession({ role: 'student', studentId: student.id, deviceId: deviceId });
+            // replace (not href) so the login page isn't left sitting in
+            // browser history — pressing back after logging in shouldn't
+            // be able to bring it back up.
+            window.location.replace('studenti.html');
+        }
+    </script>
+</body>
+
+</html>

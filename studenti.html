@@ -1,0 +1,4585 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <title>صفحة الطالب — سنتر الرياضيات</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="سنتر الرياضيات">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700;800&family=Manrope:wght@500;700;800&family=Tajawal:wght@400;500;700&family=Amiri:wght@400;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .profile-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .profile-name {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .profile-meta {
+      font-size: 12.5px;
+      color: var(--text-faint);
+      margin-top: 4px;
+    }
+
+    .ring-wrap {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 6px auto 10px;
+    }
+
+    .ring-wrap svg {
+      transform: rotate(-90deg);
+    }
+
+    .ring-bg {
+      fill: none;
+      stroke: var(--line);
+      stroke-width: 10;
+    }
+
+    .ring-fg {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 10;
+      stroke-linecap: round;
+      transition: stroke-dashoffset .6s ease;
+    }
+
+    .ring-label {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ring-label b {
+      font-size: 24px;
+    }
+
+    .ring-label span {
+      font-size: 11px;
+      color: var(--text-faint);
+    }
+
+    .attendance-card {
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      min-height: 202px;
+      margin-bottom: 24px !important;
+    }
+
+    .progress-chart-wrap {
+      display: none;
+      height: 156px;
+      padding: 0 4px;
+    }
+
+    .progress-chart-wrap canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .stats-two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .stat-card {
+      background: var(--card-2);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .stat-card-present {
+      background: var(--ok-soft);
+      border-color: rgba(34, 197, 94, .22);
+    }
+
+    .stat-card-absent {
+      background: var(--bad-soft);
+      border-color: rgba(240, 71, 90, .22);
+    }
+
+    .stat-card b {
+      display: block;
+      font-size: 22px;
+    }
+
+    .stat-card span {
+      font-size: 12px;
+      color: var(--text-faint);
+    }
+
+    .month-block {
+      margin-bottom: 16px;
+    }
+
+    .month-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+    }
+
+    .session-dots {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .session-dot {
+      width: 34px;
+      height: 34px;
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .sd-present {
+      background: var(--ok);
+    }
+
+    .sd-absent {
+      background: var(--bad);
+    }
+
+    .grades-featured {
+      background: var(--accent);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      color: #fff;
+      margin-bottom: 16px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 16px 32px -14px var(--accent-shadow);
+      transition: transform .15s ease;
+    }
+
+    .grades-featured:active {
+      transform: scale(.98);
+    }
+
+    .grades-featured-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .grades-featured-label {
+      font-size: 12.5px;
+      opacity: .85;
+      font-weight: 700;
+    }
+
+    .grades-featured-hint {
+      font-size: 10.5px;
+      opacity: .7;
+      font-weight: 700;
+    }
+
+    .grades-featured-value {
+      font-size: 40px;
+      font-weight: 800;
+      margin-top: 6px;
+      line-height: 1;
+    }
+
+    .grades-featured-sub {
+      font-size: 12.5px;
+      opacity: .85;
+      margin-top: 6px;
+      font-weight: 700;
+    }
+
+    .grade-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 14px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: var(--card-2);
+      margin-bottom: 8px;
+    }
+
+    .grade-item-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .grade-item-exam {
+      font-weight: 800;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .grade-item-date {
+      font-size: 11.5px;
+      color: var(--text-faint);
+      margin-top: 2px;
+    }
+
+    .grade-item-score {
+      flex-shrink: 0;
+      text-align: center;
+      min-width: 56px;
+    }
+
+    .grade-item-score b {
+      display: block;
+      font-size: 15px;
+    }
+
+    .grade-item-score span {
+      font-size: 10.5px;
+      color: var(--text-faint);
+    }
+
+    /* chatbot */
+    .fab-chat {
+      position: fixed;
+      bottom: 22px;
+      inset-inline-end: 20px;
+      width: 58px;
+      height: 58px;
+      border-radius: 20px;
+      background: var(--accent);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, .52);
+      backdrop-filter: blur(14px) saturate(135%);
+      -webkit-backdrop-filter: blur(14px) saturate(135%);
+      box-shadow: 0 16px 30px -10px var(--accent-shadow), inset 0 1px 1px rgba(255, 255, 255, .35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 45;
+    }
+
+    .fab-chat svg {
+      width: 26px;
+      height: 26px;
+    }
+
+    /* floating "add note" button — only actually visible while the
+       notes list page is open, since it lives inside that section and
+       fixed-position elements don't render while their ancestor is
+       display:none */
+    .fab-add-note {
+      position: fixed;
+      bottom: 96px;
+      inset-inline-end: 20px;
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
+      background: var(--accent);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, .52);
+      box-shadow: 0 16px 30px -10px var(--accent-shadow), inset 0 1px 1px rgba(255, 255, 255, .35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 46;
+    }
+
+    .fab-add-note svg {
+      width: 26px;
+      height: 26px;
+    }
+
+    @media(max-width:639px) {
+      .fab-add-note {
+        bottom: 92px;
+      }
+    }
+
+    /* whatsapp contact button */
+    .fab-whatsapp {
+      position: fixed;
+      bottom: 22px;
+      inset-inline-start: 20px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #25D366;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, .5);
+      box-shadow: 0 16px 30px -10px rgba(37, 211, 102, .55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      text-decoration: none;
+      z-index: 45;
+    }
+
+    .fab-whatsapp svg {
+      width: 26px;
+      height: 26px;
+    }
+
+    @media(max-width:639px) {
+      .fab-whatsapp {
+        bottom: max(96px, calc(96px + env(safe-area-inset-bottom)));
+      }
+    }
+
+    /* telegram bot button — stacked directly above the whatsapp button */
+    .fab-telegram {
+      position: fixed;
+      bottom: 88px;
+      inset-inline-start: 20px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #229ED9;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, .5);
+      box-shadow: 0 16px 30px -10px rgba(34, 158, 217, .55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      text-decoration: none;
+      z-index: 45;
+    }
+
+    .fab-telegram svg {
+      width: 26px;
+      height: 26px;
+    }
+
+    @media(max-width:639px) {
+      .fab-telegram {
+        bottom: max(162px, calc(162px + env(safe-area-inset-bottom)));
+      }
+    }
+
+    .student-bottom-nav {
+      display: none;
+      position: fixed;
+      inset-inline: 12px;
+      bottom: max(12px, env(safe-area-inset-bottom));
+      z-index: 50;
+      grid-template-columns: repeat(5, 1fr);
+      align-items: end;
+      gap: 4px;
+      padding: 8px 8px 7px;
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      background: color-mix(in srgb, var(--card) 92%, transparent);
+      box-shadow: var(--shadow-2);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .student-bottom-nav button {
+      min-width: 0;
+      min-height: 58px;
+      padding: 6px 2px;
+      border: 0;
+      border-radius: 16px;
+      background: transparent;
+      color: var(--text-faint);
+      font: inherit;
+      font-size: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+    }
+
+    .student-bottom-nav button:active {
+      transform: scale(.94);
+    }
+
+    .student-bottom-nav button.active {
+      background: var(--accent-soft);
+      color: var(--accent-2);
+    }
+
+    .student-bottom-nav svg {
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+
+    .student-bottom-nav span {
+      display: none;
+    }
+
+    .student-bottom-nav .student-bottom-calculator {
+      width: 58px;
+      height: 58px;
+      min-height: 58px;
+      margin: -22px auto 0;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 12px 24px -8px var(--accent-shadow);
+    }
+
+    .student-bottom-nav .student-bottom-calculator svg {
+      width: 34px;
+      height: 34px;
+    }
+
+    @media(max-width:639px) {
+      .student-bottom-nav {
+        display: grid;
+      }
+
+      .student-page .shell {
+        padding-bottom: 112px;
+      }
+
+      .student-full-page {
+        padding-bottom: 112px;
+      }
+
+      .student-page .fab-chat {
+        display: none;
+      }
+    }
+
+    /* Per-student custom background (Account page → المظهر). Falls back to
+       the normal page background color when the student hasn't set one. */
+    body.student-page {
+      background: var(--student-bg, var(--bg)) center / cover no-repeat fixed;
+    }
+
+    .chat-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(6, 5, 12, .7);
+      backdrop-filter: blur(6px);
+      display: none;
+      z-index: 70;
+      flex-direction: column;
+    }
+
+    .chat-overlay.open {
+      display: flex;
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      background: var(--bg-elev);
+    }
+
+    .chat-header .row {
+      gap: 10px;
+    }
+
+    .calculator-shell {
+      display: grid;
+      direction: ltr;
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 14px 14px 24px;
+      gap: 8px;
+      border-radius: 28px;
+      background: #221f28;
+      box-shadow: 0 24px 55px rgba(0, 0, 0, .45), inset 0 1px rgba(255, 255, 255, .12);
+    }
+
+    .calculator-brand {
+      color: #d9d6df;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      margin: 0 4px 8px;
+      text-align: left;
+    }
+
+    .calculator-actions {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      direction: ltr;
+      align-items: center;
+      gap: 8px;
+      margin: 4px 0;
+      color: #e0dce6;
+    }
+
+    .calculator-actions button {
+      width: 100%;
+      min-height: 34px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      font-size: 10px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .calculator-actions button:first-child {
+      color: #ec8194;
+    }
+
+    .calculator-actions button:nth-child(2) {
+      color: #e3a1b5;
+    }
+
+    .calculator-actions button:active {
+      transform: scale(.92);
+    }
+
+    .replay-pad {
+      width: 54px !important;
+      height: 54px;
+      justify-self: center;
+      border: 1px solid #706b79 !important;
+      border-radius: 50% !important;
+      background: #27252e !important;
+      color: #ddd9e4;
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+
+    .replay-pad::before {
+      content: '';
+      width: 22px;
+      height: 22px;
+      border: 2px solid #aaa5b2;
+      border-radius: 50%;
+    }
+
+    .replay-pad::after {
+      content: '▲';
+      position: absolute;
+      top: 4px;
+      font-size: 8px;
+      color: #aaa5b2;
+    }
+
+    .calculator-on {
+      padding: 5px 9px;
+      border-radius: 8px !important;
+      background: #222027 !important;
+    }
+
+    .calculator-display {
+      width: 100%;
+      min-height: 94px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: #c8d9d4;
+      color: #18221f;
+      text-align: end;
+      direction: ltr;
+      font-size: 30px;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, .2);
+      font-family: 'Courier New', monospace;
+    }
+
+    .calculator-display small {
+      display: flex;
+      justify-content: space-between;
+      min-height: 20px;
+      color: #586a66;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .calculator-mode {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin: 10px 0;
+    }
+
+    .calculator-mode button,
+    .calculator-key {
+      border: 1px solid #aaa5b7;
+      border-radius: 9px;
+      background: #dedce3;
+      color: #292633;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 800;
+    }
+
+    .calculator-mode button {
+      padding: 6px 12px;
+      color: var(--text-dim);
+      font-size: 12px;
+    }
+
+    .calculator-mode button.active {
+      background: #8d65e9;
+      border-color: transparent;
+      color: #fff;
+    }
+
+    .calculator-keys {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      direction: ltr;
+    }
+
+    .calculator-key {
+      min-height: 40px;
+      padding: 8px 4px;
+      font-size: 13px;
+    }
+
+    .calculator-key.function {
+      background: #514d5c;
+      color: #b293ff;
+    }
+
+    .calculator-key.operator,
+    .calculator-key.equals {
+      background: #6e4bc6;
+      border-color: transparent;
+      color: #fff;
+    }
+
+    .calculator-key.danger {
+      background: #8e3e51;
+      color: #fff;
+      border-color: transparent;
+    }
+
+    .calculator-key.standard {
+      background: #d9d7dc;
+      color: #292633;
+    }
+
+    .calculator-key.wide {
+      grid-column: span 2;
+    }
+
+    .calculator-key.equals {
+      grid-column: span 2;
+    }
+
+
+    .calculator-key:active,
+    .calculator-mode button:active {
+      transform: scale(.95);
+    }
+
+    .calculator-scientific {
+      display: grid;
+      width: 100%;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .calculator-science-row,
+    .calculator-science-row.five {
+      display: grid;
+      width: 100%;
+      gap: 6px;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+
+    .calculator-science-row.five button:last-child {
+      grid-column: span 2;
+    }
+
+    .calculator-main-keys {
+      display: grid;
+      width: 100%;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      grid-template-rows: repeat(5, 1fr);
+      gap: 6px;
+      grid-template-areas:
+        "ac del n7 n8 n9 div"
+        "blank blank n4 n5 n6 mul"
+        "blank blank n1 n2 n3 sub"
+        "blank blank n0 dot ans add"
+        "blank blank blank blank eq eq";
+    }
+
+    .key-ac {
+      grid-area: ac;
+    }
+
+    .key-del {
+      grid-area: del;
+    }
+
+    .key-7 {
+      grid-area: n7;
+    }
+
+    .key-8 {
+      grid-area: n8;
+    }
+
+    .key-9 {
+      grid-area: n9;
+    }
+
+    .key-4 {
+      grid-area: n4;
+    }
+
+    .key-5 {
+      grid-area: n5;
+    }
+
+    .key-6 {
+      grid-area: n6;
+    }
+
+    .key-1 {
+      grid-area: n1;
+    }
+
+    .key-2 {
+      grid-area: n2;
+    }
+
+    .key-3 {
+      grid-area: n3;
+    }
+
+    .key-0 {
+      grid-area: n0;
+    }
+
+    .key-dot {
+      grid-area: dot;
+    }
+
+    .key-ans {
+      grid-area: ans;
+    }
+
+    .key-div {
+      grid-area: div;
+    }
+
+    .key-mul {
+      grid-area: mul;
+    }
+
+    .key-sub {
+      grid-area: sub;
+    }
+
+    .key-add {
+      grid-area: add;
+    }
+
+    .key-equals {
+      grid-area: eq;
+    }
+
+    .calculator-science-row button,
+    .calculator-main-keys button {
+      min-width: 0;
+      min-height: 38px;
+      padding: 7px 4px;
+      border-radius: 6px;
+      text-align: center;
+      display: grid;
+      place-items: center;
+    }
+
+    .basic-calculator-memory,
+    .basic-calculator-keys {
+      display: grid;
+      width: 100%;
+      gap: 8px;
+      direction: ltr;
+    }
+
+    .basic-calculator-memory {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .basic-calculator-keys {
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-areas:
+        "seven eight nine multiply"
+        "four five six subtract"
+        "one two three add"
+        "zero decimal equals add";
+    }
+
+    .basic-calculator-keys .key-seven {
+      grid-area: seven;
+    }
+
+    .basic-calculator-keys .key-eight {
+      grid-area: eight;
+    }
+
+    .basic-calculator-keys .key-nine {
+      grid-area: nine;
+    }
+
+    .basic-calculator-keys .key-four {
+      grid-area: four;
+    }
+
+    .basic-calculator-keys .key-five {
+      grid-area: five;
+    }
+
+    .basic-calculator-keys .key-six {
+      grid-area: six;
+    }
+
+    .basic-calculator-keys .key-one {
+      grid-area: one;
+    }
+
+    .basic-calculator-keys .key-two {
+      grid-area: two;
+    }
+
+    .basic-calculator-keys .key-three {
+      grid-area: three;
+    }
+
+    .basic-calculator-keys .key-zero {
+      grid-area: zero;
+    }
+
+    .basic-calculator-keys .key-decimal {
+      grid-area: decimal;
+    }
+
+    .basic-calculator-keys .key-multiply {
+      grid-area: multiply;
+    }
+
+    .basic-calculator-keys .key-subtract {
+      grid-area: subtract;
+    }
+
+    .basic-calculator-keys .key-add {
+      grid-area: add;
+    }
+
+    .basic-calculator-keys .key-equals {
+      grid-area: equals;
+    }
+
+    .basic-calculator-key {
+      min-height: 48px;
+      border-radius: 8px !important;
+      font-size: 18px !important;
+    }
+
+    .chat-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: var(--bg);
+    }
+
+    .msg {
+      max-width: 82%;
+      padding: 11px 14px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .msg-bot {
+      align-self: flex-start;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-start-start-radius: 4px;
+    }
+
+    .msg-user {
+      align-self: flex-end;
+      background: var(--accent);
+      color: #fff;
+      border-start-end-radius: 4px;
+    }
+
+    .chat-input-bar {
+      display: flex;
+      gap: 8px;
+      padding: 12px 14px calc(14px + env(safe-area-inset-bottom));
+      border-top: 1px solid var(--line);
+      background: var(--bg-elev);
+    }
+
+    .chat-input-bar input {
+      flex: 1;
+    }
+
+    .send-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      border: none;
+      flex-shrink: 0;
+      background: var(--accent);
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .typing {
+      display: flex;
+      gap: 4px;
+      padding: 6px 2px;
+    }
+
+    .typing span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--text-faint);
+      animation: blink 1.2s infinite ease-in-out;
+    }
+
+    .typing span:nth-child(2) {
+      animation-delay: .2s;
+    }
+
+    .typing span:nth-child(3) {
+      animation-delay: .4s;
+    }
+
+    @keyframes blink {
+
+      0%,
+      80%,
+      100% {
+        opacity: .3;
+      }
+
+      40% {
+        opacity: 1;
+      }
+    }
+
+    .notification-btn {
+      position: relative;
+    }
+
+    /* Groups the theme/language toggles and the logout button into one
+       pill instead of three separate floating buttons. */
+    .topbar-toggle-group {
+      display: flex;
+      align-items: center;
+      background: var(--card);
+      border: 1.5px solid var(--line);
+      border-radius: 13px;
+      overflow: hidden;
+    }
+
+    .topbar-toggle-group .icon-btn {
+      border: none;
+      border-radius: 0;
+      background: transparent;
+    }
+
+    /* Thin, low-contrast separator between the toggles and the logout
+       button — present but not attention-grabbing. */
+    .topbar-divider {
+      width: 1px;
+      align-self: stretch;
+      margin: 9px 0;
+      background: var(--line);
+      opacity: .7;
+    }
+
+    .topbar-logout-btn {
+      color: var(--bad);
+    }
+
+    .topbar-logout-btn:hover {
+      color: var(--bad);
+    }
+
+    /* ---------- topbar hamburger menu (theme / language / logout) ---------- */
+    .topbar-menu {
+      position: relative;
+    }
+
+    .topbar-menu-panel {
+      display: none;
+      position: absolute;
+      top: calc(100% + 10px);
+      inset-inline-end: 0;
+      min-width: 190px;
+      background: color-mix(in srgb, var(--card) 65%, transparent);
+      backdrop-filter: blur(18px) saturate(160%);
+      -webkit-backdrop-filter: blur(18px) saturate(160%);
+      border: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-2);
+      padding: 6px;
+      z-index: 70;
+    }
+
+    .topbar-menu-panel.open {
+      display: block;
+      animation: sheet-up .18s ease;
+    }
+
+    .topbar-menu-item {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 11px;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: start;
+    }
+
+    .topbar-menu-item:hover {
+      background: color-mix(in srgb, var(--card-2) 70%, transparent);
+    }
+
+    .topbar-menu-item svg {
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
+    }
+
+    /* Thin, low-contrast separator before the logout row — present but not
+       attention-grabbing. */
+    .topbar-menu-divider {
+      display: block;
+      height: 1px;
+      margin: 6px 4px;
+      background: var(--line);
+      opacity: .6;
+    }
+
+    .topbar-menu-item-logout {
+      color: var(--bad);
+    }
+
+    .topbar-menu-item-logout:hover {
+      background: color-mix(in srgb, var(--bad-soft) 80%, transparent);
+    }
+
+    .notification-count {
+      position: absolute;
+      top: -4px;
+      inset-inline-end: -4px;
+      min-width: 17px;
+      height: 17px;
+      padding: 0 4px;
+      border-radius: 9px;
+      background: var(--bad);
+      color: #fff;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .notice-item {
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--card-2);
+      margin-bottom: 8px;
+    }
+
+    .notice-meta {
+      display: block;
+      color: var(--text-faint);
+      font-size: 11px;
+      margin-top: 3px;
+    }
+
+    .homework-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 7px;
+    }
+
+    .homework-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 7px 11px;
+      border-radius: 10px;
+      background: var(--accent-soft);
+      color: var(--accent-2);
+      font-size: 12px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .homework-link.download {
+      background: var(--ok-soft);
+      color: var(--ok);
+    }
+
+    .notifications-list {
+      display: grid;
+      gap: 8px;
+      max-height: 55vh;
+      overflow: auto;
+    }
+
+    .contact-us-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .contact-us-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--card-2);
+      text-decoration: none;
+      color: var(--text);
+      transition: transform .15s ease, border-color .15s ease;
+    }
+
+    .contact-us-row:hover {
+      transform: translateY(-1px);
+      border-color: var(--accent);
+    }
+
+    .contact-us-icon {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .contact-us-icon svg {
+      width: 21px;
+      height: 21px;
+    }
+
+    .contact-us-icon-facebook {
+      background: #1877F2;
+    }
+
+    .contact-us-icon-instagram {
+      background: #E1306C;
+    }
+
+    .contact-us-icon-whatsapp {
+      background: #25D366;
+    }
+
+    .contact-us-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .contact-us-name {
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .contact-us-hint {
+      font-size: 12px;
+      color: var(--text-faint);
+    }
+
+    .notification-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--card-2);
+    }
+
+    .notification-item-icon {
+      width: 30px;
+      height: 30px;
+      flex-shrink: 0;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: var(--accent-soft);
+      color: var(--accent-2);
+    }
+
+    .notification-item-icon svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .profile-icon-btn {
+      width: 50px;
+      height: 50px;
+      padding: 0;
+      border: 0;
+      border-radius: 12px;
+      background: transparent;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .profile-icon-btn img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-avatar-button {
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .student-section-button {
+      width: 100%;
+      margin: 0 0 12px;
+      text-align: start;
+      cursor: pointer;
+      background: var(--accent);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 12px 24px -14px var(--accent-shadow);
+    }
+
+    .student-section-button:hover {
+      border-color: transparent;
+      filter: brightness(1.06);
+    }
+
+    .student-grades-modal-list {
+      display: grid;
+      gap: 8px;
+      max-height: 58vh;
+      overflow: auto;
+    }
+
+    #monthlyWrap,
+    #notesWrap {
+      display: block;
+    }
+
+    .student-notes-modal-list {
+      display: grid;
+      gap: 8px;
+      max-height: 58vh;
+      overflow: auto;
+    }
+
+    .student-note-button {
+      width: 100%;
+      text-align: start;
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--card-2);
+      color: var(--text);
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .student-note-button:hover {
+      border-color: var(--accent-2);
+    }
+
+    .student-full-page {
+      display: none;
+      width: min(100%, 560px);
+      margin: 0 auto;
+      min-height: calc(100dvh - 112px);
+      padding: 14px 12px 24px;
+    }
+
+    .student-full-page.open {
+      display: block;
+    }
+
+    .student-full-page-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .student-full-page-head h2 {
+      font-size: 20px;
+    }
+
+    .student-full-page-body {
+      display: grid;
+      gap: 10px;
+    }
+
+    @media(min-width:640px) {
+      .student-full-page {
+        width: min(100%, 980px);
+        padding-inline: 24px;
+      }
+    }
+
+    .student-menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .student-menu-card {
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--card-2);
+      cursor: pointer;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .student-menu-card:hover {
+      border-color: var(--accent);
+    }
+
+    .student-menu-card svg {
+      width: 26px;
+      height: 26px;
+      color: var(--accent);
+    }
+
+    .student-menu-card span {
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .student-menu-card.is-soon {
+      opacity: .7;
+    }
+
+    /* ---------- account page ---------- */
+    .account-profile-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .account-profile-card .profile-name {
+      margin-top: 2px;
+    }
+
+    .account-info-list {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding: 6px;
+    }
+
+    .account-info-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .account-info-row:last-child {
+      border-bottom: none;
+    }
+
+    .account-info-label {
+      font-size: 13px;
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+
+    .account-info-value {
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .account-info-value-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .account-info-value-wrap .icon-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 9px;
+    }
+
+    .account-info-value-wrap .icon-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .account-gender-title {
+      font-size: 15px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .account-gender-options {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .account-gender-options .btn {
+      flex: 1;
+    }
+
+    .account-gender-locked {
+      margin-top: 10px;
+      font-size: 13.5px;
+      color: var(--text-dim);
+    }
+
+    .todo-add-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .todo-add-row input {
+      flex: 1;
+      padding: 11px 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--card-2);
+      color: var(--text);
+      font: inherit;
+    }
+
+    .todo-add-row textarea {
+      flex: 1;
+      padding: 11px 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--card-2);
+      color: var(--text);
+      font: inherit;
+      resize: vertical;
+      min-height: 44px;
+    }
+
+    /* ---------- my notes: list/sidebar ---------- */
+    .notes-head-actions {
+      display: flex;
+      gap: 8px;
+      margin-inline-start: auto;
+    }
+
+    .notes-filter-row {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      margin-bottom: 12px;
+    }
+
+    .note-filter-chip {
+      flex-shrink: 0;
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--card-2);
+      color: var(--text-dim);
+      font-size: 12.5px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .note-filter-chip.active {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent-2);
+    }
+
+    /* ---------- my notes: editor ---------- */
+    /* Must only apply display:flex while this page also has .open —
+       otherwise, since this selector's specificity ties with
+       ".student-full-page { display:none }" and comes later in the
+       stylesheet, it would win by source order and keep the note
+       editor visible everywhere on the site instead of only when
+       opened via the "+" button. */
+    .note-editor-page.open {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .note-editor-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .note-folder-select {
+      flex: 1;
+      min-width: 100px;
+    }
+
+    .note-title-input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 22px;
+      font-weight: 800;
+      padding: 6px 2px 14px;
+      margin-bottom: 6px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .note-title-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .note-toolbar-scroll {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 6px 2px 12px;
+      margin-bottom: 8px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .note-toolbar-scroll .note-toolbar-select {
+      flex-shrink: 0;
+      width: auto;
+      min-width: 92px;
+    }
+
+    .note-tb-btn {
+      flex-shrink: 0;
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--card-2);
+      color: var(--text-dim);
+      font-size: 14px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform .1s ease, background .15s ease, border-color .15s ease, color .15s ease;
+    }
+
+    .note-tb-btn:hover {
+      color: var(--text);
+      border-color: var(--accent-2);
+    }
+
+    .note-tb-btn:active {
+      transform: scale(.9);
+    }
+
+    /* Clearly-visible "this is on" state — filled accent background plus
+       a ring, so it reads at a glance even on a small screen. */
+    .note-tb-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+
+    .note-tb-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* ---------- mobile: bigger tap targets + sticky toolbar ---------- */
+    @media(max-width:639px) {
+      .note-editor-head {
+        gap: 6px;
+      }
+
+      .note-toolbar-scroll {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        background: var(--bg);
+        gap: 8px;
+        padding: 8px 2px 12px;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x proximity;
+      }
+
+      .note-tb-btn {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        font-size: 16px;
+        scroll-snap-align: start;
+      }
+
+      .note-tb-btn svg {
+        width: 19px;
+        height: 19px;
+      }
+
+      .note-toolbar-scroll .note-toolbar-select {
+        min-width: 104px;
+        padding: 9px 10px;
+        font-size: 13px;
+      }
+
+      .note-title-input {
+        font-size: 19px;
+        padding: 8px 2px 12px;
+      }
+
+      .note-editor-foot {
+        position: sticky;
+        bottom: 0;
+        background: var(--bg);
+        padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
+      }
+
+      .note-editor-foot .btn-sm {
+        padding: 10px 18px;
+        font-size: 13.5px;
+      }
+    }
+
+    .note-toolbar-select {
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--card-2);
+      color: var(--text);
+      font-size: 12px;
+    }
+
+    .note-editor-body {
+      flex: 1;
+      min-height: 260px;
+      padding: 5px 14px 40px 10px;
+      font-size: 15px;
+      line-height: 30px;
+      outline: none;
+      /* notebook ruled-paper effect: a repeating horizontal line every
+         30px (matches line-height above) plus a vertical margin line
+         like a real school notebook */
+      background-image:
+        repeating-linear-gradient(to bottom, transparent, transparent 29px, var(--line) 29px, var(--line) 30px),
+        linear-gradient(to var(--note-margin-side, left), transparent 38px, rgba(240, 71, 90, .35) 38px, rgba(240, 71, 90, .35) 40px, transparent 40px);
+      background-position: 0 4px, 0 0;
+    }
+
+    html[dir="rtl"] .note-editor-body {
+      --note-margin-side: right;
+    }
+
+    .note-editor-body:empty::before {
+      content: "ابدأ الكتابة هنا...";
+      color: var(--text-faint);
+    }
+
+    @media(min-width:900px) {
+      .note-editor-body {
+        line-height: 32px;
+        background-image:
+          repeating-linear-gradient(to bottom, transparent, transparent 31px, var(--line) 31px, var(--line) 32px),
+          linear-gradient(to var(--note-margin-side, left), transparent 38px, rgba(240, 71, 90, .35) 38px, rgba(240, 71, 90, .35) 40px, transparent 40px);
+        background-position: 0 6px, 0 0;
+      }
+    }
+
+    .note-editor-body ul,
+    .note-editor-body ol {
+      padding-inline-start: 22px;
+      margin: 8px 0;
+    }
+
+    .note-editor-body h2 {
+      font-size: 19px;
+      font-weight: 800;
+      margin: 14px 0 8px;
+    }
+
+    .note-editor-body h3 {
+      font-size: 16px;
+      font-weight: 800;
+      margin: 12px 0 6px;
+    }
+
+    .note-editor-body a {
+      color: var(--accent-2);
+      text-decoration: underline;
+    }
+
+    .note-checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin: 4px 0;
+    }
+
+    .note-checklist-item input[type="checkbox"] {
+      margin-top: 4px;
+      accent-color: var(--accent);
+    }
+
+    .note-checklist-item input:checked+span {
+      text-decoration: line-through;
+      color: var(--text-faint);
+    }
+
+    .note-image {
+      max-width: 100%;
+      border-radius: 10px;
+      margin: 8px 0;
+      display: block;
+    }
+
+    .note-table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 10px 0;
+    }
+
+    .note-table td {
+      border: 1px solid var(--line);
+      padding: 8px 10px;
+      min-width: 60px;
+    }
+
+    .note-editor-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    /* wider screens: notes list becomes a gallery grid instead of one
+       column, and the editor gets a bit more breathing room — the app
+       still opens one page at a time (list, then editor), matching how
+       every other section here works, just sized up for a bigger screen */
+    @media(min-width:640px) {
+      #studentMynotesList {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media(min-width:900px) {
+      #studentMynotesList {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .note-editor-body {
+        font-size: 16px;
+      }
+
+      .note-title-input {
+        font-size: 26px;
+      }
+    }
+    .my-notes-item {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--card-2);
+      cursor: pointer;
+    }
+
+    .my-notes-item-text {
+      flex: 1;
+      min-width: 0;
+      font-size: 13.5px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .my-notes-item-meta {
+      display: block;
+      margin-top: 6px;
+      font-size: 11px;
+      color: var(--text-faint);
+    }
+
+    /* ---------- streak page ---------- */
+    .streak-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 4px;
+      margin-bottom: 14px;
+      padding: 26px 22px;
+    }
+
+    .streak-flame {
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .streak-flame svg {
+      width: 42px;
+      height: 42px;
+    }
+
+    .streak-value {
+      font-size: 40px;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .streak-label {
+      font-size: 13px;
+      color: var(--text-dim);
+      margin-top: 6px;
+    }
+
+    /* ---------- badges page ---------- */
+    .badges-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .badge-tile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 6px;
+      padding: 18px 10px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--card-2);
+      opacity: .45;
+      filter: grayscale(1);
+      transition: opacity .2s ease, filter .2s ease, border-color .2s ease;
+    }
+
+    .badge-tile.unlocked {
+      opacity: 1;
+      filter: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent) inset;
+      cursor: pointer;
+    }
+
+    .badge-tile.unlocked:hover {
+      border-color: var(--accent-2);
+    }
+
+    .badge-share-hint {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--accent-2);
+      margin-top: 2px;
+    }
+
+    /* ---------- account page: subscription status (read-only pill) ---------- */
+    .pay-status-pill {
+      border: 1.5px solid var(--line);
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 11.5px;
+      font-weight: 800;
+      background: var(--bad-soft);
+      color: var(--bad);
+      flex-shrink: 0;
+    }
+
+    .pay-status-pill.on {
+      background: var(--ok-soft);
+      color: var(--ok);
+    }
+
+    .badge-icon {
+      line-height: 1;
+    }
+
+    .badge-icon svg {
+      width: 30px;
+      height: 30px;
+    }
+
+    .badge-icon.tier-bronze { color: #cd7f32; }
+    .badge-icon.tier-silver { color: #b7c0cc; }
+    .badge-icon.tier-gold { color: #f2b53c; }
+    .badge-icon.tier-diamond { color: #57c7f0; }
+
+    .badge-title {
+      font-size: 12.5px;
+      font-weight: 800;
+    }
+
+    .badge-progress {
+      font-size: 11px;
+      color: var(--text-faint);
+    }
+
+    .todo-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--card-2);
+    }
+
+    .todo-check {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      font-size: 13.5px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .todo-check input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .todo-item.done .todo-check span {
+      text-decoration: line-through;
+      color: var(--text-dim);
+    }
+
+    .todo-delete {
+      border: none;
+      background: transparent;
+      color: var(--text-dim);
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .todo-delete:hover {
+      color: #ef5a72;
+    }
+
+    .leaderboard-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--card-2);
+    }
+
+    .leaderboard-item.is-me {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .leaderboard-rank {
+      width: 26px;
+      flex-shrink: 0;
+      text-align: center;
+      font-weight: 800;
+      font-size: 14px;
+      color: var(--text-dim);
+    }
+
+    .leaderboard-name {
+      flex: 1;
+      min-width: 0;
+      font-weight: 700;
+      font-size: 13.5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .leaderboard-you {
+      color: var(--accent);
+      font-weight: 800;
+    }
+
+    .leaderboard-points {
+      flex-shrink: 0;
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--accent-2);
+      white-space: nowrap;
+    }
+
+    .attendance-modal-list {
+      display: grid;
+      gap: 18px;
+      max-height: 62vh;
+      overflow: auto;
+    }
+
+    .attendance-month {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--card-2);
+    }
+
+    .attendance-month-title {
+      font-weight: 800;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+    }
+
+    .attendance-dots {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 10px;
+    }
+
+    .attendance-dot {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .attendance-dot.present {
+      background: var(--ok);
+    }
+
+    .attendance-dot.absent {
+      background: var(--bad);
+    }
+
+    @media(max-width:639px) {
+      .chat-overlay {
+        overflow-y: auto;
+      }
+
+      .chat-header {
+        padding: 10px 12px;
+      }
+
+      .calculator-shell {
+        width: calc(100% - 16px);
+        margin: 10px auto;
+        padding: 10px 10px 14px;
+        border-radius: 22px;
+      }
+
+      .calculator-brand {
+        font-size: 9px;
+        margin-bottom: 5px;
+      }
+
+      .calculator-display {
+        min-height: 76px;
+        padding: 10px 12px;
+        font-size: 25px;
+      }
+
+      .calculator-display small {
+        min-height: 16px;
+        font-size: 10px;
+      }
+
+      .calculator-actions {
+        margin: 8px 0;
+      }
+
+      .calculator-actions button {
+        font-size: 9px;
+      }
+
+      .replay-pad {
+        width: 46px;
+        height: 46px;
+      }
+
+      .replay-pad::before {
+        width: 17px;
+        height: 17px;
+      }
+
+      .calculator-mode {
+        margin: 7px 0;
+      }
+
+      .calculator-mode button {
+        padding: 5px 10px;
+      }
+
+      .calculator-keys {
+        gap: 5px;
+      }
+
+      .calculator-key {
+        min-height: 35px;
+        padding: 6px 2px;
+        font-size: 11px;
+        border-radius: 8px;
+      }
+
+      .calculator-scientific,
+      .calculator-main-keys {
+        gap: 4px;
+      }
+
+      .calculator-science-row {
+        gap: 4px;
+      }
+
+      .calculator-key {
+        min-width: 0;
+      }
+
+      #studentAttendanceModal {
+        padding: 10px;
+        align-items: center;
+      }
+
+      #studentAttendanceModal .modal {
+        width: 100%;
+        max-width: 430px;
+        max-height: 90dvh;
+        border-radius: 22px;
+        padding: 18px 12px 22px;
+      }
+
+      .attendance-modal-list {
+        max-height: 72dvh;
+        gap: 12px;
+      }
+
+      .attendance-month {
+        padding: 12px 9px;
+      }
+
+      .attendance-dots {
+        gap: 5px;
+      }
+
+      .attendance-dot {
+        width: auto;
+        height: auto;
+        aspect-ratio: 1;
+        font-size: 10px;
+      }
+    }
+
+    .latest-grades {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .latest-grade {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: var(--card-2);
+    }
+
+    /* ---------- portfolio intro (first visit on this device) ---------- */
+    .portfolio-intro-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 22px;
+    }
+
+    .portfolio-intro-overlay.hide {
+      display: none;
+    }
+
+    .portfolio-intro-card {
+      max-width: 420px;
+      width: 100%;
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 16px;
+    }
+
+    .portfolio-intro-scroll {
+      width: 100%;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: 2px 4px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .portfolio-intro-block {
+      margin-bottom: 18px;
+    }
+
+    .portfolio-intro-block:last-child {
+      margin-bottom: 0;
+    }
+
+    .portfolio-intro-photo {
+      width: 170px;
+      height: 170px;
+      object-fit: cover;
+      object-position: top;
+      border-radius: 24px;
+      box-shadow: var(--shadow-2);
+      border: 1px solid var(--line);
+    }
+
+    .portfolio-intro-text {
+      font-size: 15.5px;
+      line-height: 2;
+      color: var(--text);
+      white-space: pre-line;
+      min-height: 150px;
+    }
+
+    .portfolio-intro-text .typing-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      background: var(--accent);
+      margin-inline-start: 2px;
+      vertical-align: text-bottom;
+      animation: portfolioCursorBlink .9s steps(1) infinite;
+    }
+
+    @keyframes portfolioCursorBlink {
+      50% {
+        opacity: 0;
+      }
+    }
+
+    .portfolio-intro-next {
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      transition: opacity .35s ease, transform .35s ease;
+      min-width: 140px;
+    }
+
+    .portfolio-intro-next.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .portfolio-intro-name {
+      font-size: 21px;
+      font-weight: 800;
+      color: var(--text);
+      margin-top: -4px;
+      margin-bottom: 4px;
+    }
+
+    .portfolio-intro-section-title {
+      font-size: 16.5px;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 2px;
+    }
+
+    .portfolio-intro-intro-line {
+      font-size: 14px;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+    }
+
+    .portfolio-intro-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      text-align: start;
+    }
+
+    .portfolio-intro-list li {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text);
+      background: var(--card-2);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 14px;
+    }
+
+    .portfolio-intro-club-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      text-align: start;
+      background: var(--card-2);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 8px 12px;
+    }
+
+    .portfolio-intro-club-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      object-fit: contain;
+      background: #fff;
+      border: 1px solid var(--line);
+      flex-shrink: 0;
+    }
+
+    .portfolio-intro-club-text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .portfolio-intro-club-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .portfolio-intro-club-coach {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    .portfolio-intro-fade {
+      animation: portfolioSlideFade .35s ease;
+    }
+
+    @keyframes portfolioSlideFade {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body class="student-page">
+
+  <div class="page-math-background" aria-hidden="true">
+            <span class="math-symbol">+</span>
+            <span class="math-symbol">-</span>
+            <span class="math-symbol">=</span>
+            <span class="math-symbol">≠</span>
+            <span class="math-symbol">≥</span>
+            <span class="math-symbol">x²</span>
+            <span class="math-symbol">x²</span>
+            <span class="math-symbol">∅</span>
+            <span class="math-symbol">∫</span>
+            <span class="math-symbol">∈</span>
+            <span class="math-symbol">x²</span>
+            <span class="math-symbol">∫</span>
+            <span class="math-symbol">∪</span>
+  </div>
+
+  <div class="mc-loader" id="mcLoader">
+    <div class="spinner"></div><span data-t="loading">جاري التحميل...</span>
+  </div>
+
+  
+  <div class="portfolio-intro-overlay" id="portfolioIntroOverlay">
+    <div class="portfolio-intro-card">
+      <img src="Ostaz portfolio.jpg" alt="" class="portfolio-intro-photo"
+        onerror="this.style.display='none'">
+      <div class="portfolio-intro-scroll" id="portfolioIntroSlide"></div>
+      <button type="button" class="btn btn-primary portfolio-intro-next" id="portfolioIntroNext" data-t="welcomeToPlatform">أهلاً بيك في مركز الرياضيات</button>
+    </div>
+  </div>
+  <script>
+    
+    (function () {
+      try {
+        var overlay = document.getElementById('portfolioIntroOverlay');
+        if (!overlay) return;
+
+        var slideEl = document.getElementById('portfolioIntroSlide');
+        var nextBtn = document.getElementById('portfolioIntroNext');
+        if (!slideEl || !nextBtn) return;
+
+        function makeEl(tag, className) {
+          var node = document.createElement(tag);
+          if (className) node.className = className;
+          return node;
+        }
+
+        function clubRow(list, name, coach, logo) {
+          var li = makeEl('li', 'portfolio-intro-club-row');
+          var img = document.createElement('img');
+          img.className = 'portfolio-intro-club-logo';
+          img.alt = '';
+          img.style.opacity = '0';
+          img.style.transition = 'opacity .3s ease';
+          
+          var candidates = [logo, logo.toLowerCase(), logo.charAt(0).toUpperCase() + logo.slice(1).toLowerCase()];
+          candidates = candidates.filter(function (v, i) { return candidates.indexOf(v) === i; });
+          var attempt = 0;
+          img.onerror = function () {
+            attempt++;
+            if (attempt < candidates.length) { img.src = candidates[attempt]; }
+            else { this.style.display = 'none'; }
+          };
+          img.src = candidates[0];
+          var textWrap = makeEl('div', 'portfolio-intro-club-text');
+          var nameEl = makeEl('div', 'portfolio-intro-club-name');
+          var coachEl = makeEl('div', 'portfolio-intro-club-coach');
+          textWrap.appendChild(nameEl);
+          textWrap.appendChild(coachEl);
+          li.appendChild(img);
+          li.appendChild(textWrap);
+          list.appendChild(li);
+          return [
+            { el: nameEl, text: name },
+            { el: coachEl, text: coach, reveal: img }
+          ];
+        }
+
+      
+        function build(container) {
+          var units = [];
+
+          var introBlock = makeEl('div', 'portfolio-intro-block');
+          var title = makeEl('div', 'portfolio-intro-section-title');
+          var name = makeEl('div', 'portfolio-intro-name');
+          introBlock.appendChild(title);
+          introBlock.appendChild(name);
+          container.appendChild(introBlock);
+          units.push({ el: title, text: 'السيرة الذاتية' });
+          units.push({ el: name, text: 'خالد مختار' });
+
+          var qualsBlock = makeEl('div', 'portfolio-intro-block');
+          var qualsTitle = makeEl('div', 'portfolio-intro-section-title');
+          var qualsList = makeEl('ul', 'portfolio-intro-list');
+          qualsBlock.appendChild(qualsTitle);
+          qualsBlock.appendChild(qualsList);
+          container.appendChild(qualsBlock);
+          units.push({ el: qualsTitle, text: 'الشهادات العلمية' });
+          [
+            'بكالوريس هندسة قسم ميكانيكا جامعة القاهرة',
+            'بكالوريس حقوق تخصص جنائي جامعة المنصورة',
+            'دبلومة علم نفس وتنمية بشرية الأكاديمية الأمريكية'
+          ].forEach(function (text) {
+            var li = makeEl('li');
+            qualsList.appendChild(li);
+            units.push({ el: li, text: text });
+          });
+
+          var footballBlock = makeEl('div', 'portfolio-intro-block');
+          var footballTitle = makeEl('div', 'portfolio-intro-section-title');
+          var introLine = makeEl('div', 'portfolio-intro-intro-line');
+          var footballList = makeEl('ul', 'portfolio-intro-list');
+          footballBlock.appendChild(footballTitle);
+          footballBlock.appendChild(introLine);
+          footballBlock.appendChild(footballList);
+          container.appendChild(footballBlock);
+          units.push({ el: footballTitle, text: 'مجال كرة القدم' });
+          units.push({ el: introLine, text: 'لاعب سابق بأندية الدرجة الممتاز A' });
+          units = units.concat(clubRow(footballList, 'النادى المصري البورسعيدي', 'تحت قيادة كابتن علي السعيد', 'Masry.jpg'));
+          units = units.concat(clubRow(footballList, 'نادى الأهلي', 'تحت قيادة كابتن ماهر همام', 'alahly.jpg'));
+          units = units.concat(clubRow(footballList, 'نادى الزمالك', 'تحت قيادة كابتن مصطفي نجم', 'zamalek.jpg'));
+          units = units.concat(clubRow(footballList, 'المنتخب المصري لمواليده', 'تحت قيادة كابتن ربيع ياسين.', 'egypt.jpg'));
+
+          return units;
+        }
+
+        function typeUnits(units, unitIndex, onAllDone) {
+          if (unitIndex >= units.length) { onAllDone(); return; }
+          var unit = units[unitIndex];
+          var text = unit.text;
+          var charIndex = 0;
+          unit.el.textContent = '';
+          (function step() {
+            if (charIndex <= text.length) {
+              unit.el.textContent = text.slice(0, charIndex);
+              charIndex++;
+              setTimeout(step, 40);
+            } else {
+              if (unit.reveal) unit.reveal.style.opacity = '1';
+              setTimeout(function () { typeUnits(units, unitIndex + 1, onAllDone); }, 140);
+            }
+          })();
+        }
+
+        slideEl.innerHTML = '';
+        var units = build(slideEl);
+        typeUnits(units, 0, function () {
+          nextBtn.classList.add('show');
+        });
+
+        nextBtn.addEventListener('click', function () {
+          if (!nextBtn.classList.contains('show')) return; // ignore clicks before typing finishes
+          overlay.classList.add('hide');
+        });
+      } catch (err) {
+        // Never let a bug here block the rest of the page from loading.
+        var overlayFallback = document.getElementById('portfolioIntroOverlay');
+        if (overlayFallback) overlayFallback.classList.add('hide');
+      }
+    })();
+  </script>
+
+  <div class="shell">
+    <div class="topbar">
+      <div class="row">
+        <button class="profile-icon-btn" id="topProfileAvatar" type="button"
+          onclick="document.getElementById('studentAvatarInput').click()" aria-label="profile"><img src="icon-192.png"
+            alt=""></button>
+      </div>
+      <div class="row">
+        <button class="icon-btn notification-btn" onclick="toggleNotifications()" aria-label="notifications"><svg
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" />
+          </svg><span class="notification-count" id="notificationCount" style="display:none"></span></button>
+        <div class="topbar-menu">
+          <button class="icon-btn" onclick="toggleTopbarMenu(event)" aria-label="menu" id="topbarMenuBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 7h16M4 12h16M4 17h16" />
+            </svg>
+          </button>
+          <div class="topbar-menu-panel" id="topbarMenuPanel">
+            <button type="button" class="topbar-menu-item" onclick="closeTopbarMenu(); toggleTheme()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 3v1M12 20v1M4.2 4.2l.7.7M18.4 18.4l.7.7M3 12h1M20 12h1M4.2 19.8l.7-.7M18.4 5.6l.7-.7" />
+                <circle cx="12" cy="12" r="4.5" />
+              </svg>
+              <span data-t="themeToggle">الوضع الليلي/النهاري</span>
+            </button>
+            <button type="button" class="topbar-menu-item" onclick="closeTopbarMenu(); toggleLang()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M3 12h18M12 3c2.5 2.6 4 6 4 9s-1.5 6.4-4 9c-2.5-2.6-4-6-4-9s1.5-6.4 4-9z" />
+              </svg>
+              <span id="langLabel">EN</span>
+            </button>
+            <span class="topbar-menu-divider"></span>
+            <button type="button" class="topbar-menu-item topbar-menu-item-logout"
+              onclick="closeTopbarMenu(); openModal('logoutConfirmModal')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <path d="M16 17l5-5-5-5" />
+                <path d="M21 12H9" />
+              </svg>
+              <span data-t="logout">خروج</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card profile-card">
+      <button type="button" class="avatar avatar-lg profile-avatar-button" id="profAvatar"
+        onclick="document.getElementById('studentAvatarInput').click()" aria-label="profile photo"></button>
+      <input type="file" id="studentAvatarInput" accept="image/*" hidden>
+      <div>
+        <div class="profile-name" id="profName"></div>
+        <div class="profile-meta" id="profMeta"></div>
+      </div>
+    </div>
+
+    <div class="card center attendance-card" id="attendanceCard" onclick="toggleAttendanceView()" title="اضغط للتبديل">
+      <div class="ring-wrap" id="attendanceRingView">
+        <svg width="120" height="120" viewBox="0 0 120 120">
+          <circle class="ring-bg" cx="60" cy="60" r="50"></circle>
+          <circle class="ring-fg" id="ringFg" cx="60" cy="60" r="50" stroke-dasharray="314" stroke-dashoffset="314">
+          </circle>
+        </svg>
+        <div class="ring-label"><b id="ringPct">0%</b><span data-t="attendanceRate">نسبة الحضور</span>
+        </div>
+        <span class="grades-featured-hint" data-t="tapToToggle">اضغط للتبديل</span>
+      </div>
+      <div class="progress-chart-wrap" id="progressChartView">
+        <canvas id="progressChart" aria-label="رسم بياني لتقدم الدرجات"></canvas>
+        <span class="grades-featured-hint" data-t="tapToToggle">اضغط للتبديل</span>
+      </div>
+    </div>
+
+    <div class="stats-two">
+      <div class="stat-card stat-card-present"><b id="statPresent" style="color:var(--ok)">0</b><span
+          data-t="sessionsCount">عدد
+          الحصص</span></div>
+      <div class="stat-card stat-card-absent"><b id="statAbsent" style="color:var(--bad)">0</b><span
+          data-t="absenceCount">عدد مرات
+          الغياب</span></div>
+    </div>
+
+    <div class="grades-featured" id="gradesFeatured" onclick="toggleGradesMetric()">
+      <div class="grades-featured-top">
+        <span class="grades-featured-label" id="gradesFeaturedLabel" data-t="overallPercentage">النسبة المئوية
+          العامة</span>
+        <span class="grades-featured-hint" data-t="tapToToggle">اضغط للتبديل</span>
+      </div>
+      <div class="grades-featured-value" id="gradesFeaturedValue">—</div>
+      <div class="grades-featured-sub" id="gradesFeaturedSub"></div>
+    </div>
+
+    <button type="button" id="gradesSectionStart" class="btn btn-ghost student-section-button"
+      onclick="openStudentGradesModal()"><span data-t="gradesList">سجل الدرجات</span></button>
+    <div class="latest-grades" id="latestGradesWrap"></div>
+    <div class="empty-state" id="gradesEmptyState" style="display:none;">
+      <p data-t="noGradesYet">لا يوجد درجات مسجلة بعد</p>
+    </div>
+
+    <button type="button" id="attendanceSectionStart" class="btn btn-ghost student-section-button"
+      onclick="openStudentAttendanceModal()"><span data-t="monthlyRecord">سجل الحضور الشهري</span></button>
+    <div id="monthlyWrap"></div>
+    <div class="empty-state" id="recordEmptyState" style="display:none;">
+      <p data-t="noRecordsYet">لا يوجد سجل حضور بعد</p>
+    </div>
+    <h3 style="font-size:15px; margin-bottom:12px; margin-top:20px;" data-t="homeworkNav">الواجبات</h3>
+    <button type="button" id="homeworkSectionStart" class="btn btn-ghost student-section-button"
+      onclick="openStudentHomeworkModal()"><span data-t="allHomework">كل الواجبات</span></button>
+    <div id="homeworkWrap"></div>
+    <button type="button" id="notesSectionStart" class="btn btn-ghost student-section-button"
+      onclick="openStudentNotesModal()">سجل
+      الملاحظات</button>
+    <div id="notesWrap"></div>
+  </div>
+
+  <section class="student-full-page" id="studentGradesPage" aria-labelledby="studentGradesPageTitle">
+    <div class="student-full-page-head">
+      <button class="icon-btn" type="button" onclick="history.back()" aria-label="back">&rarr;</button>
+      <h2 id="studentGradesPageTitle" data-t="gradesList">سجل الدرجات</h2>
+    </div>
+    <div class="card student-full-page-body" id="studentGradesPageList"></div>
+  </section>
+
+  <section class="student-full-page" id="studentHomeworkPage" aria-labelledby="studentHomeworkPageTitle">
+    <div class="student-full-page-head">
+      <button class="icon-btn" type="button" onclick="history.back()" aria-label="back">&rarr;</button>
+      <h2 id="studentHomeworkPageTitle" data-t="homeworkNav">الواجبات</h2>
+    </div>
+    <div class="student-full-page-body" id="studentHomeworkPageList"></div>
+  </section>
+
+  <section class="student-full-page" id="studentAttendancePage" aria-labelledby="studentAttendancePageTitle">
+    <div class="student-full-page-head">
+      <button class="icon-btn" type="button" onclick="history.back()" aria-label="back">&rarr;</button>
+      <h2 id="studentAttendancePageTitle" data-t="monthlyRecord">سجل الحضور الشهري</h2>
+    </div>
+    <div class="student-full-page-body" id="studentAttendancePageList"></div>
+  </section>
+
+  <section class="student-full-page" id="studentNotesPage" aria-labelledby="studentNotesPageTitle">
+    <div class="student-full-page-head">
+      <button class="icon-btn" type="button" onclick="history.back()" aria-label="back">&rarr;</button>
+      <h2 id="studentNotesPageTitle" data-t="notesLog">سجل الملاحظات</h2>
+    </div>
+    <div class="student-full-page-body" id="studentNotesPageList"></div>
+  </section>
+
+  <section class="student-full-page" id="studentMenuPage" aria-labelledby="studentMenuPageTitle">
+    <div class="student-full-page-head">
+      <button class="icon-btn" type="button" onclick="history.back()" aria-label="back">&rarr;</button>
+      <h2 id="studentMenuPageTitle" data-t="menuTitle">القائمة</h2>
+    </div>
+    <div class="student-menu-grid">
+      <div class="student-menu-card" onclick="renderAccountPage(); showStudentSection('account')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="8" r="4" />
+          <path d="M4 20c0-3.5 3.5-6 8-6s8 2.5 8 6" />
+        </svg>
+        <span data-t="myAccount">بيانات حسابي</span>
+      </div>
+      <div class="student-menu-card" onclick="renderStreakPage(); showStudentSection('streak')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M12 2c1 3-3 4-3 8a3 3 0 0 0 6 0c0-1-.5-2-1-3 2 1 4 3 4 6a6 6 0 0 1-12 0c0-5 3-7 6-11Z" />
+        </svg>
+        <span data-t="streakLabel">الاستمرارية</span>
+      </div>
+      <div class="student-menu-card" onclick="renderBadgesPage(); showStudentSection('badges')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="9" r="6" />
+          <path d="M9 14.5 7 22l5-3 5 3-2-7.5" />
+        </svg>
+        <span data-t="badgesLabel">الشارات</span>
+      </div>
+      <div class="student-menu-card" onclick="showStudentSection('notes')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M5 3h11l3 3v15H5z" />
+          <path d="M16 3v4h4M8 12h8M8 16h6M15 18l4-4" />
+        </svg>
+        <span data-t="notesNav">الملاحظات</span>
+      </div>
+      <div class="student-menu-card" onclick="showStudentSection('homework')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M9 4h6a2 2 0 0 1 2 2v14l-5-3-5 3V6a2 2 0 0 1 2-2Z" />
+          <path d="M9 9h6M9 13h4" />
+        </svg>
+        <span data-t="homeworkNav">الواجبات</span>
+      </div>
+      <div class="student-menu-card" onclick="renderLeaderboard(); showStudentSection('leaderboard')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4Z" />
+          <path d="M7 6H4a2 2 0 0 0 0 4h1M17 6h3a2 2 0 0 1 0 4h-1" />
+        </svg>
+        <span data-t="leaderboard">لوحة الصدارة</span>
+      </div>
+      <div class="student-menu-card is-soon" onclick="window.mcToast(window.t('comingSoon') + ' 🎮')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M6 12h4M8 10v4" />
+          <circle cx="15" cy="11" r="1" fill="currentColor" stroke="none" />
+          <circle cx="18" cy="13" r="1" fill="currentColor" stroke="none" />
+          <path
+            d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.544-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.152A4 4 0 0 0 17.32 5Z" />
+        </svg>
+        <span data-t="gameLabel">لعبة</span>
+      </div>
+      <div class="student-menu-card is-soon" onclick="window.mcToast(window.t('comingSoon') + ' 📢')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M4 4h11a2 2 0 0 1 2 2v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z" />
+          <path d="M17 8h3v10a1 1 0 0 1-1 1h-2" />
+          <path d="M6 8h6M6 11h6M6 14h4" />
+        </svg>
+        <span data-t="newsLabel">الإعلانات والأخبار</span>
+      </div>
+      <div class="student-menu-card is-soon" onclick="window.mcToast(window.t('comingSoon') + ' ⚽')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" />
+          <path
+            d="m12 8 3.09 2.24-1.18 3.63h-3.82l-1.18-3.63L12 8Z M12 3v5M12 16v5M3.6 9.3l4.31 1.4M20.4 9.3l-4.31 1.4M3.6 14.7l4.31-1.4M20.4 14.7l-4.31-1.4" />
+        </svg>
+        <span data-t="footballBookingLabel">حجوزات كورة</span>
+      </div>
+      <div class="student-menu-card" onclick="renderMyNotes(); showStudentSection('mynotes')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M12 20h9" />
+          <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+        </svg>
+        <span data-t="myNotesLabel">ملاحظاتي</span>
+      </div>
+      <div class="student-menu-card" onclick="renderTodoList(); showStudentSection('todo')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="17" rx="2" />
+          <path d="M7 3v3M17 3v3M3 10h18" />
+          <path d="m8 14 2 2 4-4" />
+        </svg>
+        <span data-t="todoList">قائمة المهام</span>
+      </div>
+      <div class="student-menu-card" onclick="openModal('contactUsModal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z" />
+        </svg>
+        <span data-t="contactUs">تواصل معانا</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="student-full-page" id="studentTodoPage" aria-labelledby="studentTodoPageTitle">
+    <div class="student-full-page-head">
+      <button class="icon-btn" type="button" onclick="history.back()" aria-label="back">&rarr;</button>
+      <h2 id="studentTodoPageTitle" data-t="todoList">قائمة المهام</h2>
+    </div>
+    <div class="todo-add-row">
+      <input type="text" id="todoInput" placeholder="اكتب مهمة جديدة..." data-t-ph="typeNewTask" onkeydown="if(event.key==='Enter'){addTodoItem();}">
+      <button type="button" class="btn btn-primary" onclick="addTodoItem()" data-t="addLabel">إضافة</button>
+    </div>
+    <div class="student-full-page-body" id="studentTodoList"></div>
+  </section>
+
+  <section class="student-full-page" id="studentMynotesPage" aria-labelledby="studentMynotesPageTitle">
+    <div class="student-full-page-head">
+      <button class="icon-btn" type="button" onclick="history.back()" aria-label="back">&rarr;</button>
+      <h2 id="studentMynotesPageTitle" data-t="myNotesLabel">ملاحظاتي</h2>
+      <div class="notes-head-actions">
+        <button class="icon-btn" type="button" onclick="openFolderManager()" aria-label="مجلدات" title="مجلدات">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z" /></svg>
+        </button>
+      </div>
+    </div>
+    <div class="notes-filter-row" id="notesFilterRow"></div>
+    <div class="student-full-page-body" id="studentMynotesList"></div>
+    <button class="fab-add-note" type="button" onclick="createNewNote()" aria-label="ملاحظة جديدة">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" /></svg>
+    </button>
+  </section>
+
+  <section class="student-full-page note-editor-page" id="studentNoteviewPage" aria-labelledby="studentNoteviewPageTitle">
+    <div class="note-editor-head">
+      <button class="icon-btn" type="button" onclick="closeNoteEditor()" aria-label="back">&rarr;</button>
+      <select id="noteFolderSelect" class="note-toolbar-select note-folder-select" onchange="onNoteFolderChange()"></select>
+      <button class="btn btn-ghost btn-sm" type="button" onclick="deleteCurrentNote()">حذف</button>
+      <button class="btn btn-ghost btn-sm" type="button" onclick="closeNoteEditor()">إغلاق</button>
+    </div>
+    <input type="text" id="noteTitleInput" class="note-title-input" placeholder="بدون عنوان" oninput="scheduleNoteAutosave()">
+    <div class="note-toolbar note-toolbar-scroll">
+      <select id="noteTextStyle" class="note-toolbar-select" onchange="noteExec('formatBlock', this.value)">
+        <option value="P">نص</option>
+        <option value="H2">عنوان كبير</option>
+        <option value="H3">عنوان صغير</option>
+      </select>
+      <button type="button" class="note-tb-btn" id="noteBoldBtn" onclick="noteExec('bold')" title="عريض"><b>B</b></button>
+      <button type="button" class="note-tb-btn" id="noteItalicBtn" onclick="noteExec('italic')" title="مائل"><i>I</i></button>
+      <button type="button" class="note-tb-btn" id="noteStrikeBtn" onclick="noteExec('strikeThrough')" title="يتوسطه خط"><s>S</s></button>
+      <button type="button" class="note-tb-btn" id="noteUnderlineBtn" onclick="noteExec('underline')" title="تسطير"><u>U</u></button>
+      <button type="button" class="note-tb-btn" id="noteUlBtn" onclick="noteExec('insertUnorderedList')" title="قائمة نقطية">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="4" cy="6" r="1.3" fill="currentColor" /><circle cx="4" cy="12" r="1.3" fill="currentColor" /><circle cx="4" cy="18" r="1.3" fill="currentColor" /><path d="M9 6h11M9 12h11M9 18h11" /></svg>
+      </button>
+      <button type="button" class="note-tb-btn" id="noteOlBtn" onclick="noteExec('insertOrderedList')" title="قائمة مرقمة">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6h11M9 12h11M9 18h11" /><text x="1" y="8" font-size="7" fill="currentColor" stroke="none">1</text><text x="1" y="14" font-size="7" fill="currentColor" stroke="none">2</text><text x="1" y="20" font-size="7" fill="currentColor" stroke="none">3</text></svg>
+      </button>
+      <button type="button" class="note-tb-btn" onclick="insertChecklistItem()" title="تشيك ليست">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4" /><path d="m8 12 3 3 5-6" /></svg>
+      </button>
+      <button type="button" class="note-tb-btn" onclick="insertNoteLink()" title="رابط">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1.5 1.5" /><path d="M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1.5-1.5" /></svg>
+      </button>
+      <button type="button" class="note-tb-btn" onclick="noteHighlight()" title="تمييز">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 11 6-6 4 4-6 6-4-4Z" /><path d="m7 13-3 3 1 3 3 1 3-3" /></svg>
+      </button>
+      <button type="button" class="note-tb-btn" id="noteFavoriteBtn" onclick="toggleNoteFavorite()" title="تفضيل">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3 2.8 6 6.6.6-5 4.5 1.5 6.4-5.9-3.6L6.1 20.5 7.6 14 2.6 9.6l6.6-.6L12 3Z" /></svg>
+      </button>
+      <button type="button" class="note-tb-btn" onclick="document.getElementById('noteImageInput').click()" title="صورة">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="3" /><circle cx="8.5" cy="10" r="1.7" /><path d="m21 16-5-5-4 4-2-2-4.5 4.5" /></svg>
+      </button>
+      <button type="button" class="note-tb-btn" onclick="insertNoteTable()" title="جدول">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M3 10h18M3 16h18M9 4v16M15 4v16" /></svg>
+      </button>
+      <button type="button" class="note-tb-btn" onclick="noteExec('insertHorizontalRule')" title="خط فاصل">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16" /></svg>
+      </button>
+      <input type="file" id="noteImageInput" accept="image/*" style="display:none" onchange="insertNoteImage(event)">
+    </div>
+    <div class="note-editor-body" id="noteEditorBody" contenteditable="true" oninput="scheduleNoteAutosave()"></div>
+    <div class="note-editor-foot">
+      <span id="noteLastEdit" class="muted" style="font-size:11.5px;"></span>
+      <button type="button" class="btn btn-primary btn-sm" onclick="saveCurrentNote()">حفظ</button>
+    </div>
+  </section>
+
+  <section class="student-full-page" id="studentStreakPage" aria-labelledby="studentStreakPageTitle">
+    <div class="student-full-page-head">
+      <button class="icon-btn" type="button" onclick="history.back()" aria-label="back">&rarr;</button>
+      <h2 id="studentStreakPageTitle" data-t="streakLabel">الاستمرارية</h2>
+    </div>
+    <p class="muted" style="font-size:12.5px; margin-bottom:14px;" data-t="streakDesc">عدد الحصص المتتالية اللي حضرتها من غير غياب</p>
+    <div class="card streak-card">
+      <div class="streak-flame">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M12 2c1 3-3 4-3 8a3 3 0 0 0 6 0c0-1-.5-2-1-3 2 1 4 3 4 6a6 6 0 0 1-12 0c0-5 3-7 6-11Z" />
+        </svg>
+      </div>
+      <div class="streak-value" id="currentStreakValue">0</div>
+      <div class="streak-label" data-t="currentStreak">سلسلتك الحالية</div>
+    </div>
+    <div class="stats-two">
+      <div class="stat-card"><b id="bestStreakValue">0</b><span data-t="bestStreak">أطول سلسلة حضور</span></div>
+      <div class="stat-card"><b id="streakTotalPresent">0</b><span data-t="sessionsCount">عدد الحصص</span></div>
+    </div>
+  </section>
+
+  <section class="student-full-page" id="studentBadgesPage" aria-labelledby="studentBadgesPageTitle">
+    <div class="student-full-page-head">
+      <button class="icon-btn" type="button" onclick="history.back()" aria-label="back">&rarr;</button>
+      <h2 id="studentBadgesPageTitle" data-t="badgesLabel">الشارات</h2>
+    </div>
+    <p class="muted" style="font-size:12.5px; margin-bottom:14px;" data-t="badgesDesc">شارات بتتفتح تلقائي كل ما تحقق إنجاز جديد</p>
+
+    <h3 style="font-size:15px; margin-bottom:10px;" data-t="attendanceBadgesTitle">شارات الحضور</h3>
+    <div class="badges-grid" id="attendanceBadgesGrid"></div>
+
+    <h3 style="font-size:15px; margin:20px 0 10px;" data-t="gradesBadgesTitle">شارات الدرجات الكاملة</h3>
+    <div class="badges-grid" id="gradesBadgesGrid"></div>
+  </section>
+
+  <section class="student-full-page" id="studentLeaderboardPage" aria-labelledby="studentLeaderboardPageTitle">
+    <div class="student-full-page-head">
+      <button class="icon-btn" type="button" onclick="history.back()" aria-label="back">&rarr;</button>
+      <h2 id="studentLeaderboardPageTitle" data-t="leaderboard">لوحة الصدارة</h2>
+    </div>
+    <p class="muted" style="font-size:12.5px; margin-bottom:14px;" data-t="leaderboardDesc">الترتيب داخل صفك بناءً على الدرجات والحضور</p>
+    <div class="student-full-page-body" id="studentLeaderboardList"></div>
+  </section>
+
+  <section class="student-full-page" id="studentAccountPage" aria-labelledby="studentAccountPageTitle">
+    <div class="student-full-page-head">
+      <button class="icon-btn" type="button" onclick="history.back()" aria-label="back">&rarr;</button>
+      <h2 id="studentAccountPageTitle" data-t="myAccount">بيانات حسابي</h2>
+    </div>
+
+    <div class="card account-profile-card">
+      <button type="button" class="avatar avatar-lg profile-avatar-button" id="accountAvatar"
+        onclick="document.getElementById('studentAvatarInput').click()" aria-label="profile photo"></button>
+      <div class="profile-name" id="accountName"></div>
+    </div>
+
+    <div class="card account-info-list">
+      <div class="account-info-row">
+        <span class="account-info-label" data-t="classCodeLabel">كود الصف الدراسي</span>
+        <span class="account-info-value" id="accountClassCode">—</span>
+      </div>
+      <div class="account-info-row">
+        <span class="account-info-label" data-t="studentPassword">كلمة المرور</span>
+        <span class="account-info-value-wrap">
+          <span class="account-info-value" id="accountPassword">••••••</span>
+          <button type="button" class="icon-btn" onclick="toggleAccountPasswordVisibility()" aria-label="show password">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12Z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+          </button>
+        </span>
+      </div>
+      <div class="account-info-row">
+        <span class="account-info-label" data-t="yourRank">ترتيبك في لوحة الصدارة</span>
+        <span class="account-info-value" id="accountRank">—</span>
+      </div>
+      <div class="account-info-row">
+        <span class="account-info-label" data-t="yourPoints">نقاطك</span>
+        <span class="account-info-value" id="accountPoints">—</span>
+      </div>
+      <div class="account-info-row">
+        <span class="account-info-label" data-t="subscriptionStatusLabel">حالة الاشتراك</span>
+        <span class="pay-status-pill" id="accountPaidStatus">—</span>
+      </div>
+    </div>
+
+    <div class="card" id="accountGenderCard">
+      <div class="account-gender-title" data-t="accountTypeTitle">النوع</div>
+      <p class="muted" style="font-size:12px; margin:0;" data-t="accountTypeHint">اختار نوعك مرة واحدة بس — هيتم استخدامه لاحقاً في حجوزات الكورة</p>
+      <div class="account-gender-options" id="accountGenderOptions">
+        <button type="button" class="btn btn-ghost" onclick="setStudentGender('male')" data-t="genderMale">ذكر</button>
+        <button type="button" class="btn btn-ghost" onclick="setStudentGender('female')" data-t="genderFemale">أنثى</button>
+      </div>
+      <div class="account-gender-locked" id="accountGenderLocked" style="display:none;">
+        <span data-t="accountTypeLockedPrefix">النوع المسجل:</span> <b id="accountGenderLockedValue"></b>
+      </div>
+    </div>
+
+    <!-- Personal appearance: theme color + background, saved on the
+         student's own record so they only ever affect this student's
+         page — never the platform default that everyone else sees. -->
+    <div class="card">
+      <div class="account-gender-title" data-t="appearanceTitle">المظهر</div>
+
+      <p class="muted" style="font-size:12px; margin:14px 0 8px;" data-t="themeColorLabel">لون السمة</p>
+      <p class="muted" style="font-size:11.5px; margin:0 0 10px;" data-t="themeColorHint">اختار لون السمة الخاص بصفحتك بس — مش هيأثر على باقي المستخدمين</p>
+      <div id="studentAccentWrap" style="display:flex; gap:10px; flex-wrap:wrap;"></div>
+      <button type="button" class="btn btn-ghost" style="margin-top:10px;"
+        onclick="resetStudentAccentColor()" data-t="useDefaultThemeColor">استخدام لون المنصة الافتراضي</button>
+
+      <p class="muted" style="font-size:12px; margin:20px 0 8px;" data-t="pageBackgroundLabel">خلفية صفحتك</p>
+      <p class="muted" style="font-size:11.5px; margin:0 0 10px;" data-t="pageBackgroundHint">ارفع صورة تحبها كخلفية لصفحتك أنت بس</p>
+      <div id="studentBgPreview" style="width:100%; height:90px; border-radius:12px; background:var(--card-2); background-size:cover; background-position:center; margin-bottom:10px;"></div>
+      <input type="file" id="studentBgInput" accept="image/*" hidden>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button type="button" class="btn btn-ghost" onclick="document.getElementById('studentBgInput').click()" data-t="chooseBackgroundImage">اختيار صورة</button>
+        <button type="button" class="btn btn-ghost" onclick="removeStudentBackground()" data-t="removeBackgroundImage">إزالة الخلفية</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="overlay" id="genderConfirmModal">
+    <div class="modal">
+      <div class="modal-head"><span class="modal-title" data-t="accountTypeTitle">النوع</span><button class="modal-close"
+          onclick="closeModal('genderConfirmModal')">&times;</button></div>
+      <p style="color:var(--text-dim); font-size:14px; line-height:1.6; margin:0 0 20px;" data-t="genderConfirmMsg">
+        هتقدر تحدد النوع مرة واحدة بس ومش هتقدر تغيّره تاني بعد كده. متأكد؟</p>
+      <div style="display:flex; gap:10px;">
+        <button type="button" class="btn btn-ghost" onclick="closeModal('genderConfirmModal')"
+          data-t="cancel">إلغاء</button>
+        <button type="button" class="btn btn-primary" onclick="confirmStudentGender()" data-t="confirmBtn">تأكيد</button>
+      </div>
+    </div>
+  </div>
+
+
+  <nav class="student-bottom-nav" aria-label="student navigation">
+    <button type="button" class="active" data-student-section="home" onclick="showStudentSection('home')"
+      aria-label="home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" />
+      </svg>
+      <span data-t="mainSection">الرئيسية</span>
+    </button>
+    <button type="button" data-student-section="grades" onclick="showStudentSection('grades')" aria-label="grades">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="m12 3 2.3 4.7 5.2.8-3.8 3.7.9 5.2-4.6-2.5-4.6 2.5.9-5.2-3.8-3.7 5.2-.8z" />
+        <path d="M8 19.5 6.5 22M16 19.5l1.5 2" />
+      </svg>
+      <span data-t="gradesList">الدرجات</span>
+    </button>
+    <button type="button" class="student-bottom-calculator" onclick="openChat()" aria-label="scientific calculator">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <rect x="5" y="2.5" width="14" height="19" rx="2" />
+        <path d="M8 6h8M8 10h2M14 10h2M8 14h2M14 14h2M8 18h2M14 18h2" />
+      </svg>
+    </button>
+    <button type="button" data-student-section="attendance" onclick="showStudentSection('attendance')"
+      aria-label="attendance">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <rect x="4" y="5" width="16" height="16" rx="2" />
+        <path d="M8 3v4M16 3v4M4 10h16M9 15l2 2 4-4" />
+      </svg>
+      <span data-t="monthlyRecord">الحضور</span>
+    </button>
+    <button type="button" data-student-section="menu" onclick="showStudentSection('menu')" aria-label="menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M12 5v14M5 12h14" />
+      </svg>
+      <span data-t="menuTitle">القائمة</span>
+    </button>
+  </nav>
+
+  <button class="fab-chat" onclick="openChat()" aria-label="scientific calculator">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <rect x="5" y="2.5" width="14" height="19" rx="2" />
+      <path d="M8 6h8M8 10h2M14 10h2M8 14h2M14 14h2M8 18h2M14 18h2" />
+    </svg>
+  </button>
+
+  <a class="fab-whatsapp" href="https://wa.me/393715124231" target="_blank" rel="noopener" aria-label="تواصل مع المستر عبر واتساب">
+    <svg viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.39 1.26 4.82L2 22l5.42-1.42a9.86 9.86 0 0 0 4.62 1.18h.01c5.46 0 9.9-4.45 9.9-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.09c-.24.68-1.4 1.31-1.93 1.35-.5.05-1.03.29-3.46-.72-2.92-1.21-4.79-4.17-4.94-4.36-.14-.19-1.18-1.57-1.18-3 0-1.42.75-2.12 1.02-2.41.27-.29.58-.36.78-.36.19 0 .39 0 .56.01.18.01.42-.07.66.5.24.58.83 2 .9 2.15.07.15.12.32.02.51-.1.19-.15.31-.3.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.75 1.24 1.62 2.01 1.11.99 2.05 1.3 2.34 1.44.29.15.46.13.63-.08.17-.2.72-.84.91-1.13.19-.29.38-.24.64-.15.27.1 1.68.79 1.97.94.29.15.48.22.55.34.07.13.07.72-.17 1.4z" />
+    </svg>
+  </a>
+
+  <a class="fab-telegram" href="https://t.me/almokhtar_plattform_bot" target="_blank" rel="noopener" aria-label="تواصل معنا عبر بوت التليجرام">
+    <svg viewBox="0 0 24 24" fill="currentColor">
+      <path d="M21.94 4.5 18.6 20.13c-.25 1.13-.9 1.4-1.83.87l-5.06-3.73-2.44 2.35c-.27.27-.5.5-1.02.5l.36-5.16 9.4-8.49c.41-.36-.09-.56-.63-.2L6.6 12.86l-5.1-1.6c-1.11-.34-1.13-1.11.23-1.65L20.5 3.14c.92-.34 1.73.22 1.44 1.36Z" />
+    </svg>
+  </a>
+
+  <div class="chat-overlay" id="chatOverlay">
+    <div class="chat-header">
+      <div class="row">
+        <div class="brand-logo" style="width:34px;height:34px;border-radius:11px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+            <rect x="5" y="2.5" width="14" height="19" rx="2" />
+            <path d="M8 6h8M8 10h2M14 10h2M8 14h2M14 14h2M8 18h2M14 18h2" />
+          </svg>
+        </div>
+        <span style="font-weight:800; font-size:14.5px;" data-t="calculatorLabel">آلة حاسبة علمية</span>
+      </div>
+      <button class="modal-close" onclick="closeChat()" aria-label="close">&times;</button>
+    </div>
+    <div class="calculator-shell">
+      <div class="calculator-brand">BASIC CALCULATOR</div>
+      <div class="calculator-display" id="calculatorDisplay"><small><span id="calculatorHistory"></span></small><span
+          id="calculatorValue">0</span></div>
+      <div class="basic-calculator-memory">
+        <button class="calculator-key danger basic-calculator-key" onclick="calculatorAction('clear')">AC</button>
+        <button class="calculator-key standard basic-calculator-key" onclick="calculatorAction('recall')">MR</button>
+        <button class="calculator-key standard basic-calculator-key" onclick="calculatorAction('memory')">M+</button>
+        <button class="calculator-key danger basic-calculator-key" onclick="calculatorAction('delete')">DEL</button>
+      </div>
+      <div class="basic-calculator-keys">
+        <button class="calculator-key standard basic-calculator-key key-seven"
+          onclick="calculatorInsert('7')">7</button><button
+          class="calculator-key standard basic-calculator-key key-eight"
+          onclick="calculatorInsert('8')">8</button><button
+          class="calculator-key standard basic-calculator-key key-nine"
+          onclick="calculatorInsert('9')">9</button><button
+          class="calculator-key operator basic-calculator-key key-multiply" onclick="calculatorInsert('*')">×</button>
+        <button class="calculator-key standard basic-calculator-key key-four"
+          onclick="calculatorInsert('4')">4</button><button
+          class="calculator-key standard basic-calculator-key key-five"
+          onclick="calculatorInsert('5')">5</button><button class="calculator-key standard basic-calculator-key key-six"
+          onclick="calculatorInsert('6')">6</button><button
+          class="calculator-key operator basic-calculator-key key-subtract" onclick="calculatorInsert('-')">−</button>
+        <button class="calculator-key standard basic-calculator-key key-one"
+          onclick="calculatorInsert('1')">1</button><button class="calculator-key standard basic-calculator-key key-two"
+          onclick="calculatorInsert('2')">2</button><button
+          class="calculator-key standard basic-calculator-key key-three"
+          onclick="calculatorInsert('3')">3</button><button class="calculator-key operator basic-calculator-key key-add"
+          onclick="calculatorInsert('+')">+</button>
+        <button class="calculator-key standard basic-calculator-key key-zero"
+          onclick="calculatorInsert('0')">0</button><button
+          class="calculator-key standard basic-calculator-key key-decimal"
+          onclick="calculatorInsert('.')">.</button><button
+          class="calculator-key equals basic-calculator-key key-equals" onclick="calculatorAction('equals')">=</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="contactUsModal">
+    <div class="modal">
+      <div class="modal-head"><span class="modal-title" data-t="contactUs">تواصل معانا</span><button class="modal-close"
+          onclick="closeModal('contactUsModal')">&times;</button></div>
+      <div class="contact-us-list">
+        <a class="contact-us-row" id="contactUsFacebook" href="#" target="_blank" rel="noopener">
+          <span class="contact-us-icon contact-us-icon-facebook">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.24.2 2.24.2v2.47h-1.26c-1.24 0-1.63.78-1.63 1.57v1.88h2.78l-.45 2.91h-2.33V22c4.78-.79 8.44-4.94 8.44-9.94Z" />
+            </svg>
+          </span>
+          <span class="contact-us-text">
+            <span class="contact-us-name" data-t="facebookLabel">فيسبوك</span>
+            <span class="contact-us-hint" data-t="facebookHint">تابعنا على فيسبوك</span>
+          </span>
+        </a>
+        <a class="contact-us-row" id="contactUsInstagram" href="#" target="_blank" rel="noopener">
+          <span class="contact-us-icon contact-us-icon-instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none" />
+            </svg>
+          </span>
+          <span class="contact-us-text">
+            <span class="contact-us-name" data-t="instagramLabel">إنستجرام</span>
+            <span class="contact-us-hint" data-t="instagramHint">تابعنا على إنستجرام</span>
+          </span>
+        </a>
+        <a class="contact-us-row" id="contactUsWhatsapp" href="#" target="_blank" rel="noopener">
+          <span class="contact-us-icon contact-us-icon-whatsapp">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.39 1.26 4.81L2 22l5.41-1.35a9.87 9.87 0 0 0 4.63 1.15h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2Zm5.79 14.08c-.24.68-1.4 1.3-1.93 1.36-.5.06-1.05.29-3.53-.74-2.98-1.24-4.9-4.27-5.05-4.47-.15-.2-1.2-1.6-1.2-3.05s.76-2.17 1.03-2.47c.27-.3.6-.37.79-.37h.57c.18 0 .43-.07.66.51.24.6.82 2.06.89 2.21.07.15.12.33.02.53-.1.2-.15.32-.3.5-.15.18-.3.4-.44.53-.15.15-.3.31-.13.6.17.3.75 1.24 1.61 2 1.11.99 2.04 1.3 2.34 1.45.3.15.47.13.65-.08.18-.2.75-.88.95-1.18.2-.3.4-.25.66-.15.27.1 1.72.81 2.02.96.3.15.5.22.57.35.08.13.08.75-.16 1.43Z" />
+            </svg>
+          </span>
+          <span class="contact-us-text">
+            <span class="contact-us-name" data-t="whatsappLabel">واتساب</span>
+            <span class="contact-us-hint" data-t="whatsappHint">راسلنا على واتساب</span>
+          </span>
+        </a>
+        <a class="contact-us-row" id="contactUsTelegram" href="#" target="_blank" rel="noopener">
+          <span class="contact-us-icon contact-us-icon-whatsapp">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M21.94 4.5 18.6 20.13c-.25 1.13-.9 1.4-1.83.87l-5.06-3.73-2.44 2.35c-.27.27-.5.5-1.02.5l.36-5.16 9.4-8.49c.41-.36-.09-.56-.63-.2L6.6 12.86l-5.1-1.6c-1.11-.34-1.13-1.11.23-1.65L20.5 3.14c.92-.34 1.73.22 1.44 1.36Z" />
+            </svg>
+          </span>
+          <span class="contact-us-text">
+            <span class="contact-us-name" data-t="telegramLabel">تليجرام</span>
+            <span class="contact-us-hint" data-t="telegramHint">راسلنا على بوت التليجرام</span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="overlay" id="logoutConfirmModal">
+    <div class="modal">
+      <div class="modal-head"><span class="modal-title" data-t="logout">خروج</span><button class="modal-close"
+          onclick="closeModal('logoutConfirmModal')">&times;</button></div>
+      <p style="color:var(--text-dim); font-size:14px; line-height:1.6; margin:0 0 20px;" data-t="logoutConfirmMsg">
+        هل أنت متأكد أنك تريد تسجيل الخروج؟</p>
+      <div style="display:flex; gap:10px;">
+        <button type="button" class="btn btn-ghost" onclick="closeModal('logoutConfirmModal')"
+          data-t="cancel">إلغاء</button>
+        <button type="button" class="btn btn-bad" onclick="doLogout()" data-t="logout">خروج</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="shareBadgeConfirmModal">
+    <div class="modal">
+      <div class="modal-head"><span class="modal-title" data-t="shareBadgeAria">مشاركة الشارة</span><button
+          class="modal-close" onclick="closeModal('shareBadgeConfirmModal')">&times;</button></div>
+      <p style="color:var(--text-dim); font-size:14px; line-height:1.6; margin:0 0 20px;"
+        data-t="confirmDownloadBadge">هل تريد تحميل هذه الشارة كصورة؟</p>
+      <div style="display:flex; gap:10px;">
+        <button type="button" class="btn btn-ghost" onclick="closeModal('shareBadgeConfirmModal')"
+          data-t="cancel">إلغاء</button>
+        <button type="button" class="btn btn-primary" onclick="confirmShareBadgeImage()"
+          data-t="downloadImageBtn">تحميل الصورة</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="notificationsModal">
+    <div class="modal">
+      <div class="modal-head"><span class="modal-title" data-t="notificationsTitle">الإشعارات</span><button class="modal-close"
+          onclick="closeModal('notificationsModal')">&times;</button></div>
+      <div class="notifications-list" id="notificationsList"></div>
+    </div>
+  </div>
+  <div class="overlay" id="studentGradesModal">
+    <div class="modal">
+      <div class="modal-head"><span class="modal-title" data-t="gradesList">سجل الدرجات</span><button
+          class="modal-close" onclick="closeModal('studentGradesModal')">&times;</button></div>
+      <div class="student-grades-modal-list" id="studentGradesModalList"></div>
+    </div>
+  </div>
+  <div class="overlay" id="studentNotesModal">
+    <div class="modal">
+      <div class="modal-head"><span class="modal-title" data-t="notesLog">سجل الملاحظات</span><button class="modal-close"
+          onclick="closeModal('studentNotesModal')">&times;</button></div>
+      <div class="student-notes-modal-list" id="studentNotesModalList"></div>
+    </div>
+  </div>
+  <div class="overlay" id="studentHomeworkModal">
+    <div class="modal">
+      <div class="modal-head"><span class="modal-title" data-t="allHomework">كل الواجبات</span><button class="modal-close"
+          onclick="closeModal('studentHomeworkModal')">&times;</button></div>
+      <div class="student-notes-modal-list" id="studentHomeworkModalList"></div>
+    </div>
+  </div>
+  <div class="overlay" id="studentNoteDetailModal">
+    <div class="modal">
+      <div class="modal-head"><span class="modal-title" data-t="noteDetailTitle">الملاحظة</span><button class="modal-close"
+          onclick="closeModal('studentNoteDetailModal')">&times;</button></div>
+      <div class="notice-item" id="studentNoteDetailText"></div>
+    </div>
+  </div>
+  <div class="overlay" id="studentAttendanceModal">
+    <div class="modal">
+      <div class="modal-head"><span class="modal-title" data-t="monthlyRecord">سجل الحضور الشهري</span><button
+          class="modal-close" onclick="closeModal('studentAttendanceModal')">&times;</button></div>
+      <div class="attendance-modal-list" id="studentAttendanceModalList"></div>
+    </div>
+  </div>
+
+  <script type="module" src="firebase.js"></script>
+  <script src="shared.js"></script>
+  <script>
+    // Defined here (not only in shared.js) so the topbar hamburger menu
+    // always works on this page even if an older shared.js is cached.
+    window.toggleTopbarMenu = function (event) {
+      if (event) event.stopPropagation();
+      var panel = document.getElementById('topbarMenuPanel');
+      if (panel) panel.classList.toggle('open');
+    };
+    window.closeTopbarMenu = function () {
+      var panel = document.getElementById('topbarMenuPanel');
+      if (panel) panel.classList.remove('open');
+    };
+    document.addEventListener('click', function (event) {
+      var panel = document.getElementById('topbarMenuPanel');
+      if (panel && panel.classList.contains('open') && !panel.contains(event.target)) {
+        panel.classList.remove('open');
+      }
+    });
+
+    if (typeof window.applyTheme === 'function') window.applyTheme();
+    if (typeof window.applyCachedAccent === 'function') window.applyCachedAccent();
+    window.applyLangDir();
+
+    // "Contact Us" links — edit these 3 in one place whenever they change.
+    var CONTACT_LINKS = {
+      facebook: 'https://web.facebook.com/profile.php?id=61568315912358',
+      instagram: 'https://www.instagram.com/direct/t/17843759472400487/',
+      whatsapp: 'https://wa.me/393715124231',
+      telegram: 'https://t.me/' + (window.TELEGRAM_BOT_USERNAME || 'almokhtar_plattform_bot')
+    };
+    document.getElementById('contactUsFacebook').href = CONTACT_LINKS.facebook;
+    document.getElementById('contactUsInstagram').href = CONTACT_LINKS.instagram;
+    document.getElementById('contactUsWhatsapp').href = CONTACT_LINKS.whatsapp;
+    document.getElementById('contactUsTelegram').href = CONTACT_LINKS.telegram;
+
+    var session = window.getSession();
+    if (!session || session.role !== 'student') { window.location.href = 'index.html'; }
+
+    window.doLogout = function () {
+      window.clearSession();
+      // replace (not href) so the login page doesn't end up sitting on
+      // top of an already-logged-out session in browser history.
+      window.location.replace('index.html');
+    };
+
+    var settings, student;
+
+    function localize() {
+      document.querySelectorAll('[data-t]').forEach(function (el) { el.textContent = window.t(el.getAttribute('data-t')); });
+      document.querySelectorAll('[data-t-ph]').forEach(function (el) { el.setAttribute('placeholder', window.t(el.getAttribute('data-t-ph'))); });
+      document.getElementById('langLabel').textContent = window.t('langToggle');
+    }
+    localize();
+
+    function className(id) {
+      var c = settings.classes.find(function (x) { return x.id === id; });
+      if (!c) return '';
+      return window.mcLang() === 'ar' ? c.name : c.nameEn;
+    }
+
+    function setStudentNavActive(section) {
+      document.querySelectorAll('[data-student-section]').forEach(function (button) {
+        button.classList.toggle('active', button.dataset.studentSection === section);
+      });
+    }
+
+    // Pure UI update — shows the requested section, no browser-history
+    // side effects. Used both for normal (forward) navigation and when
+    // the back button/swipe gesture asks us to restore a section (see
+    // the popstate listener below).
+    function renderStudentSection(section) {
+      var shell = document.querySelector('.student-page .shell');
+      var pages = ['grades', 'attendance', 'notes', 'menu', 'todo', 'homework', 'leaderboard', 'account', 'mynotes', 'noteview', 'streak', 'badges'];
+      setStudentNavActive(section);
+      if (section === 'home') {
+        shell.style.display = '';
+        pages.forEach(function (name) { document.getElementById('student' + name.charAt(0).toUpperCase() + name.slice(1) + 'Page').classList.remove('open'); });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+      shell.style.display = 'none';
+      pages.forEach(function (name) {
+        var page = document.getElementById('student' + name.charAt(0).toUpperCase() + name.slice(1) + 'Page');
+        page.classList.toggle('open', name === section);
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Internal sections (grades, notes, menu, ...) used to be plain
+    // show/hide with no browser-history entry, so pressing back — or the
+    // Android edge swipe-back gesture — skipped straight past them to
+    // whatever page was open before studenti.html, i.e. the login page.
+    // We now push a real history entry per section so back steps through
+    // the app's own screens first, one at a time, like any normal app.
+    history.replaceState({ studentSection: 'home' }, '');
+
+    window.showStudentSection = function (section) {
+      renderStudentSection(section);
+      history.pushState({ studentSection: section }, '');
+    };
+
+    window.addEventListener('popstate', function (event) {
+      var section = (event.state && event.state.studentSection) || 'home';
+      renderStudentSection(section);
+    });
+
+    function renderProfile() {
+      document.getElementById('profAvatar').innerHTML = student.avatar ? '<img src="' + student.avatar + '">' : window.initials(student.name);
+      document.getElementById('topProfileAvatar').innerHTML = student.avatar ? '<img src="' + student.avatar + '" alt="">' : '<img src="icon-192.png" alt="">';
+      document.getElementById('profName').textContent = student.name;
+      document.getElementById('profMeta').textContent = student.center + ' · ' + className(student.classId) + ' · ' + student.phone;
+    }
+
+    // "بيانات حسابي" page: class code, password, leaderboard rank/points and
+    // the one-time gender field (used later to gate football-court bookings).
+    window.renderAccountPage = function () {
+      var accountAvatar = document.getElementById('accountAvatar');
+      if (!accountAvatar) return;
+      accountAvatar.innerHTML = student.avatar ? '<img src="' + student.avatar + '">' : window.initials(student.name);
+      document.getElementById('accountName').textContent = student.name;
+
+      var cls = settings.classes.find(function (c) { return c.id === student.classId; });
+      document.getElementById('accountClassCode').textContent = cls ? cls.code : '—';
+
+      var passwordEl = document.getElementById('accountPassword');
+      passwordEl.dataset.real = student.password || '';
+      passwordEl.dataset.revealed = 'false';
+      passwordEl.textContent = '••••••';
+
+      var ranking = window.getLeaderboardForClass(student.classId);
+      var idx = ranking.findIndex(function (entry) { return entry.student.id === student.id; });
+      document.getElementById('accountRank').textContent = idx > -1 ? ('#' + (idx + 1) + ' / ' + ranking.length) : '—';
+      document.getElementById('accountPoints').textContent = idx > -1 ? (ranking[idx].points + ' ' + window.t('points')) : '—';
+
+      var paidEl = document.getElementById('accountPaidStatus');
+      if (paidEl) {
+        paidEl.textContent = student.paid ? window.t('paid') : window.t('unpaid');
+        paidEl.classList.toggle('on', !!student.paid);
+      }
+
+      renderAccountGender();
+      renderAppearanceSection();
+    };
+
+    /* ---------------- personal appearance (theme color + background) ----------------
+       Both are saved on the student's own record, so they only ever change
+       what THIS student sees on their own device — never the shared
+       platform-wide theme color or anyone else's page. */
+    function renderAppearanceSection() {
+      var wrap = document.getElementById('studentAccentWrap');
+      if (!wrap) return;
+      wrap.innerHTML = Object.keys(window.ACCENT_PALETTE).map(function (key) {
+        var c = window.ACCENT_PALETTE[key];
+        var selected = key === student.accentColor;
+        return '<button type="button" data-accent-key="' + key + '" title="' + c.label + '" aria-label="' + c.label + '" style="width:40px;height:40px;border-radius:50%;background:' + c.accent + ';cursor:pointer;flex-shrink:0;border:3px solid ' + (selected ? 'var(--text)' : 'transparent') + ';box-shadow:' + (selected ? '0 0 0 2px ' + c.accent : 'none') + ';"></button>';
+      }).join('');
+      wrap.querySelectorAll('[data-accent-key]').forEach(function (btn) {
+        btn.addEventListener('click', function () { setStudentAccentColor(btn.dataset.accentKey); });
+      });
+
+      var bgPreview = document.getElementById('studentBgPreview');
+      if (bgPreview) {
+        bgPreview.style.backgroundImage = student.background ? "url('" + student.background + "')" : 'none';
+      }
+    }
+
+    // Re-paints the accent color from the student's personal choice, if any.
+    // Called after applyAccentFromSettings() so a live settings change from
+    // the admin (which repaints the platform default) never wipes out a
+    // student's own color — this always has the final say for their page.
+    function applyStudentAccent() {
+      if (student && student.accentColor) window.previewAccentColor(student.accentColor);
+    }
+
+    function setStudentAccentColor(key) {
+      student.accentColor = key;
+      window.saveStudent(student);
+      applyStudentAccent();
+      renderAppearanceSection();
+      window.mcToast(window.t('themeColorSaved'));
+    }
+
+    window.resetStudentAccentColor = function () {
+      student.accentColor = '';
+      window.saveStudent(student);
+      window.applyAccentFromSettings();
+      renderAppearanceSection();
+      window.mcToast(window.t('themeColorReset'));
+    };
+
+    // Paints the student's own background image (or clears back to the
+    // normal page background) via the --student-bg CSS var declared next to
+    // body.student-page in the styles above.
+    function applyStudentBackground() {
+      document.documentElement.style.setProperty('--student-bg', (student && student.background) ? "url('" + student.background + "')" : '');
+    }
+
+    document.getElementById('studentBgInput').addEventListener('change', function (event) {
+      var file = event.target.files[0];
+      if (!file || !student) return;
+      window.fileToResizedDataUrl(file, 1600, 0.82, function (dataUrl) {
+        if (!dataUrl) { window.mcToast(window.t('couldNotReadImage')); return; }
+        student.background = dataUrl;
+        window.saveStudent(student);
+        applyStudentBackground();
+        renderAppearanceSection();
+        window.mcToast(window.t('backgroundSaved'));
+      });
+      event.target.value = '';
+    });
+
+    window.removeStudentBackground = function () {
+      student.background = '';
+      window.saveStudent(student);
+      applyStudentBackground();
+      renderAppearanceSection();
+      window.mcToast(window.t('backgroundRemoved'));
+    };
+
+    function renderAccountGender() {
+      var optionsWrap = document.getElementById('accountGenderOptions');
+      var lockedWrap = document.getElementById('accountGenderLocked');
+      if (!optionsWrap || !lockedWrap) return;
+      if (student.gender) {
+        optionsWrap.style.display = 'none';
+        lockedWrap.style.display = '';
+        document.getElementById('accountGenderLockedValue').textContent = student.gender === 'male' ? window.t('genderMale') : window.t('genderFemale');
+      } else {
+        optionsWrap.style.display = '';
+        lockedWrap.style.display = 'none';
+      }
+    }
+
+    window.toggleAccountPasswordVisibility = function () {
+      var el = document.getElementById('accountPassword');
+      var revealed = el.dataset.revealed === 'true';
+      el.textContent = revealed ? '••••••' : (el.dataset.real || '—');
+      el.dataset.revealed = revealed ? 'false' : 'true';
+    };
+
+    var pendingGender = null;
+    window.setStudentGender = function (gender) {
+      if (student.gender) return; // already locked — one-time choice only
+      pendingGender = gender;
+      openModal('genderConfirmModal');
+    };
+    window.confirmStudentGender = function () {
+      if (!pendingGender || student.gender) { closeModal('genderConfirmModal'); return; }
+      student.gender = pendingGender;
+      window.saveStudent(student);
+      pendingGender = null;
+      closeModal('genderConfirmModal');
+      renderAccountGender();
+      window.mcToast(window.t('genderSaved'));
+    };
+
+    function renderStats() {
+      var stats = window.getAttendanceStats(student.id);
+      document.getElementById('statPresent').textContent = stats.present;
+      document.getElementById('statAbsent').textContent = stats.absent;
+      document.getElementById('ringPct').textContent = stats.pct + '%';
+      var circumference = 314;
+      var offset = circumference - (circumference * stats.pct / 100);
+      document.getElementById('ringFg').style.strokeDashoffset = offset;
+    }
+
+    var attendanceView = 'attendance';
+
+    window.toggleAttendanceView = function () {
+      attendanceView = attendanceView === 'attendance' ? 'progress' : 'attendance';
+      document.getElementById('attendanceRingView').style.display = attendanceView === 'attendance' ? 'block' : 'none';
+      document.getElementById('progressChartView').style.display = attendanceView === 'progress' ? 'block' : 'none';
+      if (attendanceView === 'progress') renderProgressChart();
+    };
+
+    function renderMonthly() {
+      var records = window.getAttendanceForStudent(student.id);
+      var wrap = document.getElementById('monthlyWrap');
+      wrap.innerHTML = '';
+      document.getElementById('studentAttendancePageList').innerHTML = '';
+      document.getElementById('recordEmptyState').style.display = records.length ? 'none' : 'block';
+      if (!records.length) {
+        document.getElementById('studentAttendancePageList').innerHTML = '<div class="empty-state">' + window.t('noRecordsYet') + '</div>';
+        return;
+      }
+
+      var months = window.t('months');
+      var grouped = {};
+      records.forEach(function (r) {
+        var d = new Date(r.date + 'T00:00:00');
+        var key = d.getFullYear() + '-' + d.getMonth();
+        if (!grouped[key]) grouped[key] = { label: months[d.getMonth()] + ' ' + d.getFullYear(), items: [] };
+        grouped[key].items.push(r);
+      });
+
+      Object.keys(grouped).sort().reverse().forEach(function (key) {
+        var g = grouped[key];
+        var block = document.createElement('div');
+        block.className = 'month-block';
+        var dotsHtml = g.items.map(function (r) {
+          var day = new Date(r.date + 'T00:00:00').getDate();
+          return '<div class="session-dot ' + (r.status === 'present' ? 'sd-present' : 'sd-absent') + '">' + day + '</div>';
+        }).join('');
+        block.innerHTML = '<div class="month-title">' + g.label + '</div><div class="session-dots">' + dotsHtml + '</div>';
+        wrap.appendChild(block);
+      });
+      document.getElementById('studentAttendancePageList').innerHTML = wrap.innerHTML;
+    }
+    window.openStudentAttendanceModal = function () {
+      setStudentNavActive('attendance');
+      var records = window.getAttendanceForStudent(student.id), months = window.t('months'), grouped = {};
+      var firstRecord = records.slice().sort(function (a, b) { return (a.date || '').localeCompare(b.date || ''); })[0];
+      var firstMonth = firstRecord ? new Date(firstRecord.date + 'T00:00:00').getMonth() : 8;
+      var academicMonths = Array.from({ length: 12 }, function (_, index) { return (firstMonth + index) % 12; });
+      records.forEach(function (record) {
+        var date = new Date(record.date + 'T00:00:00'), month = date.getMonth();
+        if (!grouped[month]) grouped[month] = [];
+        grouped[month].push(record);
+      });
+      var wrap = document.getElementById('studentAttendanceModalList');
+      wrap.innerHTML = academicMonths.map(function (monthIndex) {
+        var monthName = months[monthIndex];
+        var items = (grouped[monthIndex] || []).sort(function (a, b) { return (a.date || '').localeCompare(b.date || ''); }).slice(0, 12);
+        var dots = Array.from({ length: 12 }, function (_, index) {
+          var record = items[index];
+          if (!record) return '<div class="attendance-dot" style="background:var(--line); color:transparent;"></div>';
+          var day = new Date(record.date + 'T00:00:00').getDate();
+          return '<div class="attendance-dot ' + (record.status === 'present' ? 'present' : 'absent') + '" title="' + record.date + '">' + day + '</div>';
+        }).join('');
+        return '<div class="attendance-month"><div class="attendance-month-title">' + monthName + '</div><div class="attendance-dots">' + dots + '</div></div>';
+      }).join('');
+      openModal('studentAttendanceModal');
+    };
+
+    var gradesMetric = 'pct'; // 'pct' or 'avg'
+
+    function renderGradesFeatured() {
+      var stats = window.getGradeStats(student.id);
+      var valueEl = document.getElementById('gradesFeaturedValue');
+      var labelEl = document.getElementById('gradesFeaturedLabel');
+      var subEl = document.getElementById('gradesFeaturedSub');
+      if (gradesMetric === 'pct') {
+        labelEl.textContent = window.t('overallPercentage');
+        valueEl.textContent = stats.count ? (stats.pct + '%') : '—';
+      } else {
+        labelEl.textContent = window.t('averageScore');
+        valueEl.textContent = stats.count ? stats.avgScore : '—';
+      }
+      subEl.textContent = stats.count
+        ? (stats.count + ' ' + window.t('examsCount') + ' · ' + stats.totalScore + '/' + stats.totalMax)
+        : window.t('noGradesYet');
+    }
+
+    window.toggleGradesMetric = function () {
+      gradesMetric = gradesMetric === 'pct' ? 'avg' : 'pct';
+      renderGradesFeatured();
+    };
+
+    function renderGradesTable() {
+      var records = window.getGradesForStudent(student.id);
+      document.getElementById('gradesEmptyState').style.display = records.length ? 'none' : 'block';
+      var html = records.map(function (g) {
+        var pct = g.maxScore ? Math.round((Number(g.score) / Number(g.maxScore)) * 100) : 0;
+        return '<div class="grade-item"><div class="grade-item-info"><div class="grade-item-exam">' + escapeHtml(g.examName) + '</div>' +
+          '<div class="grade-item-date">' + (g.date || '') + '</div></div>' +
+          '<div class="grade-item-score"><b>' + g.score + '/' + g.maxScore + '</b><span>' + pct + '%</span></div></div>';
+      }).join('');
+      document.getElementById('studentGradesPageList').innerHTML = html || '<div class="empty-state">' + window.t('noGradesYet') + '</div>';
+    }
+
+    function renderLatestGrades() {
+      var records = window.getGradesForStudent(student.id).slice(0, 1);
+      var wrap = document.getElementById('latestGradesWrap');
+      wrap.innerHTML = records.map(function (g) {
+        var pct = g.maxScore ? Math.round((Number(g.score) / Number(g.maxScore)) * 100) : 0;
+        return '<div class="latest-grade"><div class="grade-item-info"><div class="grade-item-exam">' + escapeHtml(g.examName) + '</div><div class="grade-item-date">' + (g.date || '') + '</div></div><div class="grade-item-score"><b>' + g.score + '/' + g.maxScore + '</b><span>' + pct + '%</span></div></div>';
+      }).join('');
+    }
+
+    window.openStudentGradesModal = function () {
+      setStudentNavActive('grades');
+      var records = window.getGradesForStudent(student.id);
+      var wrap = document.getElementById('studentGradesModalList');
+      wrap.innerHTML = records.length ? records.map(function (g) {
+        var pct = g.maxScore ? Math.round((Number(g.score) / Number(g.maxScore)) * 100) : 0;
+        return '<div class="grade-item"><div class="grade-item-info"><div class="grade-item-exam">' + escapeHtml(g.examName) + '</div><div class="grade-item-date">' + (g.date || '') + '</div></div><div class="grade-item-score"><b>' + g.score + '/' + g.maxScore + '</b><span>' + pct + '%</span></div></div>';
+      }).join('') : '<div class="empty-state">' + window.t('noGradesYet') + '</div>';
+      openModal('studentGradesModal');
+    };
+
+    function renderProgressChart() {
+      var canvas = document.getElementById('progressChart');
+      if (!canvas) return;
+      var context = canvas.getContext('2d');
+      var records = window.getGradesForStudent(student.id).slice().reverse();
+      var canvasWidth = canvas.clientWidth;
+      if (!canvasWidth) return;
+      canvas.width = canvasWidth * 2; canvas.height = 360;
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      var width = canvas.width, height = canvas.height;
+      var leftPad = 54, rightPad = 16, topPad = 22, bottomPad = 42;
+      var graphWidth = width - leftPad - rightPad, graphHeight = height - topPad - bottomPad;
+      var textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-faint').trim() || '#918DB0';
+      var gridColor = getComputedStyle(document.documentElement).getPropertyValue('--line').trim() || '#E4E1F2';
+      context.font = '20px IBM Plex Sans Arabic, sans-serif'; context.fillStyle = textColor; context.textAlign = 'right';
+      for (var tick = 0; tick <= 100; tick += 25) {
+        var tickY = height - bottomPad - graphHeight * tick / 100;
+        context.strokeStyle = gridColor; context.lineWidth = 2; context.setLineDash([]);
+        context.beginPath(); context.moveTo(leftPad, tickY); context.lineTo(width - rightPad, tickY); context.stroke();
+        context.fillText(tick, leftPad - 10, tickY + 7);
+      }
+      context.textAlign = 'center'; context.font = '20px IBM Plex Sans Arabic, sans-serif';
+      context.fillText('الاختبارات', leftPad + graphWidth / 2, height - 8);
+      context.save(); context.translate(14, topPad + graphHeight / 2); context.rotate(-Math.PI / 2); context.fillText('الدرجة %', 0, 0); context.restore();
+      if (!records.length) return;
+      var points = records.map(function (grade, index) {
+        var x = leftPad + graphWidth * (records.length === 1 ? .5 : index / (records.length - 1));
+        var pct = Math.max(0, Math.min(100, Number(grade.maxScore) ? Number(grade.score) / Number(grade.maxScore) * 100 : 0));
+        return { x: x, y: height - bottomPad - graphHeight * pct / 100 };
+      });
+      context.beginPath();
+      points.forEach(function (point, index) {
+        if (!index) context.moveTo(point.x, point.y); else context.lineTo(point.x, point.y);
+      });
+      context.lineTo(points[points.length - 1].x, height - bottomPad);
+      context.lineTo(points[0].x, height - bottomPad);
+      context.closePath();
+      context.fillStyle = window.getAccentColor(.13); context.fill();
+      context.beginPath();
+      context.strokeStyle = window.getAccentColor(); context.lineWidth = 6; context.lineJoin = 'round';
+      records.forEach(function (grade, index) {
+        if (!index) context.moveTo(points[index].x, points[index].y); else context.lineTo(points[index].x, points[index].y);
+      });
+      context.stroke();
+      context.fillStyle = '#fff'; context.strokeStyle = window.getAccentColor(); context.lineWidth = 4;
+      points.forEach(function (point) {
+        context.beginPath(); context.arc(point.x, point.y, 7, 0, Math.PI * 2); context.fill(); context.stroke();
+      });
+    }
+
+    // ---------------- to-do list ----------------
+    // Personal task list for the student, kept on-device (localStorage) —
+    // there's no need for this to sync across devices or be visible to
+    // the admin, so it doesn't touch Firebase.
+    function todoStorageKey() { return 'mc_todo_' + student.id; }
+    function getTodoItems() {
+      try { return JSON.parse(localStorage.getItem(todoStorageKey()) || '[]'); }
+      catch (e) { return []; }
+    }
+    function saveTodoItems(items) {
+      try { localStorage.setItem(todoStorageKey(), JSON.stringify(items)); } catch (e) { /* ignore */ }
+    }
+    window.addTodoItem = function () {
+      var input = document.getElementById('todoInput');
+      var text = input.value.trim();
+      if (!text) return;
+      var items = getTodoItems();
+      items.push({ id: Date.now().toString(36), text: text, done: false });
+      saveTodoItems(items);
+      input.value = '';
+      renderTodoList();
+    };
+    window.toggleTodoItem = function (id) {
+      var items = getTodoItems();
+      var item = items.find(function (i) { return i.id === id; });
+      if (item) { item.done = !item.done; saveTodoItems(items); renderTodoList(); }
+    };
+    window.deleteTodoItem = function (id) {
+      saveTodoItems(getTodoItems().filter(function (i) { return i.id !== id; }));
+      renderTodoList();
+    };
+    window.renderTodoList = function () {
+      var items = getTodoItems();
+      var list = document.getElementById('studentTodoList');
+      if (!items.length) { list.innerHTML = '<div class="empty-state">' + window.t('noTasksYet') + '</div>'; return; }
+      list.innerHTML = items.map(function (item) {
+        return '<div class="todo-item' + (item.done ? ' done' : '') + '">' +
+          '<label class="todo-check"><input type="checkbox" ' + (item.done ? 'checked' : '') + ' onchange="toggleTodoItem(\'' + item.id + '\')"><span>' + escapeHtml(item.text) + '</span></label>' +
+          '<button type="button" class="todo-delete" onclick="deleteTodoItem(\'' + item.id + '\')" aria-label="delete">&times;</button>' +
+          '</div>';
+      }).join('');
+    };
+
+    // "ملاحظاتي" — the student's own private notes (e.g. things to remember
+    // during a session), separate from the notes the teacher sends them.
+    // Stored per-device like the to-do list, using the same pattern.
+    /* ================= my notes (rich, folders, favorites) ================= */
+    var currentNoteId = null;
+    var activeNoteFolder = 'all';
+    var noteAutosaveTimer = null;
+
+    function myNotesStorageKey() { return 'mc_mynotes_' + student.id; }
+    function notesFoldersKey() { return 'mc_mynotes_folders_' + student.id; }
+    function getMyNotes() {
+      try { return JSON.parse(localStorage.getItem(myNotesStorageKey()) || '[]'); }
+      catch (e) { return []; }
+    }
+    function saveMyNotesList(items) {
+      try { localStorage.setItem(myNotesStorageKey(), JSON.stringify(items)); } catch (e) { /* ignore */ }
+    }
+    function getNoteFolders() {
+      try { return JSON.parse(localStorage.getItem(notesFoldersKey()) || '[]'); }
+      catch (e) { return []; }
+    }
+    function saveNoteFolders(list) {
+      try { localStorage.setItem(notesFoldersKey(), JSON.stringify(list)); } catch (e) { /* ignore */ }
+    }
+
+    window.renderMyNotes = function () {
+      var items = getMyNotes();
+      renderNotesFilterRow(items);
+      var filtered = activeNoteFolder === 'all' ? items : items.filter(function (n) { return n.folder === activeNoteFolder; });
+      filtered.sort(function (a, b) { return (b.updatedAt || b.createdAt || '').localeCompare(a.updatedAt || a.createdAt || ''); });
+      var list = document.getElementById('studentMynotesList');
+      if (!list) return;
+      if (!filtered.length) { list.innerHTML = '<div class="empty-state">' + window.t('noMyNotesYet') + '</div>'; return; }
+      list.innerHTML = filtered.map(function (item) {
+        var date = item.updatedAt || item.createdAt ? new Date(item.updatedAt || item.createdAt).toLocaleDateString() : '';
+        var title = (item.title || '').trim() || 'بدون عنوان';
+        return '<div class="my-notes-item" onclick="openMyNote(\'' + item.id + '\')">' +
+          '<div class="my-notes-item-text"><b>' + escapeHtml(title) + (item.favorite ? ' ★' : '') + '</b>' +
+          '<span class="my-notes-item-meta">' + date + '</span></div>' +
+          '<button type="button" class="todo-delete" onclick="event.stopPropagation(); quickDeleteNote(\'' + item.id + '\')" aria-label="delete">&times;</button>' +
+          '</div>';
+      }).join('');
+    };
+
+    function renderNotesFilterRow(items) {
+      var row = document.getElementById('notesFilterRow');
+      if (!row) return;
+      items = items || getMyNotes();
+      var folders = getNoteFolders();
+      var chips = [{ key: 'all', label: 'الكل (' + items.length + ')' }].concat(
+        folders.map(function (f) {
+          return { key: f, label: f + ' (' + items.filter(function (n) { return n.folder === f; }).length + ')' };
+        })
+      );
+      row.innerHTML = chips.map(function (c) {
+        var safeKey = c.key.replace(/'/g, "\\'");
+        return '<button type="button" class="note-filter-chip' + (activeNoteFolder === c.key ? ' active' : '') + '" onclick="setNoteFolder(\'' + safeKey + '\')">' + escapeHtml(c.label) + '</button>';
+      }).join('');
+    }
+    window.setNoteFolder = function (key) { activeNoteFolder = key; renderMyNotes(); };
+
+    window.quickDeleteNote = function (id) {
+      saveMyNotesList(getMyNotes().filter(function (n) { return n.id !== id; }));
+      renderMyNotes();
+    };
+
+    window.createNewNote = function () {
+      var items = getMyNotes();
+      var note = {
+        id: Date.now().toString(36), title: '', html: '',
+        folder: activeNoteFolder === 'all' ? '' : activeNoteFolder,
+        favorite: false, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString()
+      };
+      items.unshift(note);
+      saveMyNotesList(items);
+      openMyNote(note.id);
+    };
+
+    window.openFolderManager = function () {
+      var name = prompt('اسم المجلد الجديد:');
+      if (!name) return;
+      name = name.trim();
+      if (!name) return;
+      var folders = getNoteFolders();
+      if (folders.indexOf(name) === -1) { folders.push(name); saveNoteFolders(folders); }
+      renderMyNotes();
+    };
+
+    window.openMyNote = function (id) {
+      var item = getMyNotes().find(function (n) { return n.id === id; });
+      if (!item) return;
+      currentNoteId = id;
+      document.getElementById('noteTitleInput').value = item.title || '';
+      document.getElementById('noteEditorBody').innerHTML = item.html || '';
+      populateNoteFolderSelect(item.folder || '');
+      updateFavoriteButton(item.favorite);
+      updateLastEditLabel(item.updatedAt || item.createdAt);
+      updateNoteToolbarState();
+      showStudentSection('noteview');
+    };
+
+    function populateNoteFolderSelect(selected) {
+      var sel = document.getElementById('noteFolderSelect');
+      var folders = getNoteFolders();
+      sel.innerHTML = '<option value="">بدون مجلد</option>' + folders.map(function (f) {
+        return '<option value="' + escapeHtml(f) + '"' + (f === selected ? ' selected' : '') + '>' + escapeHtml(f) + '</option>';
+      }).join('');
+    }
+    window.onNoteFolderChange = function () { saveCurrentNote(false); };
+
+    function updateFavoriteButton(fav) {
+      var btn = document.getElementById('noteFavoriteBtn');
+      if (btn) btn.classList.toggle('active', !!fav);
+    }
+    window.toggleNoteFavorite = function () {
+      var btn = document.getElementById('noteFavoriteBtn');
+      btn.classList.toggle('active');
+      saveCurrentNote(false);
+    };
+
+    function updateLastEditLabel(iso) {
+      var el = document.getElementById('noteLastEdit');
+      if (el) el.textContent = 'آخر تعديل: ' + (iso ? new Date(iso).toLocaleString() : '—');
+    }
+
+    window.scheduleNoteAutosave = function () {
+      clearTimeout(noteAutosaveTimer);
+      noteAutosaveTimer = setTimeout(function () { saveCurrentNote(false); }, 800);
+    };
+
+    window.saveCurrentNote = function (showFeedback) {
+      if (!currentNoteId) return;
+      var items = getMyNotes();
+      var idx = items.findIndex(function (n) { return n.id === currentNoteId; });
+      if (idx === -1) return;
+      items[idx].title = document.getElementById('noteTitleInput').value.trim();
+      items[idx].html = document.getElementById('noteEditorBody').innerHTML;
+      items[idx].folder = document.getElementById('noteFolderSelect').value;
+      items[idx].favorite = document.getElementById('noteFavoriteBtn').classList.contains('active');
+      items[idx].updatedAt = new Date().toISOString();
+      saveMyNotesList(items);
+      updateLastEditLabel(items[idx].updatedAt);
+      if (showFeedback !== false) window.mcToast('تم الحفظ');
+    };
+
+    window.deleteCurrentNote = function () {
+      if (!currentNoteId) return;
+      if (!confirm('هل تريد حذف هذه الملاحظة؟')) return;
+      saveMyNotesList(getMyNotes().filter(function (n) { return n.id !== currentNoteId; }));
+      currentNoteId = null;
+      renderMyNotes();
+      showStudentSection('mynotes');
+    };
+
+    window.closeNoteEditor = function () {
+      saveCurrentNote(false);
+      currentNoteId = null;
+      renderMyNotes();
+      showStudentSection('mynotes');
+    };
+
+    window.noteExec = function (cmd, val) {
+      document.getElementById('noteEditorBody').focus();
+      document.execCommand(cmd, false, val || null);
+      window.scheduleNoteAutosave();
+      updateNoteToolbarState();
+    };
+
+    function updateNoteToolbarState() {
+      function setActive(id, cmd) {
+        var btn = document.getElementById(id);
+        if (!btn) return;
+        var on = false;
+        try { on = document.queryCommandState(cmd); } catch (e) { /* ignore */ }
+        btn.classList.toggle('active', on);
+      }
+      setActive('noteBoldBtn', 'bold');
+      setActive('noteItalicBtn', 'italic');
+      setActive('noteUnderlineBtn', 'underline');
+      setActive('noteStrikeBtn', 'strikeThrough');
+      setActive('noteUlBtn', 'insertUnorderedList');
+      setActive('noteOlBtn', 'insertOrderedList');
+      try {
+        var block = (document.queryCommandValue('formatBlock') || '').toUpperCase();
+        var sel = document.getElementById('noteTextStyle');
+        if (sel) sel.value = (block === 'H2' || block === 'H3') ? block : 'P';
+      } catch (e) { /* ignore */ }
+    }
+    (function () {
+      var body = document.getElementById('noteEditorBody');
+      if (body) {
+        ['keyup', 'mouseup', 'touchend'].forEach(function (evt) {
+          body.addEventListener(evt, updateNoteToolbarState);
+        });
+      }
+    })();
+
+    // Tapping a toolbar button (bold, list, ...) fires "mousedown" first,
+    // which moves focus away from the note and collapses whatever text
+    // was selected — so by the time the click actually runs execCommand,
+    // there's nothing selected left to format. Preventing the default on
+    // mousedown keeps the selection intact.
+    //
+    // IMPORTANT: this must NOT also preventDefault() on "touchstart". Per
+    // the touch event spec, preventDefault() on touchstart cancels the
+    // browser's synthetic mouse/click events for that tap — so on phones
+    // the onclick="noteExec(...)" handlers on these buttons were never
+    // firing at all (the buttons looked dead: no response, no visible
+    // press). Only mousedown needs to be prevented; click still fires
+    // normally afterwards on both touch and desktop.
+    (function () {
+      var toolbar = document.querySelector('.note-toolbar-scroll');
+      if (!toolbar) return;
+      toolbar.addEventListener('mousedown', function (event) {
+        if (event.target.closest('.note-tb-btn')) event.preventDefault();
+      });
+    })();
+
+    window.noteHighlight = function () {
+      var accentSoft = getComputedStyle(document.documentElement).getPropertyValue('--accent-soft').trim() || '#fff59d';
+      window.noteExec('hiliteColor', accentSoft);
+    };
+
+    window.insertChecklistItem = function () {
+      window.noteExec('insertHTML', '<div class="note-checklist-item"><input type="checkbox"><span contenteditable="true">مهمة جديدة</span></div><div><br></div>');
+    };
+
+    window.insertNoteLink = function () {
+      var url = prompt('رابط الصفحة:');
+      if (!url) return;
+      window.noteExec('createLink', url);
+    };
+
+    window.insertNoteTable = function () {
+      window.noteExec('insertHTML', '<table class="note-table"><tr><td><br></td><td><br></td></tr><tr><td><br></td><td><br></td></tr></table><div><br></div>');
+    };
+
+    window.insertNoteImage = function (e) {
+      var file = e.target.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function () {
+        window.noteExec('insertHTML', '<img src="' + reader.result + '" class="note-image">');
+      };
+      reader.readAsDataURL(file);
+      e.target.value = '';
+    };
+
+    // ---------- streak (consecutive attendance) ----------
+    function computeAttendanceStreaks(studentId) {
+      var records = window.getAttendanceForStudent(studentId); // ascending by date
+      var best = 0, running = 0;
+      records.forEach(function (r) {
+        if (r.status === 'present') { running++; if (running > best) best = running; }
+        else if (r.status === 'absent') { running = 0; }
+      });
+      var current = 0;
+      for (var i = records.length - 1; i >= 0; i--) {
+        if (records[i].status === 'present') current++;
+        else break;
+      }
+      return { current: current, best: best };
+    }
+
+    window.renderStreakPage = function () {
+      var el = document.getElementById('currentStreakValue');
+      if (!el || !student) return;
+      var streaks = computeAttendanceStreaks(student.id);
+      el.textContent = streaks.current;
+      document.getElementById('bestStreakValue').textContent = streaks.best;
+      document.getElementById('streakTotalPresent').textContent = window.getAttendanceStats(student.id).present;
+    };
+
+    // ---------- badges (attendance milestones + perfect-grade milestones) ----------
+    // Same line-icon style as the rest of the app: a medal shape for the
+    // first three tiers, a gem for the top one — tinted per tier via CSS,
+    // and turned to grayscale automatically while locked (see .badge-tile).
+    var BADGE_MEDAL_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="9" r="6"/><path d="M9 14.5 7 22l5-3 5 3-2-7.5"/></svg>';
+    var BADGE_GEM_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12l4 6-10 12L2 9Z"/><path d="M2 9h20M9 3l-2 6 5 12 5-12-2-6"/></svg>';
+    var ATTENDANCE_BADGE_TIERS = [
+      { svg: BADGE_MEDAL_SVG, tier: 'bronze', threshold: 10, key: 'Bronze' },
+      { svg: BADGE_MEDAL_SVG, tier: 'silver', threshold: 25, key: 'Silver' },
+      { svg: BADGE_MEDAL_SVG, tier: 'gold', threshold: 50, key: 'Gold' },
+      { svg: BADGE_GEM_SVG, tier: 'diamond', threshold: 100, key: 'Diamond' }
+    ];
+    var GRADES_BADGE_TIERS = [
+      { svg: BADGE_MEDAL_SVG, tier: 'bronze', threshold: 1, key: 'Bronze' },
+      { svg: BADGE_MEDAL_SVG, tier: 'silver', threshold: 3, key: 'Silver' },
+      { svg: BADGE_MEDAL_SVG, tier: 'gold', threshold: 5, key: 'Gold' },
+      { svg: BADGE_GEM_SVG, tier: 'diamond', threshold: 10, key: 'Diamond' }
+    ];
+    function countFullGrades(studentId) {
+      return window.getGradesForStudent(studentId).filter(function (r) {
+        return Number(r.maxScore) > 0 && Number(r.score) === Number(r.maxScore);
+      }).length;
+    }
+    function badgeTileHtml(tier, value, titleKey, unitKey) {
+      var unlocked = value >= tier.threshold;
+      var clamped = Math.min(value, tier.threshold);
+      var attrs = unlocked
+        ? ' role="button" tabindex="0" aria-label="' + escapeHtml(window.t('shareBadgeAria') || 'مشاركة الشارة') + '" onclick="shareBadgeImage(\'' + tier.tier + '\',\'' + titleKey + '\',\'' + unitKey + '\',' + clamped + ',' + tier.threshold + ')" onkeydown="if(event.key===\'Enter\'){shareBadgeImage(\'' + tier.tier + '\',\'' + titleKey + '\',\'' + unitKey + '\',' + clamped + ',' + tier.threshold + ')}"'
+        : '';
+      return '<div class="badge-tile' + (unlocked ? ' unlocked' : '') + '"' + attrs + '>' +
+        '<div class="badge-icon tier-' + tier.tier + '">' + tier.svg + '</div>' +
+        '<div class="badge-title">' + escapeHtml(window.t(titleKey)) + '</div>' +
+        '<div class="badge-progress">' + clamped + ' / ' + tier.threshold + ' ' + escapeHtml(window.t(unitKey)) + '</div>' +
+        (unlocked ? '<div class="badge-share-hint">' + escapeHtml(window.t('tapToShareBadge') || 'اضغط للمشاركة') + '</div>' : '') +
+        '</div>';
+    }
+
+    // ---------- badge sharing: renders the earned badge onto a canvas and
+    // downloads it as a PNG (or hands it to the native share sheet on
+    // mobile, when available, so the student can send it straight to a
+    // parent instead of only saving it). ----------
+    var BADGE_TIER_HEX = { bronze: '#cd7f32', silver: '#b7c0cc', gold: '#f2b53c', diamond: '#57c7f0' };
+
+    function shadeHexColor(hex, percent) {
+      var num = parseInt(hex.replace('#', ''), 16),
+        amt = Math.round(2.55 * percent),
+        R = (num >> 16) + amt,
+        G = (num >> 8 & 0x00FF) + amt,
+        B = (num & 0x0000FF) + amt;
+      return '#' + (0x1000000 + (R < 255 ? (R < 1 ? 0 : R) : 255) * 0x10000 +
+        (G < 255 ? (G < 1 ? 0 : G) : 255) * 0x100 +
+        (B < 255 ? (B < 1 ? 0 : B) : 255)).toString(16).slice(1);
+    }
+
+    function drawBadgeStar(ctx, cx, cy, spikes, outerR, innerR) {
+      var rot = Math.PI / 2 * 3, step = Math.PI / spikes;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - outerR);
+      for (var i = 0; i < spikes; i++) {
+        ctx.lineTo(cx + Math.cos(rot) * outerR, cy + Math.sin(rot) * outerR);
+        rot += step;
+        ctx.lineTo(cx + Math.cos(rot) * innerR, cy + Math.sin(rot) * innerR);
+        rot += step;
+      }
+      ctx.lineTo(cx, cy - outerR);
+      ctx.closePath();
+    }
+
+    function downloadImageBlob(blob, fileName) {
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+    }
+
+    var pendingBadgeShare = null;
+
+    window.shareBadgeImage = function (tierKey, titleKey, unitKey, value, threshold) {
+      pendingBadgeShare = { tierKey: tierKey, titleKey: titleKey, unitKey: unitKey, value: value, threshold: threshold };
+      openModal('shareBadgeConfirmModal');
+    };
+
+    window.confirmShareBadgeImage = function () {
+      closeModal('shareBadgeConfirmModal');
+      if (!pendingBadgeShare) return;
+      var p = pendingBadgeShare;
+      pendingBadgeShare = null;
+
+      var tierKey = p.tierKey, titleKey = p.titleKey, unitKey = p.unitKey, value = p.value, threshold = p.threshold;
+      var title = window.t(titleKey);
+      var progressLabel = value + ' / ' + threshold + ' ' + window.t(unitKey);
+      var name = (student && student.name) || '';
+      var color = BADGE_TIER_HEX[tierKey] || '#f2b53c';
+
+      var canvas = document.createElement('canvas');
+      var W = 900, H = 620;
+      canvas.width = W; canvas.height = H;
+      var ctx = canvas.getContext('2d');
+
+      var bgGrad = ctx.createLinearGradient(0, 0, W, H);
+      bgGrad.addColorStop(0, '#11151c');
+      bgGrad.addColorStop(1, '#1b2230');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, W, H);
+
+      var cx = W / 2, cy = 230, r = 120;
+      var circleGrad = ctx.createRadialGradient(cx, cy, 10, cx, cy, r);
+      circleGrad.addColorStop(0, color);
+      circleGrad.addColorStop(1, shadeHexColor(color, -25));
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fillStyle = circleGrad;
+      ctx.fill();
+      ctx.lineWidth = 6;
+      ctx.strokeStyle = 'rgba(255,255,255,.35)';
+      ctx.stroke();
+
+      ctx.fillStyle = '#fff';
+      drawBadgeStar(ctx, cx, cy, 5, r * 0.55, r * 0.25);
+      ctx.fill();
+
+      ctx.direction = 'rtl';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 46px Tajawal, "IBM Plex Sans Arabic", sans-serif';
+      ctx.fillText(title, cx, 415);
+
+      ctx.font = '26px Tajawal, "IBM Plex Sans Arabic", sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,.75)';
+      ctx.fillText(progressLabel, cx, 458);
+
+      if (name) {
+        ctx.font = '600 24px Tajawal, "IBM Plex Sans Arabic", sans-serif';
+        ctx.fillStyle = 'rgba(255,255,255,.62)';
+        ctx.fillText(name, cx, 515);
+      }
+
+      ctx.font = '20px Manrope, sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,.4)';
+      ctx.direction = 'ltr';
+      ctx.fillText('Math Center', cx, 570);
+
+      canvas.toBlob(function (blob) {
+        if (!blob) return;
+        var fileName = 'badge-' + tierKey + '-' + Date.now() + '.png';
+        var file;
+        try { file = new File([blob], fileName, { type: 'image/png' }); } catch (e) { file = null; }
+        if (file && navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          navigator.share({ files: [file], title: title }).catch(function () { downloadImageBlob(blob, fileName); });
+        } else {
+          downloadImageBlob(blob, fileName);
+        }
+      }, 'image/png');
+    };
+
+    window.renderBadgesPage = function () {
+      var attGrid = document.getElementById('attendanceBadgesGrid');
+      if (!attGrid || !student) return;
+      var attendanceCount = window.getAttendanceStats(student.id).present;
+      attGrid.innerHTML = ATTENDANCE_BADGE_TIERS.map(function (tier) {
+        return badgeTileHtml(tier, attendanceCount, 'attendanceBadge' + tier.key, 'sessionsUnit');
+      }).join('');
+
+      var fullGradesCount = countFullGrades(student.id);
+      document.getElementById('gradesBadgesGrid').innerHTML = GRADES_BADGE_TIERS.map(function (tier) {
+        return badgeTileHtml(tier, fullGradesCount, 'gradesBadge' + tier.key, 'fullGradeUnit');
+      }).join('');
+    };
+
+    window.renderLeaderboard = function () {
+      var list = document.getElementById('studentLeaderboardList');
+      if (!list || !student) return;
+      var ranking = window.getLeaderboardForClass(student.classId);
+      if (!ranking.length) { list.innerHTML = '<div class="empty-state">' + window.t('leaderboardEmpty') + '</div>'; return; }
+      var medals = ['🥇', '🥈', '🥉'];
+      list.innerHTML = ranking.map(function (entry, i) {
+        var isMe = entry.student.id === student.id;
+        return '<div class="leaderboard-item' + (isMe ? ' is-me' : '') + '">' +
+          '<div class="leaderboard-rank">' + (medals[i] || (i + 1)) + '</div>' +
+          '<div class="avatar">' + (entry.student.avatar ? '<img src="' + entry.student.avatar + '">' : window.initials(entry.student.name)) + '</div>' +
+          '<div class="leaderboard-name">' + escapeHtml(entry.student.name) + (isMe ? ' <span class="leaderboard-you">(' + window.t('you') + ')</span>' : '') + '</div>' +
+          '<div class="leaderboard-points">' + entry.points + ' ' + window.t('points') + '</div>' +
+          '</div>';
+      }).join('');
+    };
+
+    function renderCommunications() {
+      var notifications = window.getNotifications(student.id), count = document.getElementById('notificationCount');
+      var readIds = getReadNotificationIds();
+      var unreadCount = notifications.filter(function (item) { return readIds.indexOf(item.id) === -1; }).length;
+      count.textContent = unreadCount; count.style.display = unreadCount ? 'flex' : 'none';
+
+      // Homework: home page shows only the latest 3, full list lives in the
+      // "كل الواجبات" modal.
+      var homeworkItems = window._mcCache.homework.filter(function (h) { return h.center === student.center && h.classId === student.classId; }).sort(function (a, b) { return (b.createdAt || '').localeCompare(a.createdAt || ''); });
+      // "فتح الملف" tries to hand the file to the OS's native app chooser
+      // (Web Share API with files) instead of just navigating to a data:
+      // URL — most mobile browsers won't let you "open with" a data: URL
+      // directly, which is why this used to just fail silently.
+      window.handleHomeworkOpen = function (event, el) {
+        event.preventDefault();
+        var dataUrl = el.getAttribute('href');
+        var fileName = el.dataset.filename || 'file';
+        fetch(dataUrl)
+          .then(function (res) { return res.blob(); })
+          .then(function (blob) {
+            var file = new File([blob], fileName, { type: blob.type });
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+              navigator.share({ files: [file], title: fileName }).catch(function () { /* user cancelled the chooser — nothing to do */ });
+            } else {
+              window.open(dataUrl, '_blank');
+            }
+          })
+          .catch(function () { window.open(dataUrl, '_blank'); });
+        return false;
+      };
+
+      function homeworkItemHtml(h) {
+        var src = escapeHtml(h.fileUrl || h.dataUrl || '');
+        return '<div class="notice-item"><b>' + escapeHtml(h.title) + '</b><div class="homework-actions"><a class="homework-link" href="' + src + '" data-filename="' + escapeHtml(h.fileName) + '" onclick="return handleHomeworkOpen(event, this)">' + window.t('openFile') + '</a><a class="homework-link download" download="' + escapeHtml(h.fileName) + '" href="' + src + '" target="_blank" rel="noopener">' + window.t('downloadFile') + '</a></div></div>';
+      }
+      document.getElementById('homeworkWrap').innerHTML = homeworkItems.slice(0, 1).map(homeworkItemHtml).join('') || '<div class="empty-state">' + window.t('noHomeworkYet') + '</div>';
+      document.getElementById('studentHomeworkModalList').innerHTML = homeworkItems.length ? homeworkItems.map(homeworkItemHtml).join('') : '<div class="empty-state">' + window.t('noHomeworkYet') + '</div>';
+      document.getElementById('studentHomeworkPageList').innerHTML = homeworkItems.length ? homeworkItems.map(homeworkItemHtml).join('') : '<div class="empty-state">' + window.t('noHomeworkYet') + '</div>';
+
+      
+      var noteItems = window.getNotes().filter(function (n) { return n.studentId === student.id; }).sort(function (a, b) { return (b.createdAt || '').localeCompare(a.createdAt || ''); });
+      function noteItemHtml(n) {
+        return '<div class="notice-item">' + escapeHtml(n.text) + '<span class="notice-meta">' + window.t('noteFromTeacher') + '</span></div>';
+      }
+      document.getElementById('notesWrap').innerHTML = noteItems.slice(0, 1).map(noteItemHtml).join('') || '<div class="empty-state">' + window.t('noNotesYet') + '</div>';
+      document.getElementById('studentNotesPageList').innerHTML = noteItems.length ? noteItems.map(noteItemHtml).join('') : '<div class="empty-state">' + window.t('noNotesYet') + '</div>';
+    }
+    window.openStudentHomeworkModal = function () {
+      openModal('studentHomeworkModal');
+    };
+    window.openStudentNotesModal = function () {
+      setStudentNavActive('notes');
+      var notes = window.getNotes().filter(function (note) { return note.studentId === student.id; }).sort(function (a, b) { return (b.createdAt || '').localeCompare(a.createdAt || ''); });
+      var wrap = document.getElementById('studentNotesModalList');
+      wrap.innerHTML = notes.length ? notes.map(function (note, index) { return '<button type="button" class="student-note-button" data-note-index="' + index + '">' + escapeHtml(note.text) + '<span class="notice-meta">' + window.t('noteFromTeacher') + ' · ' + (note.createdAt ? new Date(note.createdAt).toLocaleDateString() : '') + '</span></button>'; }).join('') : '<div class="empty-state">' + window.t('noNotesYet') + '</div>';
+      Array.prototype.forEach.call(wrap.querySelectorAll('[data-note-index]'), function (button) { button.onclick = function () { showStudentNote(notes[Number(button.dataset.noteIndex)]); }; });
+      openModal('studentNotesModal');
+    };
+    function showStudentNote(note) {
+      if (!note) return;
+      document.getElementById('studentNoteDetailText').innerHTML = escapeHtml(note.text) + '<span class="notice-meta">' + window.t('noteFromTeacher') + '</span>';
+      closeModal('studentNotesModal');
+      openModal('studentNoteDetailModal');
+    }
+    function getReadNotificationIds() {
+      try { return JSON.parse(localStorage.getItem('mc_read_notifications_' + student.id) || '[]'); } catch (e) { return []; }
+    }
+    function markNotificationsRead(notifications) {
+      var ids = getReadNotificationIds();
+      notifications.forEach(function (item) { if (ids.indexOf(item.id) === -1) ids.push(item.id); });
+      localStorage.setItem('mc_read_notifications_' + student.id, JSON.stringify(ids));
+    }
+    window.toggleNotifications = function () {
+      var list = document.getElementById('notificationsList');
+      var notifications = window.getNotifications(student.id).sort(function (a, b) { return (b.createdAt || '').localeCompare(a.createdAt || ''); });
+      list.innerHTML = notifications.length ? notifications.map(function (item) {
+        var icon = item.type === 'grade' ? '<path d="M4 19h16M6 17V7h12v10M9 4h6"/>' : item.type === 'homework' ? '<path d="M5 4h14v16H5zM8 8h8M8 12h8"/>' : '<path d="M4 5h16v11H8l-4 4z"/>';
+        return '<div class="notification-item"><div class="notification-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' + icon + '</svg></div><div>' + escapeHtml(item.text || '') + '<span class="notice-meta">' + (item.createdAt ? new Date(item.createdAt).toLocaleDateString() : '') + '</span></div></div>';
+      }).join('') : '<div class="empty-state">' + window.t('noNotificationsYet') + '</div>';
+      markNotificationsRead(notifications);
+      document.getElementById('notificationCount').style.display = 'none';
+      openModal('notificationsModal');
+    };
+
+    function escapeHtml(str) {
+      return (str || '').replace(/[&<>"']/g, function (m) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+      });
+    }
+
+    document.getElementById('studentAvatarInput').addEventListener('change', function (event) {
+      var file = event.target.files[0];
+      if (!file || !student) return;
+      window.fileToDataUrl(file, function (dataUrl) {
+        student.avatar = dataUrl;
+        window.saveStudent(student);
+        renderProfile();
+        var accountAvatar = document.getElementById('accountAvatar');
+        if (accountAvatar) accountAvatar.innerHTML = '<img src="' + dataUrl + '">';
+        window.mcToast('تم حفظ الصورة الشخصية');
+      });
+    });
+
+    window.whenMCReady(function () {
+      settings = window.getSettings();
+      student = window.getStudentById(session.studentId);
+      if (!student) { window.clearSession(); window.location.href = 'index.html'; return; }
+
+      window.applyAccentFromSettings();
+      applyStudentAccent();
+      applyStudentBackground();
+      window.onMCUpdate('settings', function () { window.applyAccentFromSettings(); applyStudentAccent(); });
+
+      document.getElementById('mcLoader').classList.add('hide');
+      localize();
+      renderProfile();
+      renderStats();
+      renderMonthly();
+      renderGradesFeatured();
+      renderGradesTable();
+      renderLatestGrades();
+      renderProgressChart();
+      renderCommunications();
+      renderAccountPage();
+      renderStreakPage();
+      renderBadgesPage();
+
+      window.onMCUpdate('attendance', function () { renderStats(); renderMonthly(); renderLeaderboard(); renderAccountPage(); renderStreakPage(); renderBadgesPage(); });
+      window.onMCUpdate('grades', function () { renderGradesFeatured(); renderGradesTable(); renderLatestGrades(); renderProgressChart(); renderCommunications(); renderLeaderboard(); renderAccountPage(); renderBadgesPage(); });
+      window.onMCUpdate('homework', renderCommunications);
+      window.onMCUpdate('notes', renderCommunications);
+      window.onMCUpdate('notifications', renderCommunications);
+      window.onMCUpdate('students', function () {
+        var fresh = window.getStudentById(session.studentId);
+        if (fresh) { student = fresh; renderProfile(); renderAccountPage(); applyStudentAccent(); applyStudentBackground(); }
+        renderLeaderboard();
+      });
+    });
+
+  
+    (function () {
+      var bottomNav = document.querySelector('.student-bottom-nav');
+      if (!bottomNav) return;
+      bottomNav.addEventListener('click', function (e) {
+        var btn = e.target.closest('button[data-student-section]');
+        if (btn) window.closeAllOverlays();
+      });
+    })();
+
+    /* ---------------- Scientific calculator ---------------- */
+    var calculatorExpression = '';
+    var calculatorAngle = 'DEG';
+    var calculatorJustCalculated = false;
+    var calculatorAnswer = 0;
+    var calculatorMemory = 0;
+    var calculatorHyp = false;
+    window.openChat = function () {
+      document.getElementById('chatOverlay').classList.add('open');
+    };
+    window.closeChat = function () { document.getElementById('chatOverlay').classList.remove('open'); };
+
+    function updateCalculatorDisplay() { document.getElementById('calculatorValue').textContent = calculatorExpression || '0'; }
+    window.setCalculatorAngle = function (angle) {
+      calculatorAngle = angle;
+      var indicator = document.getElementById('calculatorAngle');
+      if (indicator) indicator.textContent = angle;
+    };
+    window.calculatorInsert = function (value) {
+      if (calculatorJustCalculated && /^[0-9πe.]$/.test(value)) calculatorExpression = '';
+      calculatorJustCalculated = false;
+      calculatorExpression += value;
+      updateCalculatorDisplay();
+    };
+    window.calculatorFunction = function (name) {
+      calculatorJustCalculated = false;
+      calculatorExpression += name === 'factorial' ? '!' : name + '(';
+      updateCalculatorDisplay();
+    };
+    window.calculatorAction = function (action) {
+      if (action === 'clear') { calculatorExpression = ''; document.getElementById('calculatorHistory').textContent = ''; }
+      if (action === 'delete') calculatorExpression = calculatorExpression.slice(0, -1);
+      if (action === 'memory') {
+        try { calculatorMemory += evaluateScientific(calculatorExpression || '0'); document.getElementById('calculatorHistory').textContent = 'M = ' + calculatorMemory; } catch (error) { document.getElementById('calculatorHistory').textContent = 'خطأ في العملية'; }
+      }
+      if (action === 'recall') calculatorExpression += String(calculatorMemory);
+      if (action === 'hyp') calculatorHyp = !calculatorHyp;
+      if (action === 'mode') setCalculatorAngle(calculatorAngle === 'DEG' ? 'RAD' : 'DEG');
+      if (action === 'equals') {
+        try {
+          var result = evaluateScientific(calculatorExpression);
+          document.getElementById('calculatorHistory').textContent = calculatorExpression + ' =';
+          calculatorAnswer = result;
+          calculatorExpression = String(Number(result.toPrecision(12)));
+          calculatorJustCalculated = true;
+        } catch (error) {
+          document.getElementById('calculatorHistory').textContent = 'خطأ في العملية';
+          calculatorExpression = '';
+        }
+      }
+      updateCalculatorDisplay();
+    };
+    document.addEventListener('keydown', function (event) {
+      if (!document.getElementById('chatOverlay').classList.contains('open')) return;
+      if (/^[0-9.]$/.test(event.key) || '+-*/^()'.indexOf(event.key) !== -1) calculatorInsert(event.key);
+      else if (event.key === 'Enter') calculatorAction('equals');
+      else if (event.key === 'Backspace') calculatorAction('delete');
+      else if (event.key === 'Escape') closeChat();
+    });
+
+    function evaluateScientific(expression) {
+      var source = (expression || '').replace(/π/g, 'pi').replace(/Ans/gi, 'ans').replace(/×/g, '*').replace(/÷/g, '/');
+      var tokens = [], position = 0, match, pattern = /\s*(?:(\d+(?:\.\d*)?|\.\d+)|([A-Za-z]+)|(\^|[()+\-*/!]))/y;
+      while (position < source.length) {
+        pattern.lastIndex = position; match = pattern.exec(source); if (!match) throw new Error('Invalid token'); position = pattern.lastIndex;
+        tokens.push(match[1] ? { type: 'number', value: Number(match[1]) } : match[2] ? { type: 'name', value: match[2] } : { type: 'operator', value: match[3] });
+      }
+      var cursor = 0;
+      function has(value) { return tokens[cursor] && (!value || tokens[cursor].value === value); }
+      function take(value) { if (!has(value)) throw new Error('Expected ' + value); cursor++; }
+      function primary() {
+        if (has('+')) { cursor++; return primary(); }
+        if (has('-')) { cursor++; return -primary(); }
+        if (has('(')) { cursor++; var grouped = addSub(); take(')'); return grouped; }
+        if (tokens[cursor] && tokens[cursor].type === 'number') return tokens[cursor++].value;
+        if (tokens[cursor] && tokens[cursor].type === 'name') {
+          var name = tokens[cursor++].value.toLowerCase();
+          if (name === 'pi') return Math.PI;
+          if (name === 'e') return Math.E;
+          if (name === 'ans') return calculatorAnswer;
+          take('('); var argument = addSub();
+          var secondArgument = null;
+          if (has(',')) { cursor++; secondArgument = addSub(); }
+          take(')');
+          var radians = calculatorAngle === 'DEG' ? argument * Math.PI / 180 : argument;
+          if (name === 'sin') return calculatorHyp ? Math.sinh(argument) : Math.sin(radians);
+          if (name === 'cos') return calculatorHyp ? Math.cosh(argument) : Math.cos(radians);
+          if (name === 'tan') return calculatorHyp ? Math.tanh(argument) : Math.tan(radians);
+          if (name === 'sqrt') return Math.sqrt(argument);
+          if (name === 'log') return Math.log10(argument);
+          if (name === 'ln') return Math.log(argument);
+          if (name === 'square') return argument * argument;
+          if (name === 'cube') return argument * argument * argument;
+          if (name === 'inverse') return 1 / argument;
+          if (name === 'npr' && secondArgument !== null) return factorial(argument) / factorial(argument - secondArgument);
+          if (name === 'ncr' && secondArgument !== null) return factorial(argument) / (factorial(secondArgument) * factorial(argument - secondArgument));
+        }
+        throw new Error('Expected value');
+      }
+      function power() {
+        var value = primary();
+        while (has('!')) { cursor++; if (value < 0 || value % 1 || value > 170) throw new Error('Invalid factorial'); for (var n = value - 1; n > 1; n--) value *= n; }
+        if (has('^')) { cursor++; value = Math.pow(value, power()); }
+        return value;
+      }
+      function multiplyDivide() { var value = power(); while (has('*') || has('/')) { var op = tokens[cursor++].value, next = power(); value = op === '*' ? value * next : value / next; } return value; }
+      function addSub() { var value = multiplyDivide(); while (has('+') || has('-')) { var op = tokens[cursor++].value, next = multiplyDivide(); value = op === '+' ? value + next : value - next; } return value; }
+      var result = addSub(); if (cursor !== tokens.length || !isFinite(result)) throw new Error('Invalid expression'); return result;
+    }
+
+    function answerMathQuestion(q) {
+      var lang = window.mcLang();
+      var cleaned = q.replace(/[^0-9+\-*/().\s^]/g, '');
+      var hasDigits = /[0-9]/.test(cleaned);
+      var looksArithmetic = hasDigits && /^[0-9+\-*/().\s^]+$/.test(cleaned) && cleaned.replace(/\s/g, '') === q.replace(/\s/g, '').replace(/[×÷]/g, function (m) { return m === '×' ? '*' : '/'; });
+
+      if (looksArithmetic) {
+        try {
+          var expr = cleaned.replace(/\^/g, '**');
+          // eslint-disable-next-line no-new-func
+          var result = Function('"use strict"; return (' + expr + ')')();
+          if (typeof result === 'number' && isFinite(result)) {
+            return lang === 'ar'
+              ? ('الناتج هو: ' + result)
+              : ('The result is: ' + result);
+          }
+        } catch (e) { /* fall through to generic reply */ }
+      }
+
+      var lower = q.toLowerCase();
+      if (/متوسط|average|mean/.test(lower)) {
+        return lang === 'ar'
+          ? 'لحساب المتوسط الحسابي: اجمع كل القيم ثم اقسم الناتج على عددها. مثال: متوسط 4 و6 و8 = (4+6+8)÷3 = 6.'
+          : 'To find the average: add all the values, then divide by how many there are. Example: average of 4, 6, 8 = (4+6+8)÷3 = 6.';
+      }
+      if (/مساحة|area/.test(lower)) {
+        return lang === 'ar'
+          ? 'مساحة المستطيل = الطول × العرض. مساحة المثلث = (القاعدة × الارتفاع) ÷ 2. مساحة الدائرة = π × نق².'
+          : 'Rectangle area = length × width. Triangle area = (base × height) ÷ 2. Circle area = π × r².';
+      }
+      if (/معادلة|equation/.test(lower)) {
+        return lang === 'ar'
+          ? 'لحل معادلة من الدرجة الأولى مثل ٢س + ٣ = ٩: اطرح 3 من الطرفين (٢س = ٦) ثم اقسم على 2 (س = 3).'
+          : 'To solve a linear equation like 2x + 3 = 9: subtract 3 from both sides (2x = 6), then divide by 2 (x = 3).';
+      }
+      return lang === 'ar'
+        ? 'يمكنني مساعدتك في العمليات الحسابية والمعادلات والمساحات والمتوسطات. اكتب سؤالك بشكل أوضح أو أرسل عملية حسابية مباشرة مثل: 12 * (3 + 5)'
+        : 'I can help with arithmetic, equations, areas, and averages. Try a clearer question, or send a direct calculation like: 12 * (3 + 5)';
+    }
+  </script>
+</body>
+
+</html>

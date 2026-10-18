@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>تأكيد الدخول — لوحة تحكم الأستاذ</title>
+    <link rel="stylesheet" href="shared.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="سنتر الرياضيات">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#7A0D14">
+    <style>
+        .login-page {
+            overflow: hidden;
+            background: url('login\ bg.jpg') center center / cover no-repeat fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-page::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: rgba(20, 4, 7, 0);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .verify-wrap {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: rgba(20, 4, 7, 0.349);
+            border: 1px solid rgba(255, 255, 255, .22);
+            backdrop-filter: blur(14px) saturate(140%);
+            -webkit-backdrop-filter: blur(14px) saturate(140%);
+            box-shadow: 0 10px 34px rgba(0, 0, 0, .45);
+        }
+
+        .login-page .field label {
+            color: rgba(255, 255, 255, .82);
+        }
+
+        .login-page .input {
+            background: rgba(0, 0, 0, .28);
+            border: 1.5px solid rgba(255, 255, 255, .25);
+            color: #fff;
+            letter-spacing: 6px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .login-page .input::placeholder {
+            color: rgba(255, 255, 255, .4);
+            letter-spacing: normal;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .login-page .btn-primary {
+            background: #fff;
+            color: #7A0D14;
+        }
+
+        .login-page .btn-primary:disabled {
+            opacity: .6;
+        }
+
+        .otp-hint {
+            color: rgba(255, 255, 255, .78);
+            font-size: 13px;
+            text-align: center;
+            margin-bottom: 18px;
+            line-height: 1.6;
+        }
+
+        .otp-hint b {
+            color: #fff;
+        }
+
+        .otp-links {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 14px;
+            font-size: 13px;
+        }
+
+        .otp-links a {
+            color: rgba(255, 255, 255, .82);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .otp-links a.disabled {
+            pointer-events: none;
+            opacity: .5;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 18px;
+        }
+
+        .hero h2 {
+            color: #fff;
+            margin: 10px 0 0;
+        }
+
+        /* This page only: hide the "Created by ..." site-credit line
+           that shared.js appends to every page's body. */
+        #mcSiteCredit {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body class="login-page">
+    <script>
+        // TEMP DEBUG — shows any JS error as a plain popup so it's visible on
+        // mobile too (no devtools needed). Safe to remove once the bug's found.
+        window.onerror = function (msg, url, line, col) {
+            alert('حصل خطأ برمجي:\n' + msg + '\nفي: ' + url + '\nسطر: ' + line + ':' + col);
+        };
+        window.addEventListener('unhandledrejection', function (e) {
+            alert('حصل خطأ (promise):\n' + (e.reason && e.reason.message ? e.reason.message : e.reason));
+        });
+    </script>
+    <div class="verify-wrap">
+        <div class="login-card card">
+            <div class="hero">
+                <div class="brand-logo" id="verifyLogo">Top</div>
+                <h2>تأكيد الدخول</h2>
+            </div>
+
+            <p class="otp-hint">
+                تم إرسال كود مكوّن من 6 أرقام إلى <b id="maskedEmail">بريدك الإلكتروني</b><br>
+                الكود صالح لمدة 5 دقائق.
+            </p>
+
+            <div class="field">
+                <label>كود التحقق</label>
+                <input type="text" id="otpCode" class="input" placeholder="000000" inputmode="numeric"
+                    maxlength="6" autocomplete="one-time-code">
+            </div>
+
+            <p class="err-text" id="otpErr"></p>
+            <button class="btn btn-primary" id="verifyBtn" onclick="handleVerify()">تأكيد</button>
+
+            <div class="otp-links">
+                <a id="resendLink" onclick="handleResend()">إعادة إرسال الكود</a>
+                <a onclick="handleCancel()">رجوع لتسجيل الدخول</a>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="firebase.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="shared.js"></script>
+    <script>
+        window.applyCachedAccent();
+        window.initEmailJS();
+
+        var pendingDeviceId = sessionStorage.getItem('mc_pending_admin_device');
+        if (!pendingDeviceId) {
+            // Nobody just submitted the admin password on this device — nothing to verify.
+            window.location.href = 'index.html';
+        }
+
+        function maskEmail(email) {
+            var parts = (email || '').split('@');
+            if (parts.length !== 2) return email || '';
+            var name = parts[0];
+            var visible = name.slice(0, Math.min(2, name.length));
+            return visible + '***@' + parts[1];
+        }
+
+        window.whenMCReady(() => {
+            window.applyTheme();
+            window.applyAccentFromSettings();
+            window.applyFaviconFromSettings();
+            const settings = window.getSettings() || {};
+            const logo = document.getElementById('verifyLogo');
+            if (settings.logo) logo.innerHTML = '<img src="' + settings.logo + '" alt="شعار المنصة">';
+            document.getElementById('maskedEmail').textContent = maskEmail(settings.adminEmail);
+        });
+
+        var resendCooldown = 0;
+        var resendTimer = null;
+        function startResendCooldown() {
+            resendCooldown = 60;
+            var link = document.getElementById('resendLink');
+            link.classList.add('disabled');
+            clearInterval(resendTimer);
+            resendTimer = setInterval(() => {
+                resendCooldown--;
+                link.textContent = resendCooldown > 0 ? ('إعادة الإرسال بعد ' + resendCooldown + ' ث') : 'إعادة إرسال الكود';
+                if (resendCooldown <= 0) {
+                    clearInterval(resendTimer);
+                    link.classList.remove('disabled');
+                }
+            }, 1000);
+        }
+        startResendCooldown();
+
+        function handleResend() {
+            if (resendCooldown > 0) return;
+            const err = document.getElementById('otpErr');
+            err.style.display = 'none';
+            window.resendAdminOTP(pendingDeviceId).then(() => {
+                window.mcToast('تم إرسال كود جديد');
+                startResendCooldown();
+            }).catch((e) => {
+                console.error(e);
+                err.textContent = 'تعذر إرسال الكود، حاول مرة أخرى.';
+                err.style.display = 'block';
+            });
+        }
+
+        function handleCancel() {
+            sessionStorage.removeItem('mc_pending_admin_device');
+            window.location.href = 'index.html';
+        }
+
+        function handleVerify() {
+            const input = document.getElementById('otpCode');
+            const err = document.getElementById('otpErr');
+            const btn = document.getElementById('verifyBtn');
+            const code = input.value.trim();
+            err.style.display = 'none';
+
+            if (!/^[0-9]{6}$/.test(code)) {
+                err.textContent = 'اكتب الكود المكوّن من 6 أرقام.';
+                err.style.display = 'block';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'جاري التحقق...';
+
+            window.verifyAdminOTP(pendingDeviceId, code).then((result) => {
+                btn.disabled = false;
+                btn.textContent = 'تأكيد';
+                if (!result.ok) {
+                    err.textContent = result.reason === 'EXPIRED'
+                        ? 'انتهت صلاحية الكود، اضغط "إعادة إرسال الكود".'
+                        : 'الكود غير صحيح.';
+                    err.style.display = 'block';
+                    return;
+                }
+                window.updateAdminSession(pendingDeviceId);
+                window.setSession({ role: 'admin', deviceId: pendingDeviceId });
+                sessionStorage.removeItem('mc_pending_admin_device');
+                // replace (not href) so the verify/login pages aren't left
+                // sitting in browser history — back from admin.html
+                // shouldn't be able to return to them.
+                window.location.replace('admin.html');
+            }).catch((e) => {
+                console.error(e);
+                btn.disabled = false;
+                btn.textContent = 'تأكيد';
+                err.textContent = 'حصل خطأ، تحقق من اتصالك وحاول مرة أخرى.';
+                err.style.display = 'block';
+            });
+        }
+
+        document.getElementById('otpCode').addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') handleVerify();
+        });
+    </script>
+</body>
+
+</html>
