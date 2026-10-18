@@ -1049,7 +1049,13 @@ window.sendTelegramMessage = function (chatId, text) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ chat_id: chatId, text: text })
-  }).then(function (res) { return res.ok; }).catch(function () { return false; });
+  }).then(function (res) {
+    if (!res.ok) {
+      res.json().then(function (d) { console.error('Telegram rejected the message:', chatId, d && d.description); })
+        .catch(function () { console.error('Telegram rejected the message:', chatId, res.status); });
+    }
+    return res.ok;
+  }).catch(function (err) { console.error('Telegram send failed:', err); return false; });
 };
 
 /* ---------------- whatsapp AUTO-send (UltraMsg gateway) ----------------
